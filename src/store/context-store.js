@@ -65,6 +65,12 @@ export const ContextStoreProvider = ({ children }) => {
           questionBanks: [...State.questionBanks, action?.payload],
         };
       }
+      case 'EXAM_PAPER_DATA': {
+        return {
+          ...State,
+          courseData: action.payload,
+        };
+      }
       case 'AddAdminDetails': {
         console.log('AdminData', action);
         const state = { ...State };

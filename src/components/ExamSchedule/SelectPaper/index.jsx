@@ -1,20 +1,34 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/header';
 import AddSelectPaper from './components/addSelectPaper';
 import ArrowRight from '../../../assets/icon/Arrow Right.svg';
+import { useStore } from '../../../store/context-store';
 
 const Index = () => {
   const navigate = useNavigate();
+  const [Store, StoreDispatch] = useStore();
+
+  const [selectedData, setSelectedData] = useState({
+    course_id: null,
+    subject_id: null,
+    chapter_id: null,
+  });
 
   const handleNextClick = () => {
-    console.log('hello');
+    if (
+      !selectedData.course_id ||
+      !selectedData.subject_id ||
+      !selectedData.chapter_id
+    )
+      return;
+    StoreDispatch({ type: 'EXAM_PAPER_DATA', payload: selectedData });
     navigate('/basicInfo');
   };
   return (
     <div>
-      <Header />
-      <AddSelectPaper />
+      <Header selectedData={selectedData} setSelectedData={setSelectedData} />
+      {/* <AddSelectPaper /> */}
       <div className='flex justify-end mt-6'>
         <button
           onClick={handleNextClick}

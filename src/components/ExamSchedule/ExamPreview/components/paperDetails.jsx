@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Stack } from '@mui/material';
 import { FiTrash2 } from 'react-icons/fi';
 import { Icon } from '@iconify/react';
 import { FaRegCircleUser } from 'react-icons/fa6';
+import { useNavigate, useParams } from 'react-router-dom';
 
 // import { useNavigate, useParams } from 'react-router-dom';
 // import TabTitle from '../../shared/TabTitle';
@@ -10,8 +11,29 @@ import Button from '../../../shared/buttons/Button';
 
 import PATH_DASHBOARD from '../../../../routes/path';
 import ArrowRight from '../../../icon/ArrowRight';
+import { examDetail, examDelete } from '../../../../services/exam';
 
-const PaperDetails = ({ paperImg, paperDetails }) => {
+const PaperDetails = ({ paperImg }) => {
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [examDetails, setExamDetails] = useState({});
+
+  const getExamDetails = async () => {
+    const details = await examDetail(id);
+    if (details?.data?.data?.id) {
+      setExamDetails(details.data.data);
+    }
+  };
+
+  const onExamDelete = async () => {
+    await examDelete(examDetails.id);
+    navigate('/examSchedule');
+  };
+
+  useEffect(() => {
+    getExamDetails();
+  }, []);
+
   return (
     <div>
       <div className='flex mb-10 justify-between'>
@@ -46,6 +68,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
             startIcon={
               <FiTrash2 className='text-[rgba(255, 102, 146, 1)] cursor-pointer' />
             }
+            onClick={onExamDelete}
           >
             Delete
           </Button>
@@ -76,7 +99,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
             className='w-[237.36px] justify-center h-[336.55px]'
           />
           <h2 className='text-white text-lg mt-4 '>
-            {paperDetails?.chapter || 'Chapter - 1'}
+            {examDetails?.chapter || 'Chapter - 1'}
           </h2>
         </div>
         <Stack
@@ -97,7 +120,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Exam Title :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.title || 'N/A'}
+                {examDetails?.title || 'N/A'}
               </p>
             </Stack>
             <Stack>
@@ -105,7 +128,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Description :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.description || 'N/A'}
+                {examDetails?.description || 'N/A'}
               </p>
             </Stack>
             <Stack>
@@ -113,7 +136,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Standard :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.standard || 'N/A'}
+                {examDetails?.course || 'N/A'}
               </p>
             </Stack>
             <Stack>
@@ -121,7 +144,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Number of Questions :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.numberOfQuestions || 'N/A'}
+                {examDetails?.number_of_questions || 'N/A'}
               </p>
             </Stack>
             <Stack>
@@ -129,7 +152,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Date :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.date || 'N/A'}
+                {examDetails?.exam_date || 'N/A'}
               </p>
             </Stack>
           </Stack>
@@ -139,23 +162,23 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Duration :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.duration || 'N/A'}
+                {examDetails?.duration || 'N/A'}
               </p>
             </Stack>
-            <Stack>
+            {/* <Stack>
               <p className='text-[rgba(255,255,255,0.5)] text-sm text-left'>
                 Address :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.address || 'N/A'}
+                {examDetails?.address || 'N/A'}
               </p>
-            </Stack>
+            </Stack> */}
             <Stack>
               <p className='text-[rgba(255,255,255,0.5)] text-sm text-left'>
                 Subject :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.subject || 'N/A'}
+                {examDetails?.subject || 'N/A'}
               </p>
             </Stack>
             <Stack>
@@ -163,7 +186,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Total Marks :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.totalMarks || 'N/A'}
+                {examDetails?.total_marks || 'N/A'}
               </p>
             </Stack>
             <Stack>
@@ -171,7 +194,7 @@ const PaperDetails = ({ paperImg, paperDetails }) => {
                 Exam Time :
               </p>
               <p className='text-[rgba(255,255,255,1)] text-left'>
-                {paperDetails?.examTime || 'N/A'}
+                {examDetails?.exam_time || 'N/A'}
               </p>
             </Stack>
           </Stack>

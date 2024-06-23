@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { IoCloseOutline } from 'react-icons/io5';
 import { useForm } from 'react-hook-form';
 import {
   FormProvider, // Import FormProvider
   RHFSelect, // Import RHFSelect
 } from '../../../hooks/hook-form';
+import { getCoursesList } from '../../../services/exam/index';
 
-const Header = () => {
+const Header = ({ selectedData, setSelectedData }) => {
   const methods = useForm({});
   const {
     handleSubmit,
@@ -15,6 +16,74 @@ const Header = () => {
   const onSubmit = async data => {
     console.log('submit');
   };
+
+  const [courseOptions, setCourseOptions] = useState([]);
+  const [subjectOptions, setSubjectOptions] = useState([]);
+  const [chapterOptions, setChapterOptions] = useState([]);
+
+  const onOptionChange = async (type, value) => {
+    let query = '';
+    let response = [];
+    switch (type) {
+      case 'course_id':
+        query = `?course_id=${value}`;
+        response = await getCoursesList(query);
+        if (response.data.data.length) {
+          setSubjectOptions(
+            response.data.data.map(item => {
+              return { label: item.name, value: item.id };
+            }),
+          );
+        } else {
+          setSubjectOptions([]);
+        }
+        setChapterOptions([]);
+        break;
+      case 'subject_id':
+        query = `?course_id=${selectedData.course_id}&subject_id=${value}`;
+        response = await getCoursesList(query);
+        if (response.data.data.length) {
+          setChapterOptions(
+            response.data.data.map(item => {
+              return { label: item.name, value: item.id };
+            }),
+          );
+        } else {
+          setChapterOptions([]);
+        }
+        break;
+      case 'chapter_id':
+        break;
+      default:
+        response = await getCoursesList(query);
+        if (response.data.data.length) {
+          setCourseOptions(
+            response.data.data.map(item => {
+              return { label: item.name, value: item.id };
+            }),
+          );
+        } else {
+          setCourseOptions([]);
+        }
+        setSubjectOptions([]);
+        setChapterOptions([]);
+        break;
+    }
+  };
+
+  useEffect(() => {
+    onOptionChange();
+  }, []);
+
+  const onFormChange = e => {
+    const { name, value } = e.target;
+    setSelectedData({
+      ...selectedData,
+      [name]: value,
+    });
+    onOptionChange(name, value);
+  };
+
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <div>
@@ -32,23 +101,28 @@ const Header = () => {
             <div className='h-10 mt-8 bg-secondary__fill__dark mr-2 border rounded-md border-gray-700 w-36'>
               <RHFSelect
                 size='small'
-                name='Select_Std'
-                options={[
-                  { label: '10th', value: '10th' },
-                  { label: '11th', value: '11th' },
-                  { label: '12th', value: '12th' },
-                ]}
+                name='course_id'
+                placeholder='Select Course'
+                onChange={onFormChange}
+                options={courseOptions}
               />
             </div>
             <div className='h-10 mt-8 bg-secondary__fill__dark border rounded-md border-gray-700 w-40'>
               <RHFSelect
                 size='small'
-                name='Select_Subject'
-                options={[
-                  { label: 'Social Science', value: 'Social Science' },
-                  { label: 'Math', value: 'Math' },
-                  { label: 'Chemistry', value: 'Chemistry' },
-                ]}
+                name='subject_id'
+                placeholder='Select Subject'
+                onChange={onFormChange}
+                options={subjectOptions}
+              />
+            </div>
+            <div className='h-10 mt-8 bg-secondary__fill__dark border rounded-md border-gray-700 w-40'>
+              <RHFSelect
+                size='small'
+                name='chapter_id'
+                placeholder='Select Chapter'
+                onChange={onFormChange}
+                options={chapterOptions}
               />
             </div>
             <div className='text-white mt-10 ml-2 flex'>

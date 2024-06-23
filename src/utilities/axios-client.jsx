@@ -79,14 +79,22 @@ export const APIClient2 = () => {
   return { axiosInstance };
 };
 export const APIClient = () => {
-  const [Store, StoreDispatch] = useStore();
+  let savedToken = '';
+  let savedRefreshToken = '';
+  try {
+    const lastState = JSON.parse(localStorage.getItem('last_state')) || '';
+    savedToken = lastState?.user?.token || '';
+    savedRefreshToken = lastState?.user?.refreshToken || '';
+  } catch (e) {
+    console.log(e);
+  }
 
   // Function to get bearer token
   const getToken = () => {
-    return Store?.user?.token || '';
+    return savedToken || '';
   };
   const getrefreshToken = () => {
-    return Store?.user?.refreshToken || '';
+    return savedRefreshToken || '';
   };
   const getNewAccessToken = async refreshToken => {
     try {
@@ -110,11 +118,15 @@ export const APIClient = () => {
     if (withAuth) {
       config = {
         headers: {
-          Authorization: `Bearer ${token || Store?.user?.token}`,
+          Authorization: `Bearer ${token || savedToken}`,
         },
         ...responseType,
       };
     }
+
+    const onUnAuthorized = () => {
+      window.location.pathname = '/login';
+    };
     switch (method) {
       case 'GET':
         setLoading(true);
@@ -126,6 +138,7 @@ export const APIClient = () => {
           })
           .catch(err => {
             setLoading(false);
+            if (err.response.status === 401) onUnAuthorized();
             return err;
           });
         return getResponse;
@@ -139,6 +152,7 @@ export const APIClient = () => {
           })
           .catch(err => {
             setLoading(false);
+            if (err.response.status === 401) onUnAuthorized();
             return err;
           });
         return postResponse;
@@ -151,6 +165,7 @@ export const APIClient = () => {
           })
           .catch(err => {
             setLoading(false);
+            if (err.response.status === 401) onUnAuthorized();
             return err;
           });
         return putResponse;
@@ -163,6 +178,7 @@ export const APIClient = () => {
           })
           .catch(err => {
             setLoading(false);
+            if (err.response.status === 401) onUnAuthorized();
             return err;
           });
         return patchResponse;
@@ -175,6 +191,7 @@ export const APIClient = () => {
           })
           .catch(err => {
             setLoading(false);
+            if (err.response.status === 401) onUnAuthorized();
             return err;
           });
         return deleteResponse;
@@ -187,6 +204,7 @@ export const APIClient = () => {
           })
           .catch(err => {
             setLoading(false);
+            if (err.response.status === 401) onUnAuthorized();
             return err;
           });
         return defaultResponse;

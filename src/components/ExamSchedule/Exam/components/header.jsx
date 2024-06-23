@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
-const Header = () => {
+const Header = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const handleOnClick = () => {
     navigate('/selectPaper');
@@ -14,6 +14,8 @@ const Header = () => {
           type='text'
           placeholder='Search Name, Inrollment, Standerd'
           className='w-80 ml-8 mt-8 p-2 bg-secondary__fill__dark h-10 rounded '
+          value={search}
+          onInput={e => setSearch(e.target.value)}
         />
         <button
           onClick={handleOnClick}

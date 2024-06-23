@@ -1,57 +1,57 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Icon } from '@iconify/react';
 import { useNavigate } from 'react-router-dom';
+import useFetcher from '../../../../hooks/useFetcher';
+import { getAllExams } from '../../../../services/exam';
 
-const Card = () => {
+const Card = ({ search }) => {
+  const { fetcher, getExecutorState } = useFetcher();
   const navigate = useNavigate();
-  const handleOnClick = () => {
-    navigate('/examPreview');
+  const handleOnClick = id => {
+    navigate(`/examPreview/${id}`);
   };
-  const exam = [
-    {
-      name: 'Bharat No Varsho',
-      question: '40 Questions',
-      mark: '80 Marks',
-      subject: 'Social Science',
-      time: '1 Hour',
-      standard: '10th',
-      examiner: '300',
-      date: 'April 14, 2023',
-      duration: '9:00 PM To 12:00PM ',
-    },
-    {
-      name: 'Bharat No Varsho',
-      question: '40 Questions',
-      mark: '80 Marks',
-      subject: 'Social Science',
-      time: '1 Hour',
-      standard: '10th',
-      examiner: '300',
-      date: 'April 14, 2023',
-      duration: '9:00 PM To 12:00PM ',
-    },
-    {
-      name: 'Bharat No Varsho',
-      question: '40 Questions',
-      mark: '80 Marks',
-      subject: 'Social Science',
-      time: '1 Hour',
-      standard: '10th',
-      examiner: '300',
-      date: 'April 14, 2023',
-      duration: '9:00 PM To 12:00PM ',
-    },
-  ];
+
+  const [exams, setExams] = useState([]);
+
+  useEffect(() => {
+    fetcher({
+      key: 'exams',
+      executer: () => getAllExams(search),
+      onSuccess: response => {
+        const data = response.data?.data;
+        if (data?.length) {
+          const formatedArray = data.map(exam => {
+            return {
+              id: exam.id,
+              name: exam.title,
+              question: `${+exam.number_of_questions} Questions`,
+              mark: `${exam.total_marks} Marks`,
+              subject: exam.subject,
+              time: exam.duration,
+              standard: exam.course,
+              examiner: exam.no_of_examiners,
+              date: exam.exam_date,
+              duration: exam.exam_time,
+            };
+          });
+          setExams(formatedArray);
+        } else {
+          setExams([]);
+        }
+      },
+    });
+  }, [search]);
+
   return (
     <div className='grid gap-8 mt-8 grid-cols-3'>
-      {exam.map((examData, index) => {
+      {exams.map((examData, index) => {
         return (
           <div
             key={index}
             className='relative p-7 bg-secondary__fill rounded-md border border-gray-700 flex-col justify-start items-end gap-3 inline-flex'
           >
             <div
-              onClick={handleOnClick}
+              onClick={() => handleOnClick(examData.id)}
               className='absolute top-3 right-3 flex justify-end w-full pr-4'
             >
               <Icon icon={'mdi:eye'} className='text-white' width={25} />

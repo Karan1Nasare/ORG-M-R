@@ -388,7 +388,7 @@ const AppRoutes = [
   {
     name: 'examPreview',
     slug: 'examPreview',
-    route: '/examPreview',
+    route: '/examPreview/:id',
     component: ExamPreview,
     icon: '',
     external: false,
