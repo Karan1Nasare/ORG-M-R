@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Icon } from '@iconify/react/dist/iconify';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 import ConfirmDelete from '../../../ui/Dialog/ConfirmDelete';
 import EditDialogCard from '../../../ui/Dialog/Notification/editDialog';
@@ -28,10 +28,7 @@ function Description({ children }) {
 }
 
 function NotificationCard({
-  id,
-  title,
-  description,
-  createdAt,
+  data,
   isEditOpen,
   openDelete,
   openEditDialog,
@@ -41,9 +38,21 @@ function NotificationCard({
   openDeleteDialog,
   handleUpdateNotification,
 }) {
-  const dateTime = moment(createdAt);
+  const [selectedData, setSelectedData] = useState(null);
+  const dateTime = dayjs(data?.created_at);
   const formattedDateTime = dateTime.format('YYYY-MM-DD');
   const timeWithAMPM = dateTime.format('hh:mm:ss A');
+
+  const editHandler = row => {
+    console.log('🚀 ~ editHandler ~ row:', row);
+    openEditDialog();
+    setSelectedData(row);
+  };
+
+  const deleteHandler = row => {
+    openDeleteDialog();
+    setSelectedData(row);
+  };
 
   return (
     <section className='flex flex-col p-8 rounded-lg border border-gray-700 border-solid bg-secondary__fill  max-md:px-5'>
@@ -54,7 +63,7 @@ function NotificationCard({
             alt='Exam schedule icon'
           />
           <div className='flex flex-col'>
-            <h1 className='text-base text-white flex'>{title}</h1>
+            <h1 className='text-base text-white flex'>{data?.title}</h1>
             <div className='flex'>
               <InfoItem label='Date' value={formattedDateTime} />
               &nbsp;
@@ -66,12 +75,12 @@ function NotificationCard({
           <Icon
             icon={'lucide:edit'}
             className='text-white'
-            onClick={openEditDialog}
+            onClick={() => editHandler(data)}
           />
           <Icon
             icon={'material-symbols:delete'}
             color='red'
-            onClick={openDeleteDialog}
+            onClick={() => deleteHandler(data)}
             className='cursor-pointer'
           />
         </div>
@@ -79,24 +88,27 @@ function NotificationCard({
       <Description>
         Description :<br />
         <br />
-        {description}
+        {data?.description}
       </Description>
-      <ConfirmDelete
-        fullMessage='Are you sure you want to Delete Chapter?'
-        title='Delete Chapter'
-        handleClose={handleCloseDelete}
-        open={openDelete}
-        deleteHandler={confirmDeleteHandler}
-      />
-      <EditDialogCard
-        id={id}
-        initialTitle={title}
-        initialDescription={description}
-        isOpen={isEditOpen}
-        onClose={closeEditDialog}
-        heading='Edit Notifications'
-        handleUpdateNotification={handleUpdateNotification}
-      />
+      {selectedData?.id && (
+        <ConfirmDelete
+          fullMessage='Are you sure you want to Delete Notification?'
+          title='Delete Notification'
+          handleClose={handleCloseDelete}
+          open={openDelete}
+          deleteHandler={() => confirmDeleteHandler(selectedData?.id)}
+        />
+      )}
+
+      {isEditOpen && selectedData && (
+        <EditDialogCard
+          updateData={selectedData}
+          isOpen={isEditOpen}
+          onClose={closeEditDialog}
+          heading='Edit Notifications'
+          handleUpdateNotification={handleUpdateNotification}
+        />
+      )}
     </section>
   );
 }

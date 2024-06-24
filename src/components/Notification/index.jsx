@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useNotification from './hooks/useNotification';
 import NotificationCard from './components/NotificationCard';
 import NotificationSearch from './components/Header/searchHeader';
 import Pagination from '../shared/Pagination';
+import Loader from '../shared/Loader';
 
 const NotificationView = () => {
   const {
@@ -23,8 +24,36 @@ const NotificationView = () => {
     openDeleteDialog,
     handleAddNotification,
     handleUpdateNotification,
+    loading,
   } = useNotification();
   console.log('🚀 ~ NotificationView ~ data:', data);
+
+  let content;
+
+  if (loading) {
+    content = <Loader />;
+  } else if (data?.length > 0) {
+    content = (
+      <div className='grid lg:grid-cols-2 gap-6 sm:grid-cols-1 md:grid-cols-2 xs:grid-cols-1 w-full'>
+        {data.map((notification, index) => (
+          <NotificationCard
+            key={index}
+            data={notification}
+            isEditOpen={isEditOpen}
+            openDelete={openDelete}
+            openEditDialog={openEditDialog}
+            closeEditDialog={closeEditDialog}
+            confirmDeleteHandler={confirmDeleteHandler}
+            handleCloseDelete={handleCloseDelete}
+            openDeleteDialog={openDeleteDialog}
+            handleUpdateNotification={handleUpdateNotification}
+          />
+        ))}
+      </div>
+    );
+  } else {
+    content = <p className='text-white'>No records found.</p>;
+  }
 
   return (
     <div
@@ -46,33 +75,7 @@ const NotificationView = () => {
         onChange={handleSearchChange}
         handleAddNotification={handleAddNotification}
       />
-      <div className='flex-1 mt-4'>
-        {data.length > 0 ? (
-          <div className='grid lg:grid-cols-2 gap-6 sm:grid-cols-1 md:grid-cols-2 xs:grid-cols-1 w-full'>
-            {data[0] &&
-              data[0].map((notification, index) => (
-                <NotificationCard
-                  key={index}
-                  id={notification.id}
-                  title={notification.title}
-                  description={notification.description}
-                  image={notification.image.url}
-                  createdAt={notification.created_at}
-                  isEditOpen={isEditOpen}
-                  openDelete={openDelete}
-                  openEditDialog={openEditDialog}
-                  closeEditDialog={closeEditDialog}
-                  confirmDeleteHandler={confirmDeleteHandler}
-                  handleCloseDelete={handleCloseDelete}
-                  openDeleteDialog={openDeleteDialog}
-                  handleUpdateNotification={handleUpdateNotification}
-                />
-              ))}
-          </div>
-        ) : (
-          <p className='text-white'>No records found.</p>
-        )}
-      </div>
+      <div className='flex-1 mt-4'>{content}</div>
       {totalShowItems > ITEMS_PER_PAGE && (
         <Pagination
           totalCards={searchTerm ? data.length : totalShowItems}

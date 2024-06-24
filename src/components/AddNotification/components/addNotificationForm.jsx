@@ -1,34 +1,16 @@
-import React, { useState } from 'react';
-import { Icon } from '@iconify/react';
+import React from 'react';
+import { Controller, useFormContext } from 'react-hook-form';
 import UploadFileIcon from '@mui/icons-material/UploadFile';
 import RichTextEditor from '../../shared/RichTextEditor';
+import { RHFTextField } from '../../../hooks/hook-form';
 
-const AddNotificationForm = ({
-  notification,
-  selectedFile,
-  setSelectedFile,
-  onChange,
-  handleAddNotification,
-}) => {
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    onChange(name, value);
-  };
+const AddNotificationForm = ({ selectedFile, setSelectedFile }) => {
+  const { control } = useFormContext();
 
   const handleFileChange = async event => {
     const file = event.target.files[0];
     if (file) {
-      const fileName = `${Date.now()}-${file?.name}`;
-      const imageUrl = `https://mr-education-app.s3.ap-south-1.amazonaws.com/uploads/notification/${fileName}`;
-
-      const fileData = {
-        url: imageUrl,
-        mime_type: file?.type,
-        name: file?.name,
-        size: file?.size,
-      };
-
-      setSelectedFile(fileData);
+      setSelectedFile(file);
     }
   };
 
@@ -71,20 +53,26 @@ const AddNotificationForm = ({
                 <div className='text-sm text-left text-white max-md:max-w-full'>
                   Title
                 </div>
-                <input
+                <RHFTextField
+                  name='title'
+                  placeholder='Enter Title'
                   type='text'
-                  placeholder=' Enter Title'
-                  className='justify-center bg-secondary__fill items-start px-3 py-3 mt-2 text-sm leading-5 rounded border border-gray-700 border-solid text-stone-300 max-md:pr-5 max-md:max-w-full'
-                  onChange={handleInputChange}
-                  value={notification?.title}
+                  fullWidth
+                  required
                 />
                 <div className='mt-8 text-sm text-white text-left max-md:max-w-full'>
                   Description
                 </div>
-                <div className='flex flex-col mt-2 rounded border border-gray-700 border-solid  w-full max-w-screen mx-auto grow'>
-                  <RichTextEditor
-                    onChange={handleInputChange}
-                    value={notification?.description}
+                <div className='flex flex-col mt-2 rounded border border-gray-700 border-solid w-full max-w-screen mx-auto grow'>
+                  <Controller
+                    name='description'
+                    control={control}
+                    render={({ field }) => (
+                      <RichTextEditor
+                        value={field.value}
+                        onChange={field.onChange}
+                      />
+                    )}
                   />
                 </div>
               </div>
@@ -92,13 +80,6 @@ const AddNotificationForm = ({
           </div>
         </div>
       </div>
-      <button
-        className='flex items-center gap-2.5 px-4 py-2.5 mt-8 float-right text-base text-center bg-white rounded-lg text-secondary__fill'
-        onClick={handleAddNotification}
-      >
-        <Icon icon='fluent:add-circle-20-regular' />
-        <span className='my-auto'>Add Notification</span>
-      </button>
     </div>
   );
 };

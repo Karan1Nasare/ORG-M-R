@@ -19,7 +19,6 @@ const AddAdminsPage = lazy(() => import('./pages/Admins/AddAdminsPage'));
 
 const Banner = lazy(() => import('./components/banner'));
 const AddBanner = lazy(() => import('./components/banner/addBanner'));
-const AddNewBanner = lazy(() => import('./components/banner/addNewBanner'));
 
 const AnnouncementPage = lazy(() => import('./pages/Announcement'));
 const AddAnnouncement = lazy(() => import('./pages/AddAnnouncement'));
@@ -247,18 +246,7 @@ const AppRoutes = [
     wrapper: LayoutWrapper,
     parent: 'banner',
   },
-  {
-    name: 'addNewBanner',
-    slug: 'addNewBanner',
-    route: `/addNewBanner`,
-    component: AddNewBanner,
-    menu_location: '',
-    icon: '',
-    external: false,
-    auth: true,
-    wrapper: LayoutWrapper,
-    parent: 'banner',
-  },
+
   // Feature Route
   {
     name: 'features',

@@ -23,6 +23,7 @@
     "autoprefixer": "^10.4.19",
     "aws-sdk": "^2.1636.0",
     "axios": "^1.7.2",
+    "dayjs": "^1.11.11",
     "draft-js": "^0.11.7",
     "enforce-branch-name": "^1.1.2",
     "eslint-plugin-jest": "^28.5.0",

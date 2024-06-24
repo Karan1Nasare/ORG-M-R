@@ -54,7 +54,8 @@ const URLS = {
   EDIT_ACADEMIC_YEAR: id => `/academic-years/${id}`,
   UPDATE_ACADEMIC_YEAR: id => `/academic-years/${id}`,
   DELETE_ACADEMIC_YEAR: id => `/academic-years/${id}`,
-  GET_NOTIFICATIION: userType => `/notifications?user_type=${userType}`,
+  GET_NOTIFICATION: (searchInput, pageSize) =>
+    `/notifications?search=${searchInput}&page_size=${pageSize}`,
   ADD_NOTIFICATION: () => `/notifications`,
   EDIT_NOTIFICATION: id => `/notifications/${id}`,
   DELETE_NOTIFICATION: id => `/notifications/${id}`,
@@ -62,5 +63,10 @@ const URLS = {
   ADD_STAFF: () => `/staff`,
   UPDATE_STAFF: id => `/staff/${id}`,
   DELETE_STAFF: id => `/staff/${id}`,
+  GET_BANNER: () => `/banners`,
+  ADD_BANNER: () => `/banners`,
+  EDIT_BANNER: id => `/banners/${id}`,
+  UPDATE_BANNER: id => `/banners/${id}`,
+  DELETE_BANNER: id => `/banners/${id}`,
 };
 export default URLS;
