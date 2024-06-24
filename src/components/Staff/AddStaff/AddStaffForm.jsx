@@ -32,9 +32,7 @@ const AddStaffForm = ({ file, setFile }) => {
           </Stack>
 
           <Stack>
-            <p className='text-lg  text-white text-left'>
-              Upload Your Plan Image
-            </p>
+            <p className='text-lg  text-white text-left'>Upload Staff Image</p>
             <p className='text-sm font-normal text-[#98A4AE]'>
               Allowed JPG, GIF or PNG. Max size of 800K{' '}
             </p>

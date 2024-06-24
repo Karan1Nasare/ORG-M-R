@@ -2,12 +2,16 @@
 import React, { useEffect, useState } from 'react';
 import * as zod from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useForm, useFormContext } from 'react-hook-form';
-import { Grid, IconButton, InputAdornment } from '@mui/material';
+import { Controller, useForm, useFormContext } from 'react-hook-form';
+import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import AddStudentForm from './AddStaffForm';
+import { yupResolver } from '@hookform/resolvers/yup';
+import { object, string } from 'yup';
+
+import AddStaffForm from './AddStaffForm';
 import {
   FormProvider,
+  RHFMultiSelect,
   RHFSelect,
   RHFTextField,
 } from '../../../hooks/hook-form';
@@ -15,27 +19,66 @@ import Button from '../../shared/buttons/Button';
 import colors from '../../../theme/colors';
 import { useStore } from '../../../store/context-store';
 import TabTitle from '../../shared/TabTitle';
+import useAddStaff from './hooks/useAddStaff';
+
+// const staffSchema = object({
+//   organisation: string().required('Select at least one organization'),
+//   class: string().required('Select at least one class'),
+//   primary_class: string().required('Select at least one primary class'),
+//   name: string().required('Staff Full Name is required'),
+//   email: string().email('Invalid email').required('Staff Email is required'),
+//   phone: string().required('Phone Number is required'),
+//   staff_id: string().required('Staff ID is required'),
+//   subject: string().required('Select at least one subject'),
+//   standard: string().required('Select at least one standard'),
+//   address: string().required('Address is required'),
+//   city: string().required('City is required'),
+//   state: string().required('State is required'),
+//   degree: string().required('Degree is required'),
+//   password: string()
+//     .min(8, 'Password must be at least 8 characters')
+//     .required('Password is required'),
+//   password_confirmation: string()
+//     .oneOf([string().ref('password')], 'Passwords must match')
+//     .required('Confirm Password is required'),
+// });
 
 const AddStaff = ({ setValue }) => {
+  const { onAddStaff } = useAddStaff();
   const [file, setFile] = useState();
-  const [showPass, setShowPass] = useState(false);
-  const [showConfirmPass, setShowConfirmPass] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [Store, StoreDispatch] = useStore();
 
-  // useEffect(() => {
-  //   if (file && file.length > 0) {
-  //     setValue('profilePicture', file[0]);
-  //   } else {
-  //     setValue('profilePicture', null);
-  //   }
-  // }, [file]);
   const onSubmit = async data => {
     console.debug('onSubmit', file);
     console.debug('onSubmit', data);
+    const formData = new FormData();
+
+    // Append form fields to the FormData object using Object.entries
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    formData.append('image', file[0]);
+    formData.append('subject_id', '1');
+
+    onAddStaff(formData);
   };
-  const methods = useForm({});
+
+  const methods = useForm({
+    defaultValues: {
+      organisation: [],
+      class: [],
+      primary_class: [],
+      subject: [],
+      standard: [],
+    },
+  });
   const {
+    control,
     handleSubmit,
+    errors,
     formState: { isSubmitting },
   } = methods;
 
@@ -45,15 +88,69 @@ const AddStaff = ({ setValue }) => {
         <TabTitle title='Add Students Details' sx={{ marginTop: '20px' }} />
 
         <div className='mt-3'>
-          <AddStudentForm file={file} setFile={setFile} />
+          <AddStaffForm file={file} setFile={setFile} />
           <div className='text-sm w-full mt-5 font-medium text-center bg-[#0B1739] text-gray-500   p-6 rounded-md flex items-center justify-between'>
             <Grid container spacing={4}>
+              <Grid item xs={12}>
+                <label
+                  htmlFor='organization'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Organization
+                </label>
+                <RHFMultiSelect
+                  name='organisation'
+                  options={[
+                    { label: 'Organization 1', value: 'Organization 1' },
+                    { label: 'Organization 2', value: 'Organization 2' },
+                  ]}
+                  placeholder='Select Organization'
+                  chip
+                />
+              </Grid>
+              <Grid item md={6} sm={12}>
+                <label
+                  htmlFor='class'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Class
+                </label>
+                <RHFMultiSelect
+                  size='small'
+                  name='class'
+                  options={[
+                    { label: 'Class 1', value: 'Class 1' },
+                    { label: 'Class 2', value: 'Class 2' },
+                  ]}
+                  placeholder='Select Class'
+                  chip
+                />
+              </Grid>
+              <Grid item md={6} sm={12}>
+                <label
+                  htmlFor='primary_class'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Primary Class
+                </label>
+                <RHFMultiSelect
+                  size='small'
+                  name='primary_class'
+                  options={[
+                    { label: 'Primay Class 1', value: 'Primay Class 1' },
+                    { label: 'Primay Class 2', value: 'Primay Class 2' },
+                  ]}
+                  placeholder='Select Primary Class'
+                  chip
+                />
+              </Grid>
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='OrgName'
-                  label='Org Name*'
-                  placeholder='Enter name'
+                  name='name'
+                  type='text'
+                  label='Staff Full Name'
+                  placeholder='Enter Staff Full Name'
                   fullWidth
                   required
                 />
@@ -61,10 +158,10 @@ const AddStaff = ({ setValue }) => {
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='AdminEmail'
+                  name='email'
                   type='email'
-                  label='Email*'
-                  placeholder='Enter Email'
+                  label='Staff Email*'
+                  placeholder='Enter Staff Email'
                   fullWidth
                   required
                 />
@@ -72,9 +169,9 @@ const AddStaff = ({ setValue }) => {
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='OrgPhoneNumber'
+                  name='phone'
                   type='number'
-                  label='Org Phone Number*'
+                  label='Phone Number'
                   placeholder='Enter Phone Number'
                   fullWidth
                   required
@@ -83,53 +180,57 @@ const AddStaff = ({ setValue }) => {
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='OrgPersonName'
+                  name='staff_id'
                   type='text'
-                  label='Org Person Name*'
-                  placeholder='Enter Name'
+                  label='ID'
+                  placeholder='Enter ID'
                   fullWidth
                   required
                 />
               </Grid>
               <Grid item md={6} sm={12}>
-                <RHFTextField
+                <label
+                  htmlFor='class'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Subject
+                </label>
+                <RHFMultiSelect
                   size='small'
-                  name='OrgPersonNumber'
-                  type='number'
-                  label='Org Person Number*'
-                  placeholder='+91 12345 65478'
-                  fullWidth
-                  required
+                  name='subject'
+                  options={[
+                    { label: 'Subject 1', value: 'Subject 1' },
+                    { label: 'Subject 2', value: 'Subject 2' },
+                  ]}
+                  placeholder='Select Subject'
+                  chip
                 />
               </Grid>
               <Grid item md={6} sm={12}>
-                <RHFTextField
+                <label
+                  htmlFor='standard'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Standard
+                </label>
+                <RHFMultiSelect
                   size='small'
-                  name='GSTNumber'
-                  type='text'
-                  label='GST Number'
-                  placeholder='GST Number'
-                  fullWidth
-                  required
+                  name='standard'
+                  options={[
+                    { label: 'Standard 1', value: 'Standard 1' },
+                    { label: 'Standard 2', value: 'Standard 2' },
+                  ]}
+                  placeholder='Select Standard'
+                  chip
                 />
               </Grid>
+
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='AlternativePhoneNumber'
+                  name='address'
                   type='text'
-                  label='Alternative Phone Number*'
-                  placeholder='Phone Number'
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item md={6} sm={12}>
-                <RHFTextField
-                  size='small'
-                  name='AdminAddress'
-                  type='text'
-                  label='Admin Address*'
+                  label='Address'
                   placeholder='814 Howard Street, 120065, India'
                   fullWidth
                   required
@@ -138,10 +239,10 @@ const AddStaff = ({ setValue }) => {
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='Website'
+                  name='city'
                   type='text'
-                  label='Website*'
-                  placeholder='Enter Website'
+                  label='City*'
+                  placeholder='Enter City'
                   fullWidth
                   required
                 />
@@ -149,7 +250,7 @@ const AddStaff = ({ setValue }) => {
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='State'
+                  name='state'
                   type='text'
                   label='State*'
                   placeholder='Enter State'
@@ -157,55 +258,110 @@ const AddStaff = ({ setValue }) => {
                   required
                 />
               </Grid>
+
               <Grid item md={6} sm={12}>
                 <RHFTextField
                   size='small'
-                  name='City'
+                  name='degree'
                   type='text'
-                  label='City*'
-                  placeholder='Enter City'
+                  label='Degree'
+                  placeholder='Enter Degree'
                   fullWidth
                   required
                 />
               </Grid>
+
               <Grid item md={6} sm={12}>
-                <RHFTextField
-                  size='small'
-                  name='City'
-                  type='text'
-                  label='City*'
-                  placeholder='Enter City'
-                  fullWidth
-                  required
+                <label
+                  htmlFor='password'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Password
+                </label>
+                <Controller
+                  name='password'
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      control={control}
+                      type={showPassword ? 'text' : 'password'}
+                      variant='outlined'
+                      fullWidth
+                      size='small'
+                      error={!!errors?.password}
+                      helperText={
+                        errors?.password ? errors?.password.message : ''
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton
+                              onClick={() => setShowPassword(!showPassword)}
+                              edge='end'
+                            >
+                              {showPassword ? (
+                                <VisibilityOff sx={{ color: 'white' }} />
+                              ) : (
+                                <Visibility sx={{ color: 'white' }} />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item md={6} sm={12}>
-                <RHFTextField
-                  size='small'
-                  name='OrgAddress'
-                  type='text'
-                  label='Org Address*'
-                  placeholder='Enter Org Address'
-                  fullWidth
-                  required
-                />
-              </Grid>
-              <Grid item md={6} sm={12}>
-                <RHFTextField
-                  size='small'
-                  name='Pincode'
-                  type='number'
-                  label='Pin code*'
-                  placeholder='Enter Pin code'
-                  fullWidth
-                  required
+                <label
+                  htmlFor='password_confirmation'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Confirm Password
+                </label>
+                <Controller
+                  name='password_confirmation'
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      control={control}
+                      type={showConfirmPassword ? 'text' : 'password'}
+                      variant='outlined'
+                      fullWidth
+                      size='small'
+                      error={!!errors?.confirmPassword}
+                      helperText={
+                        errors?.confirmPassword
+                          ? errors?.confirmPassword.message
+                          : ''
+                      }
+                      InputProps={{
+                        endAdornment: (
+                          <InputAdornment position='end'>
+                            <IconButton
+                              onClick={() =>
+                                setShowConfirmPassword(!showConfirmPassword)
+                              }
+                              edge='end'
+                            >
+                              {showConfirmPassword ? (
+                                <VisibilityOff sx={{ color: 'white' }} />
+                              ) : (
+                                <Visibility sx={{ color: 'white' }} />
+                              )}
+                            </IconButton>
+                          </InputAdornment>
+                        ),
+                      }}
+                    />
+                  )}
                 />
               </Grid>
             </Grid>
           </div>
           <div className='flex mt-3 justify-end'>
             <div className=' pt-2 rounded bg-white h-11 w-40'>
-              <button>Add Student</button>
+              <button>Add Staff 1234</button>
             </div>
           </div>
         </div>

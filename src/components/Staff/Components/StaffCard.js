@@ -9,7 +9,8 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const StaffCard = ({ name, email, phone, image, classes, subjects }) => {
+const StaffCard = ({ data }) => {
+  console.log('🚀 ~ StaffCard ~ data:', data);
   const navigate = useNavigate();
   const handleOnClick = () => {
     navigate('/staffInformation');
@@ -27,56 +28,59 @@ const StaffCard = ({ name, email, phone, image, classes, subjects }) => {
       <CardContent className='flex flex-col items-start p-6 gap-3'>
         <div className='flex items-center mb-4 w-full'>
           <Avatar
-            alt={name}
-            src={image}
+            alt={data?.name}
+            src={data?.image}
             style={{ width: '80px', height: '80px' }}
             className='mr-4'
           />
           <div className='flex-1'>
-            <Typography variant='h6' className='font-helvetica'>
-              {name}
+            <Typography variant='h6' className='font-helvetica text-start'>
+              {data?.name}
+            </Typography>
+            <Typography
+              variant='body2'
+              className='text-gray-400 font-helvetica text-sm text-start'
+            >
+              {data?.email}
             </Typography>
             <Typography
               variant='body2'
               className='text-gray-400 font-helvetica text-sm'
             >
-              {email}
-            </Typography>
-            <Typography
-              variant='body2'
-              className='text-gray-400 font-helvetica text-sm'
-            >
-              {phone}
+              {data?.phone}
             </Typography>
           </div>
           <IconButton onClick={handleOnClick} className='text-white'>
             <FaEye style={{ fontSize: '1.2em', color: 'white' }} />
           </IconButton>
         </div>
-        <div className='w-full flex items-center gap-2 mb-2'>
-          <Typography
-            variant='body2'
-            className='text-gray-400 font-helvetica text-sm'
-          >
-            Primary Class -
-          </Typography>
-          <div className='flex flex-wrap gap-1'>
-            {classes.map((cls, index) => (
-              <span
-                key={index}
-                style={{
-                  backgroundColor: 'rgba(54, 199, 195, 0.2)',
-                  color: '#36C7C3',
-                }}
-                className='px-2 py-1 rounded-full font-helvetica'
-              >
-                {cls}
-              </span>
-            ))}
+        {data?.staff_details?.classes && (
+          <div className='w-full flex items-center gap-2 mb-2'>
+            <Typography
+              variant='body2'
+              className='text-gray-400 font-helvetica text-sm'
+            >
+              Primary Class -
+            </Typography>
+            <div className='flex flex-wrap gap-1'>
+              {data?.staff_details?.classes?.map((cls, index) => (
+                <span
+                  key={index}
+                  style={{
+                    backgroundColor: 'rgba(54, 199, 195, 0.2)',
+                    color: '#36C7C3',
+                  }}
+                  className='px-2 py-1 rounded-full font-helvetica'
+                >
+                  {cls}
+                </span>
+              ))}
+            </div>
           </div>
-        </div>
+        )}
+
         <div className='w-full flex flex-wrap gap-1 mt-2'>
-          {subjects.map((subject, index) => (
+          {data?.staff_details?.subjects?.map((subject, index) => (
             <span
               key={index}
               style={{

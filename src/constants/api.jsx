@@ -58,5 +58,9 @@ const URLS = {
   ADD_NOTIFICATION: () => `/notifications`,
   EDIT_NOTIFICATION: id => `/notifications/${id}`,
   DELETE_NOTIFICATION: id => `/notifications/${id}`,
+  GET_STAFF: () => `/staff`,
+  ADD_STAFF: () => `/staff`,
+  UPDATE_STAFF: id => `/staff/${id}`,
+  DELETE_STAFF: id => `/staff/${id}`,
 };
 export default URLS;

@@ -111,7 +111,7 @@ export function RHFMultiSelect({
 
     if (!selectedItems.length && placeholder) {
       return (
-        <Box component='em' sx={{ color: 'text.disabled' }}>
+        <Box component='em' sx={{ color: 'white' }}>
           {placeholder}
         </Box>
       );
@@ -121,7 +121,12 @@ export function RHFMultiSelect({
       return (
         <Box sx={{ display: 'flex', flexWrap: 'wrap', gap: 0.5 }}>
           {selectedItems.map(item => (
-            <Chip key={item.value} size='small' label={item.label} />
+            <Chip
+              key={item.value}
+              size='small'
+              sx={{ color: 'white' }}
+              label={item.label}
+            />
           ))}
         </Box>
       );
@@ -135,7 +140,7 @@ export function RHFMultiSelect({
       name={name}
       control={control}
       render={({ field, fieldState: { error } }) => (
-        <FormControl sx={sx}>
+        <FormControl fullWidth>
           {label && (
             <InputLabel id={name} size='small'>
               {label}
@@ -147,7 +152,18 @@ export function RHFMultiSelect({
             multiple
             displayEmpty={!!placeholder}
             labelId={name}
-            input={<OutlinedInput fullWidth label={label} error={!!error} />}
+            input={
+              <OutlinedInput
+                fullWidth
+                label={label}
+                error={!!error}
+                sx={{
+                  textAlign: 'left',
+                  color: 'white',
+                  border: '1px solid #343B4F', // Align with RHFSelect color
+                }}
+              />
+            }
             renderValue={renderValues}
             MenuProps={{
               PaperProps: {
@@ -165,9 +181,10 @@ export function RHFMultiSelect({
                   px: 2,
                   borderRadius: 0.75,
                   typography: 'body2',
+                  color: 'white',
                 }}
               >
-                <em>{placeholder}</em>
+                <em style={{ color: 'white' }}>{placeholder}</em>
               </MenuItem>
             )}
 
@@ -189,7 +206,6 @@ export function RHFMultiSelect({
                     ...(checkbox && {
                       p: 0.25,
                     }),
-                    background: 'red',
                   }}
                 >
                   {checkbox && (
@@ -203,7 +219,7 @@ export function RHFMultiSelect({
 
           {(!!error || helperText) && (
             <FormHelperText error={!!error}>
-              {error ? error?.message : helperText}
+              {error ? error.message : helperText}
             </FormHelperText>
           )}
         </FormControl>

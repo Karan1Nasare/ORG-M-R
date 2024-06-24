@@ -79,6 +79,10 @@ const BasicInfo = lazy(
 
 const Staff = lazy(() => import('./components/Staff/index'));
 const AddStaff = lazy(() => import('./components/Staff/AddStaff/index'));
+// const AddStaff = lazy(
+//   () => import('./components/Staff/Components/AddStaffPage'),
+// );
+
 const StaffInformation = lazy(
   () => import('./components/Staff/StaffInformation/index'),
 );

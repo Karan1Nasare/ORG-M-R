@@ -3,6 +3,7 @@ import { FaEye } from 'react-icons/fa';
 import StaffCard from './Components/StaffCard';
 import Header from './Components/header';
 import AddStaffForm from './Components/AddStaffForm';
+import useStaff from './hooks/useStaff';
 
 const students = [
   {
@@ -45,20 +46,14 @@ const students = [
 ];
 
 const App = () => {
+  const { staffList } = useStaff();
+  console.log('🚀 ~ App ~ staffList:', staffList);
   return (
     <div className=' min-h-screen p-10'>
       <Header />
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10'>
-        {students.map((student, index) => (
-          <StaffCard
-            key={index}
-            name={student.name}
-            email={student.email}
-            phone={student.number}
-            image={student.image}
-            classes={['5B', '5B', '5B']} // Replace with actual classes if available
-            subjects={['Social Science', 'Social Science', 'Social Science']} // Replace with actual subjects if available
-          />
+        {staffList?.data?.map((staff, index) => (
+          <StaffCard key={index} data={staff} />
         ))}
       </div>
     </div>
