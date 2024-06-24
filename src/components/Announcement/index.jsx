@@ -26,6 +26,8 @@ const Announcement = () => {
     confirmUpdateHandler,
     totalPages,
     loading,
+    searchTerm,
+    handleSearchChange,
   } = useAnnouncements();
 
   let content;
@@ -91,7 +93,7 @@ const Announcement = () => {
         >
           Announcement
         </Typography>
-        <AnnouncementHeader value={{}} onChange={{}} />
+        <AnnouncementHeader value={searchTerm} onChange={handleSearchChange} />
         <div className='flex-1 mt-2'>{content}</div>
       </div>
     </>

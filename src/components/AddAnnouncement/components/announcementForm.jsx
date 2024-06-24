@@ -1,36 +1,38 @@
-import React, { useState } from 'react';
-import { useFormContext } from 'react-hook-form';
-import { TextField, Grid } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { useFormContext, Controller } from 'react-hook-form';
+import { TextField, Grid, Button, Typography } from '@mui/material';
 import { RHFSelect, RHFTextField } from '../../../hooks/hook-form';
 import RichTextEditor from '../../shared/RichTextEditor';
 import ImageUpload from '../../ui/Form/ImageUpload';
 
-const AnnouncementForm = ({
-  announcement,
-  selectedFile,
-  setSelectedFile,
-  onChange,
-  handleAddAnnouncement,
-}) => {
-  const { control } = useFormContext();
+const AnnouncementForm = ({ setValue, eventList }) => {
+  console.log('🚀 ~ AnnouncementForm ~ eventList:', eventList);
+  const { control, handleSubmit } = useFormContext();
   const [file, setFile] = useState();
 
-  const handleInputChange = e => {
-    const { name, value } = e.target;
-    onChange(name, value);
+  const handleInputChange = (name, value) => {
+    setValue(name, value);
   };
 
+  useEffect(() => {
+    if (file) {
+      setValue('image', file);
+      setValue('url', 'http://www.test.com');
+    }
+  }, [file, setValue]);
+
   return (
-    <>
+    <form onSubmit={handleSubmit(() => {})}>
       <div className='flex justify-end mb-4'>
         <div className='w-44'>
           <RHFSelect
             size='small'
-            name='Select'
+            name='type'
             options={[
               { label: 'Student', value: 'Student' },
               { label: 'Staff', value: 'Staff' },
             ]}
+            setValue={setValue}
           />
         </div>
       </div>
@@ -59,8 +61,9 @@ const AnnouncementForm = ({
                 </label>
                 <RHFSelect
                   size='small'
-                  name='Select Announcement Type'
-                  options={[{ label: 'Event', value: 'Event' }]}
+                  name='event_id'
+                  options={[{ id: '1', label: 'Event', value: '1' }]}
+                  setValue={setValue}
                 />
               </div>
               <div className='flex flex-col mt-4'>
@@ -70,12 +73,20 @@ const AnnouncementForm = ({
                 >
                   Title
                 </label>
-                <RHFTextField
-                  className='h-11 border text-sm bg-secondary__fill border-gray-600 rounded-md w-full max-w-screen mx-auto'
-                  placeholder='Enter Exam Title'
-                  name='examTitle'
-                  defaultValue=''
+                <Controller
+                  name='title'
                   control={control}
+                  render={({ field }) => (
+                    <TextField
+                      className='h-11 border text-sm bg-secondary__fill border-gray-600 rounded-md w-full max-w-screen mx-auto'
+                      placeholder='Enter Exam Title'
+                      onChange={e => {
+                        field.onChange(e);
+                        handleInputChange('title', e.target.value);
+                      }}
+                      value={field.value}
+                    />
+                  )}
                 />
               </div>
               <div className='flex flex-col mt-4'>
@@ -87,15 +98,27 @@ const AnnouncementForm = ({
                 </label>
                 <RHFSelect
                   size='small'
-                  name='Select Announcement Type'
+                  name='standard'
                   options={[{ label: 'Event', value: 'Event' }]}
+                  setValue={setValue}
                 />
               </div>
               <div>
                 <p className='mt-8 text-sm max-md:max-w-full text-left text-white'>
                   Description<span className='text-red-600'>*</span>
                 </p>
-                <RichTextEditor />
+                <Controller
+                  name='description'
+                  control={control}
+                  defaultValue=''
+                  rules={{ required: 'Description is required' }}
+                  render={({ field }) => (
+                    <RichTextEditor
+                      value={field.value}
+                      onChange={field.onChange}
+                    />
+                  )}
+                />
               </div>
 
               <div className='flex space-x-4 mt-4'>
@@ -111,7 +134,7 @@ const AnnouncementForm = ({
                     type='date'
                     fullWidth
                     className='justify-center items-start bg-[#0B1739] px-3 py-3 mt-2 text-sm leading-5 rounded border border-[#343B4F] border-solid text-stone-300 max-md:pr-5 max-md:max-w-full'
-                    //   onChange={e => handleDateChange('date', e.target.value)}
+                    onChange={e => setValue('date', e.target.value)}
                   />
                 </div>
 
@@ -127,7 +150,7 @@ const AnnouncementForm = ({
                     type='time'
                     fullWidth
                     className='justify-center items-start bg-[#0B1739] px-3 py-3 mt-2 text-sm leading-5 rounded border border-[#343B4F] border-solid text-stone-300 max-md:pr-5 max-md:max-w-full'
-                    //   onChange={e => handleDateChange('time', e.target.value)}
+                    onChange={e => setValue('time', e.target.value)}
                   />
                 </div>
               </div>
@@ -135,7 +158,7 @@ const AnnouncementForm = ({
           </Grid>
         </Grid>
       </main>
-    </>
+    </form>
   );
 };
 

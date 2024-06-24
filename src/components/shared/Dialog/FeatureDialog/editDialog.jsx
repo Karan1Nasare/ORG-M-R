@@ -2,25 +2,60 @@ import React, { useState } from 'react';
 import { IconButton } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Icon } from '@iconify/react';
-
 import AnnouncementImage from '../../../../assets/announcement_card.png';
 import RichTextEditor from '../../RichTextEditor';
+import SelectField from '../../SelectField';
 
-const EditFeatureCard = ({ isOpen, onClose }) => {
+const EditAnnouncementCard = ({
+  isOpen,
+  onClose,
+  announcementData,
+  onUpdate,
+}) => {
   if (!isOpen) {
     return null;
   }
 
-  const [bgImage, setBgImage] = useState(AnnouncementImage);
+  const [data, setData] = useState({
+    title: announcementData?.title || '',
+    description: announcementData?.description || '',
+    totalAmount: announcementData?.total_amount || '',
+    image: announcementData?.image?.url || AnnouncementImage,
+    url: announcementData?.url || '',
+    date: announcementData?.date || '',
+    time: announcementData?.time || '',
+    _method: 'PUT',
+  });
 
   const handleFileChange = event => {
     const file = event.target.files[0];
     if (file) {
       const reader = new FileReader();
-      reader.onloadend = () => {
-        setBgImage(reader.result);
+      reader.onload = () => {
+        setData(prevState => ({ ...prevState, image: reader.result }));
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    try {
+      const id = announcementData?.id;
+      await onUpdate(formData);
+      onClose();
+    } catch (error) {
+      console.error('Error editing feature:', error);
     }
   };
 
@@ -44,8 +79,8 @@ const EditFeatureCard = ({ isOpen, onClose }) => {
           <div className='absolute inset-0 flex items-center justify-center'>
             <img
               loading='lazy'
-              src={bgImage}
-              className='object-cover w-full h-full opacity-50'
+              src={data?.image}
+              className='w-full h-52 rounded-xl mb-4 object-cover opacity-50'
             />
           </div>
 
@@ -73,19 +108,59 @@ const EditFeatureCard = ({ isOpen, onClose }) => {
 
         <div className='flex flex-wrap gap-5 content-start mt-5 text-sm '>
           <div className='flex flex-col flex-1'>
-            <div className='text-white'>Feature Name</div>
-            <input
-              type='text'
-              className='w-full px-3 py-3 mt-2 rounded border border-gray-700 border-solid bg-none leading-[143%] text-ellipsis text-stone-300  focus:outline-none focus:ring-2 focus:ring-primary bg-transparent'
-              placeholder='Select Feature Name'
+            <div className='text-white mb-2'>Select Announcement Type</div>
+            <SelectField
+              name='announcementType'
+              label='Select an option'
+              value={data.announcementType}
+              onChange={handleInputChange}
+              options={[
+                { label: 'Option 1', value: 'option1' },
+                { label: 'Option 2', value: 'option2' },
+                { label: 'Option 3', value: 'option3' },
+              ]}
+              placeholder='Select'
+              error={false} // Set to true to display error state
             />
           </div>
           <div className='flex flex-col flex-1'>
-            <div className='text-white'>GST</div>
+            <div className='text-white'>Title</div>
             <input
               type='text'
-              placeholder='Enter GST'
+              name='title'
+              placeholder='Enter Title'
               className='justify-center bg-transparent items-start px-3 py-3 mt-2 rounded border border-gray-700 border-solid leading-[143%] text-stone-300 max-md:pr-5'
+              value={data.title}
+              onChange={handleInputChange}
+            />
+          </div>
+        </div>
+        <div className='flex flex-wrap gap-5 content-start mt-5 text-sm '>
+          <div className='flex flex-col flex-1'>
+            <div className='text-white mb-2'>Standard</div>
+            <SelectField
+              name='standard'
+              label='Select an option'
+              value={data.standard}
+              onChange={handleInputChange}
+              options={[
+                { label: 'Option 1', value: 'option1' },
+                { label: 'Option 2', value: 'option2' },
+                { label: 'Option 3', value: 'option3' },
+              ]}
+              placeholder='Select'
+              error={false} // Set to true to display error state
+            />
+          </div>
+          <div className='flex flex-col flex-1'>
+            <div className='text-white'>URL</div>
+            <input
+              type='text'
+              name='url'
+              placeholder='Enter URL'
+              className='justify-center bg-transparent items-start px-3 py-3 mt-2 rounded border border-gray-700 border-solid leading-[143%] text-stone-300 max-md:pr-5'
+              value={data.url}
+              onChange={handleInputChange}
             />
           </div>
         </div>
@@ -93,25 +168,41 @@ const EditFeatureCard = ({ isOpen, onClose }) => {
           Description
         </div>
         <div className='mt-2'>
-          <RichTextEditor />
+          <RichTextEditor
+            value={data.description}
+            onChange={value =>
+              setData(prevState => ({ ...prevState, description: value }))
+            }
+          />
         </div>
         <div className='flex flex-wrap gap-5 content-start mt-5 text-sm'>
           <div className='flex flex-col flex-1'>
-            <div className='text-white'>Rate (Amount)</div>
+            <div className='text-white'>Date</div>
             <input
-              placeholder='Enter Rate'
+              type='date'
+              name='date'
+              placeholder='Select a date'
               className='justify-center bg-transparent items-start px-3 py-3.5 mt-2 rounded border border-gray-700 border-solid text-stone-300 max-md:pr-5'
+              value={data.date}
+              onChange={handleInputChange}
             />
           </div>
           <div className='flex flex-col flex-1'>
-            <div className='text-white'>Total Amount</div>
+            <div className='text-white'>Time</div>
             <input
-              placeholder='Enter Total Amount'
+              type='time'
+              name='time'
+              placeholder='Select a time'
               className='justify-center items-start bg-transparent px-3 py-3.5 mt-2 rounded border border-gray-700 border-solid text-stone-300 max-md:pr-5'
+              value={data.time}
+              onChange={handleInputChange}
             />
           </div>
         </div>
-        <button className='justify-center self-center px-7 py-3 mt-8 text-base text-center whitespace-nowrap bg-white rounded-lg text-slate-900 max-md:px-5'>
+        <button
+          onClick={handleSubmit}
+          className='justify-center self-center px-7 py-3 mt-8 text-base text-center whitespace-nowrap bg-white rounded-lg text-slate-900 max-md:px-5'
+        >
           Update
         </button>
       </div>
@@ -119,4 +210,4 @@ const EditFeatureCard = ({ isOpen, onClose }) => {
   );
 };
 
-export default EditFeatureCard;
+export default EditAnnouncementCard;

@@ -4,14 +4,23 @@ import { useForm, FormProvider } from 'react-hook-form';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 import AnnouncementForm from './components/announcementForm';
+import useAddAnnouncement from './hooks/useAddAnnouncement';
 
 const AddAnnouncement = () => {
+  const { onAddAnnouncement, eventList } = useAddAnnouncement();
   const methods = useForm();
-  const { handleSubmit } = methods;
+  const { handleSubmit, setValue, getValues } = methods;
 
-  const onSubmit = async data => {
-    console.log('onSubmit', data);
-    // setShowForm(false);
+  const onSubmit = data => {
+    console.log('Submitted data:', data);
+    const formData = new FormData();
+
+    // Append form fields to the FormData object using Object.entries
+    Object.entries(data).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    onAddAnnouncement(data);
   };
 
   return (
@@ -21,9 +30,13 @@ const AddAnnouncement = () => {
       </Typography>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <AnnouncementForm />
+          <AnnouncementForm setValue={setValue} eventList={eventList} />
           <div className='flex justify-end mt-6 '>
-            <Button variant='outline-add-button' startIcon={<AddCircleIcon />}>
+            <Button
+              type='submit'
+              variant='outline-add-button'
+              startIcon={<AddCircleIcon />}
+            >
               Add Announcement
             </Button>
           </div>

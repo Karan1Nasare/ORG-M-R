@@ -25,8 +25,8 @@ const AnnouncementCard = ({
   return (
     <div className='relative bg-secondary__fill h-68 w-34 mt-4 p-8 rounded-lg border border-grey__primary__light border-opacity-20'>
       <img
-        src={data?.image[0]?.url || AnnouncementImage}
-        className='w-full h-13'
+        src={data?.image?.url || AnnouncementImage}
+        className='w-full h-52 rounded-xl mb-4 object-cover'
         alt='Announcement Image'
       />
       <div className='flex items-center justify-between mt-4'>

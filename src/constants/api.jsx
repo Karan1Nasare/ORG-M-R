@@ -68,5 +68,10 @@ const URLS = {
   EDIT_BANNER: id => `/banners/${id}`,
   UPDATE_BANNER: id => `/banners/${id}`,
   DELETE_BANNER: id => `/banners/${id}`,
+  GET_ANNOUNCEMENT: () => `/announcements`,
+  ADD_ANNOUNCEMENT: () => `/announcements`,
+  EDIT_ANNOUNCEMENT: id => `/announcements/${id}`,
+  DELETE_ANNOUNCEMENT: id => `/announcements/${id}`,
+  GET_EVENT: () => `/events`,
 };
 export default URLS;

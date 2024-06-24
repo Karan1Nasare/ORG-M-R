@@ -19,6 +19,11 @@ const useAnnouncements = () => {
   const [openDelete, setOpenDelete] = useState(false);
   const [selectedData, setSelectedData] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  const handleSearchChange = value => {
+    setSearchTerm(value);
+  };
 
   const openEditDialog = data => {
     setIsEditOpen(true);
@@ -91,19 +96,6 @@ const useAnnouncements = () => {
   };
 
   const fetchAnnouncementList = async () => {
-    // try {
-    //   const data = Array.from({ length: 10 }, (_, index) => ({
-    //     title: `Announcement ${index}`,
-    //     description: 'Announcement description',
-    //     type: 'Student',
-    //     standard: 'Std-10th',
-    //     image: AnouncementImage,
-    //     id: index + 1,
-    //   }));
-    //   setAnnouncementList(data);
-    // } catch (err) {
-    //   console.log('error while fetching announcement', err);
-    // }
     try {
       setLoading(true);
       fetcher({
@@ -152,6 +144,9 @@ const useAnnouncements = () => {
     handlePageChange,
     totalPages: Math.ceil(announcementList.length / ITEMS_PER_PAGE),
     confirmUpdateHandler,
+    searchTerm,
+    setSearchTerm,
+    handleSearchChange,
   };
 };
 
