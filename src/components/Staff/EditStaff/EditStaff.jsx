@@ -1,61 +1,62 @@
-/*   import/no-extraneous-dependencies */
 import React, { useEffect, useState } from 'react';
-import * as zod from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
+import { useForm, Controller } from 'react-hook-form';
 import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { object, string } from 'yup';
-
-import AddStaffForm from './AddStaffForm';
 import {
   FormProvider,
   RHFMultiSelect,
-  RHFSelect,
   RHFTextField,
 } from '../../../hooks/hook-form';
+import AddStaffForm from './EdtStaffForm';
 import Button from '../../shared/buttons/Button';
-import colors from '../../../theme/colors';
-import { useStore } from '../../../store/context-store';
 import TabTitle from '../../shared/TabTitle';
-import useAddStaff from './hooks/useAddStaff';
+import useAddStaff from './hooks/useEditStaff';
 
-// const staffSchema = object({
-//   organisation: string().required('Select at least one organization'),
-//   class: string().required('Select at least one class'),
-//   primary_class: string().required('Select at least one primary class'),
-//   name: string().required('Staff Full Name is required'),
-//   email: string().email('Invalid email').required('Staff Email is required'),
-//   phone: string().required('Phone Number is required'),
-//   staff_id: string().required('Staff ID is required'),
-//   subject: string().required('Select at least one subject'),
-//   standard: string().required('Select at least one standard'),
-//   address: string().required('Address is required'),
-//   city: string().required('City is required'),
-//   state: string().required('State is required'),
-//   degree: string().required('Degree is required'),
-//   password: string()
-//     .min(8, 'Password must be at least 8 characters')
-//     .required('Password is required'),
-//   password_confirmation: string()
-//     .oneOf([string().ref('password')], 'Passwords must match')
-//     .required('Confirm Password is required'),
-// });
-
-const AddStaff = ({ setValue }) => {
+const EditStaff = ({ setValue, staffDataById }) => {
+  console.log('🚀 ~ EditStaff ~ staffDataById:', staffDataById?.staff_details);
   const { onAddStaff } = useAddStaff();
   const [file, setFile] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [Store, StoreDispatch] = useStore();
+
+  const methods = useForm({
+    defaultValues: {
+      organisation: staffDataById?.organisation || [],
+      class: staffDataById?.staff_details?.class || [],
+      primary_class: staffDataById?.staff_details?.primary_class || [],
+      subject: staffDataById?.staff_details?.subject || [],
+      standard: staffDataById?.staff_details?.standard || [],
+      name: staffDataById?.name || '',
+      email: staffDataById?.email || '',
+      phone: staffDataById?.staff_details?.phone || '',
+      staff_id: staffDataById?.staff_details?.staff_id || '',
+      address: staffDataById?.staff_details?.address || '',
+      city: staffDataById?.staff_details?.city || '',
+      state: staffDataById?.staff_details?.state || '',
+      degree: staffDataById?.staff_details?.degree || '',
+      password: '',
+      password_confirmation: '',
+    },
+  });
+
+  const {
+    control,
+    handleSubmit,
+    reset,
+    formState: { errors, isSubmitting },
+  } = methods;
+
+  // useEffect(() => {
+  //   if (staffDataById) {
+  //     reset(staffDataById);
+  //   }
+  // }, [staffDataById, reset]);
 
   const onSubmit = async data => {
     console.debug('onSubmit', file);
     console.debug('onSubmit', data);
     const formData = new FormData();
 
-    // Convert multi-select fields to arrays
     const multiSelectFields = [
       'organisation',
       'class',
@@ -67,7 +68,6 @@ const AddStaff = ({ setValue }) => {
       formData.append(field, JSON.stringify(data[field]));
     });
 
-    // Append the remaining form fields to the FormData object
     Object.entries(data).forEach(([key, value]) => {
       if (!multiSelectFields.includes(key)) {
         formData.append(key, value);
@@ -80,30 +80,14 @@ const AddStaff = ({ setValue }) => {
     onAddStaff(formData);
   };
 
-  const methods = useForm({
-    defaultValues: {
-      organisation: [],
-      class: [],
-      primary_class: [],
-      subject: [],
-      standard: [],
-    },
-  });
-  const {
-    control,
-    handleSubmit,
-    errors,
-    formState: { isSubmitting },
-  } = methods;
-
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <TabTitle title='Add Staff Details' sx={{ marginTop: '20px' }} />
+        <TabTitle title='Edit Staff Details' sx={{ marginTop: '20px' }} />
 
         <div className='mt-3'>
           <AddStaffForm file={file} setFile={setFile} />
-          <div className='text-sm w-full mt-5 font-medium text-center bg-[#0B1739] text-gray-500   p-6 rounded-md flex items-center justify-between'>
+          <div className='text-sm w-full mt-5 font-medium text-center bg-[#0B1739] text-gray-500 p-6 rounded-md flex items-center justify-between'>
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <label
@@ -375,7 +359,7 @@ const AddStaff = ({ setValue }) => {
           </div>
           <div className='flex mt-3 justify-end'>
             <div className=' pt-2 rounded bg-white h-11 w-40'>
-              <button type='submit'>Add Staff</button>
+              <button type='submit'>Edit Staff</button>
             </div>
           </div>
         </div>
@@ -384,4 +368,4 @@ const AddStaff = ({ setValue }) => {
   );
 };
 
-export default AddStaff;
+export default EditStaff;

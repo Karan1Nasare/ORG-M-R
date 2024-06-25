@@ -23,7 +23,7 @@ const TabTitle = ({ title, sx }) => {
         ...sx,
       }}
     >
-      {title}
+      {title} Details
     </Typography>
   );
 };

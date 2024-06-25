@@ -3,11 +3,11 @@ import React from 'react';
 import TabTitle from '../../shared/TabTitle';
 import ActiveInfoCard from './ActiveInfoCard';
 
-const StaffDetailInfo = ({ organization }) => {
+const StaffDetailInfo = ({ data }) => {
   return (
     <>
       <Stack sx={{ margin: '20px 0' }}>
-        <TabTitle title='Chirag Gondaliya Details' />
+        <TabTitle title={data?.name} />
       </Stack>
       <Box sx={{ display: 'flex' }}>
         <Stack
@@ -25,7 +25,7 @@ const StaffDetailInfo = ({ organization }) => {
           }}
         >
           <img
-            src={organization?.profileImage}
+            src={data?.staff_details?.image?.url}
             className='w-full h-full min-h-[150px]'
           />
         </Stack>
@@ -70,17 +70,13 @@ const StaffDetailInfo = ({ organization }) => {
             <p className='text-[rgba(255,255,255,0.5)] text-sm text-left'>
               Org Name :
             </p>
-            <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.name}
-            </p>
+            <p className='text-[rgba(255,255,255,1)] text-left'>{data?.name}</p>
           </Stack>
           <Stack>
             <p className='text-[rgba(255,255,255,0.5)] text-sm text-left'>
-              Org Person Name :
+              Staff Full Name :
             </p>
-            <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.name}
-            </p>
+            <p className='text-[rgba(255,255,255,1)] text-left'>{data?.name}</p>
           </Stack>
 
           <Stack>
@@ -88,7 +84,7 @@ const StaffDetailInfo = ({ organization }) => {
               Alternative Phone Number
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.AlternativePhone || 'N/A'}
+              {data?.staff_details?.phone || 'N/A'}
             </p>
           </Stack>
           <Stack>
@@ -96,7 +92,7 @@ const StaffDetailInfo = ({ organization }) => {
               State
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.state}
+              {data?.staff_details?.state}
             </p>
           </Stack>
           <Stack>
@@ -104,7 +100,7 @@ const StaffDetailInfo = ({ organization }) => {
               Address
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.address}
+              {data?.staff_details?.address}
             </p>
           </Stack>
         </Stack>
@@ -114,7 +110,7 @@ const StaffDetailInfo = ({ organization }) => {
               Email :
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.email}
+              {data?.staff_details?.email}
             </p>
           </Stack>
           <Stack>
@@ -122,7 +118,7 @@ const StaffDetailInfo = ({ organization }) => {
               Phone Number:
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.phone}
+              {data?.staff_details?.phone}
             </p>
           </Stack>
           <Stack>
@@ -130,7 +126,7 @@ const StaffDetailInfo = ({ organization }) => {
               Website
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.website || 'N/A'}
+              {data?.website || 'N/A'}
             </p>
           </Stack>
           <Stack>
@@ -138,7 +134,7 @@ const StaffDetailInfo = ({ organization }) => {
               City
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.city}
+              {data?.staff_details?.city}
             </p>
           </Stack>
           <Stack>
@@ -146,7 +142,7 @@ const StaffDetailInfo = ({ organization }) => {
               Pincode
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {organization?.pincode}
+              {data?.staff_details?.pincode}
             </p>
           </Stack>
         </Stack>

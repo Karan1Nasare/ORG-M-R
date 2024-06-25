@@ -78,9 +78,7 @@ const BasicInfo = lazy(
 
 const Staff = lazy(() => import('./components/Staff/index'));
 const AddStaff = lazy(() => import('./components/Staff/AddStaff/index'));
-// const AddStaff = lazy(
-//   () => import('./components/Staff/Components/AddStaffPage'),
-// );
+const EditStaff = lazy(() => import('./components/Staff/EditStaff/index'));
 
 const StaffInformation = lazy(
   () => import('./components/Staff/StaffInformation/index'),
@@ -415,6 +413,17 @@ const AppRoutes = [
     slug: 'addStaff',
     route: '/addStaff',
     component: AddStaff,
+    icon: '',
+    external: false,
+    auth: true,
+    wrapper: LayoutWrapper,
+    parent: 'dashboard',
+  },
+  {
+    name: 'editStaff',
+    slug: 'editStaff',
+    route: '/editStaff/:id',
+    component: EditStaff,
     icon: '',
     external: false,
     auth: true,

@@ -14,13 +14,14 @@ import StaffDetailInfo from './StaffDetailInfo';
 import StaffAccountInfo from './StaffAccountInfo';
 import GrowthReport from './GrowthReport';
 
-const StaffViewPage = () => {
+const StaffViewPage = ({ data }) => {
+  console.log('🚀 ~ StaffViewPage ~ data:', data);
   const navigate = useNavigate();
   const [Tabvalue, setTabValue] = useState('1');
   const [organizationDetails, setorganizationDetails] = useState();
 
-  const handleEditClick = () => {
-    navigate('/addStudent');
+  const handleEditClick = id => {
+    navigate(`/editStaff/${id}`);
   };
 
   const handleChange = (event, newValue) => {
@@ -29,8 +30,8 @@ const StaffViewPage = () => {
 
   const AdminDetailsTabs = activeTab => {
     const TabsList = {
-      1: <StaffDetailInfo />,
-      2: <StaffAccountInfo />,
+      1: <StaffDetailInfo data={data} />,
+      2: <StaffAccountInfo data={data} />,
       3: <GrowthReport />,
     };
 
@@ -44,7 +45,7 @@ const StaffViewPage = () => {
         justifyContent={'space-between'}
         alignItems={'center'}
       >
-        <TabTitle title={'Abc org '} />
+        <TabTitle title={'Staff '} />
         <Stack direction={'row'} spacing={2} alignItems={'center'}>
           <Button
             sx={{ background: theme => theme.color.white, padding: '8px 16px' }}
@@ -52,7 +53,7 @@ const StaffViewPage = () => {
             Manage
           </Button>
           <Button
-            onClick={handleEditClick}
+            onClick={() => handleEditClick(data?.id)}
             sx={{ background: theme => theme.color.white, padding: '8px 16px' }}
             startIcon={<Icon icon='basil:edit-outline' />}
           >

@@ -13,7 +13,7 @@ const StaffCard = ({ data }) => {
   console.log('🚀 ~ StaffCard ~ data:', data);
   const navigate = useNavigate();
   const handleOnClick = () => {
-    navigate('/staffInformation');
+    navigate('/staffInformation', { state: { staffData: data } });
   };
   return (
     <Card
