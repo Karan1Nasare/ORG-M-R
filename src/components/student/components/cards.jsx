@@ -5,10 +5,10 @@ import { useNavigate } from 'react-router-dom';
 const Cards = ({ cards }) => {
   const navigate = useNavigate();
   const handleOnClick = () => {
-    navigate('/studentInformation');
+    navigate('/student/studentInformation');
   };
   return (
-    <div className='2xl:grid 2xl:grid-cols-3 2xl:gap-4 xl:grid xl:grid-cols-2 xl:gap-4 lg:grid lg:grid-cols-2 lg:gap-4 mt-4'>
+    <div className='2xl:grid 2xl:grid-cols-3 2xl:gap-4 xl:grid xl:grid-cols-2 xl:gap-4 lg:grid lg:grid-cols-2 lg:gap-4 '>
       {/* Render all cards if no search query is entered or filteredCards is null */}
       {!cards || cards.length === 0 ? (
         <p className='text-white'>No cards found.</p>

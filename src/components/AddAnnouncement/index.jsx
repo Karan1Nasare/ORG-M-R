@@ -1,12 +1,14 @@
 import React from 'react';
 import { Button, Typography } from '@mui/material';
 import { useForm, FormProvider } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-
+import back from '../icon/back.svg';
 import AnnouncementForm from './components/announcementForm';
 import useAddAnnouncement from './hooks/useAddAnnouncement';
 
 const AddAnnouncement = () => {
+  const navigate = useNavigate();
   const { onAddAnnouncement, eventList } = useAddAnnouncement();
   const methods = useForm();
   const { handleSubmit, setValue, getValues } = methods;
@@ -22,12 +24,27 @@ const AddAnnouncement = () => {
 
     onAddAnnouncement(data);
   };
+  const handleBackClick = () => {
+    navigate('/announcements');
+  };
 
   return (
     <>
-      <Typography className='flex align-items-start' variant='mainLayoutTitle'>
-        Add Announcement
-      </Typography>
+      <div className='flex justify-between'>
+        <Typography
+          className='flex align-items-start'
+          variant='mainLayoutTitle'
+        >
+          Add Announcement
+        </Typography>
+        <div
+          onClick={handleBackClick}
+          className='flex items-center mb-4 cursor-pointer'
+        >
+          <img src={back} alt='' className='text-white w-8 h-8 mr-1' />
+          <button className='text-white text-2xl'>Back</button>
+        </div>
+      </div>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
           <AnnouncementForm setValue={setValue} eventList={eventList} />

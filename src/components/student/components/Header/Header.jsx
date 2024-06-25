@@ -9,16 +9,16 @@ import { Icon } from '@iconify/react';
 const Header = ({ inputValue, handleInputChange, handleSearchClick }) => {
   const navigate = useNavigate();
   const handleAddStudentsClick = () => {
-    navigate('/addStudent');
+    navigate('/student/addStudent');
   };
 
   const handleAddMultipleClick = () => {
-    navigate('/addMultipleStudent');
+    navigate('/student/addMultipleStudent');
   };
   return (
     <div>
       <h1 className='text-white text-3xl text-left mb-3'>Student</h1>
-      <div className='flex justify-between gap-5  p-6 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
+      <div className='flex justify-between h-28 p-6 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
         {/* <div className='flex items-center bg-[#0B1739] p-4 space-x-4 justify-between'> */}
 
         <Grid container spacing={2} sx={{ flex: 1 }}>

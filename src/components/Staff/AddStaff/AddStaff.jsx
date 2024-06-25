@@ -7,6 +7,8 @@ import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { object, string } from 'yup';
+import { useNavigate } from 'react-router-dom';
+import back from '../../icon/back.svg';
 
 import AddStaffForm from './AddStaffForm';
 import {
@@ -44,6 +46,7 @@ import useAddStaff from './hooks/useAddStaff';
 // });
 
 const AddStaff = ({ setValue }) => {
+  const navigate = useNavigate();
   const { onAddStaff } = useAddStaff();
   const [file, setFile] = useState();
   const [showPassword, setShowPassword] = useState(false);
@@ -96,14 +99,27 @@ const AddStaff = ({ setValue }) => {
     formState: { isSubmitting },
   } = methods;
 
+  const handleBackClick = () => {
+    navigate('/staff');
+  };
+
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <TabTitle title='Add Staff Details' sx={{ marginTop: '20px' }} />
+        <div className='flex justify-between'>
+          <TabTitle title='Add Staff ' sx={{ marginTop: '20px' }} />
+          <div
+            onClick={handleBackClick}
+            className='flex items-center mt-4 cursor-pointer'
+          >
+            <img src={back} alt='' className='text-white w-8 h-8 mr-1' />
+            <button className='text-white text-2xl'>Back</button>
+          </div>
+        </div>
 
         <div className='mt-3'>
           <AddStaffForm file={file} setFile={setFile} />
-          <div className='text-sm w-full mt-5 font-medium text-center bg-[#0B1739] text-gray-500   p-6 rounded-md flex items-center justify-between'>
+          <div className='text-sm w-full mt-5 font-medium border border-gray-700 text-center bg-[#0B1739] text-gray-500 p-6 rounded-xl flex items-center justify-between'>
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <label

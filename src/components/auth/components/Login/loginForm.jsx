@@ -1,7 +1,15 @@
 /* eslint-disable import/no-cycle */
 import React, { useState } from 'react';
 import { Button, TextField, Typography } from '@mui/material';
-
+import IconButton from '@mui/material/IconButton';
+import FilledInput from '@mui/material/FilledInput';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import FormHelperText from '@mui/material/FormHelperText';
+import FormControl from '@mui/material/FormControl';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 import { useForm } from 'react-hook-form';
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { object, string } from 'yup';
@@ -9,16 +17,15 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Password } from '@mui/icons-material';
 import { useNavigate } from 'react-router-dom';
 import AuthButtonBg from '../../../../assets/auth/buttonBg.svg';
-import { APIClient } from '../../../../utilities/axios-client';
-import URLS from '../../../../constants/api';
+import { APIClient, APIClient2 } from '../../../../utilities/axios-client';
 import { useStore } from '../../../../store/context-store';
-import { getRouteByName } from '../../../../App.routes';
 import useFetcher from '../../../../hooks/useFetcher';
-import { login } from '../../../../services/auth';
+import { getRouteByName } from '../../../../App.routes';
+import URLS from '../../../../constants/api';
 
 const LoginForm = () => {
   const { API } = APIClient();
-  const { fetcher, getExecutorState } = useFetcher();
+  const { axiosInstance } = APIClient2();
   const [Store, StoreDispatch] = useStore();
   const [responseErr, setResponseErr] = useState('');
   const navigate = useNavigate();
@@ -34,15 +41,19 @@ const LoginForm = () => {
     formState: { errors, isSubmitting },
     register,
   } = useForm({ resolver: yupResolver(loginSchema) });
-
+  const { fetcher, getExecutorState } = useFetcher();
+  const { isLoading } = getExecutorState('login');
+  const loginin = async data => {
+    return axiosInstance.post(URLS.LOGIN, data);
+  };
   const onLoginHandler = async data => {
     fetcher({
       key: 'login',
-      executer: () => login(data),
+      executer: () => loginin(data),
+      onSuccessRoute: getRouteByName('dashboard')?.route || '/',
       onSuccess: response => {
         StoreDispatch({ type: 'Login', user: response.data.data });
       },
-      onSuccessRoute: getRouteByName('dashboard')?.route || '/',
     });
     // try {
     //   const response = await API('POST', URLS.LOGIN, data, false);
@@ -58,9 +69,13 @@ const LoginForm = () => {
     //   console.log('error: ', err);
     // }
   };
-  const { isLoading } = getExecutorState('login');
+  const [showPassword, setShowPassword] = React.useState(false);
+  const handleClickShowPassword = () => setShowPassword(show => !show);
+  const handleMouseDownPassword = e => {
+    e.preventDefault();
+  };
   return (
-    <div className='text-white w-[40%] lg:ml-64'>
+    <div className='text-white md:w-[40%] lg:w-[50%] lg:ml-40'>
       <form onSubmit={handleSubmit(onLoginHandler)}>
         <Typography variant='title' className='text-start block mb-10'>
           Login to Continue
@@ -75,15 +90,49 @@ const LoginForm = () => {
               {...register('username')}
             />
           </div>
-          <div>
+          <div className='bg-secondary__fill mt-2 rounded-md border border-gray-700 '>
             <TextField
               name='password'
-              id='password'
               placeholder='Password (Required)'
               label=''
               className='underline-border w-full'
-              variant='standard'
+              variant='outlined'
               {...register('password')}
+              id='standard-adornment-password'
+              type={showPassword ? 'text' : 'password'}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment
+                    position='end'
+                    sx={{ border: 'none', marginRight: '0' }}
+                  >
+                    <IconButton
+                      style={{ color: 'white' }}
+                      aria-label='toggle password visibility'
+                      onClick={handleClickShowPassword}
+                      onMouseDown={handleMouseDownPassword}
+                    >
+                      {showPassword ? <Visibility /> : <VisibilityOff />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+                sx: {
+                  '&.MuiOutlinedInput-root': {
+                    '& fieldset': {
+                      borderColor: 'transparent',
+                    },
+                    '&:hover fieldset': {
+                      borderColor: 'transparent',
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: 'transparent',
+                    },
+                    '& .MuiInputBase-input': {
+                      border: 'none', // Specifically target the right border of the input
+                    },
+                  },
+                },
+              }}
             />
           </div>
         </div>
@@ -104,5 +153,4 @@ const LoginForm = () => {
     </div>
   );
 };
-
 export default LoginForm;

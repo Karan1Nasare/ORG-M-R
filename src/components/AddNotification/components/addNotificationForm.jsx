@@ -14,37 +14,56 @@ const AddNotificationForm = ({ selectedFile, setSelectedFile }) => {
     }
   };
 
+  const handleIconClick = () => {
+    document.getElementById('file-upload').click();
+  };
+
   return (
     <div>
       <div className='flex flex-col justify-center p-8 rounded-xl w-full max-w-screen mx-auto border border-gray-700 border-solid bg-secondary__fill max-md:px-5'>
         <div className=' w-full max-w-screen mx-auto h-88'>
           <div className='flex gap-5 max-md:flex-col max-md:gap-0'>
             {/* Left Div */}
-            <div className='flex flex-col w-[23%] max-md:ml-0 max-md:w-full h-full'>
-              <div className='flex flex-col justify-center items-center w-full rounded-full border border-gray-700 border-solid aspect-square bg-secondary__fill max-md:px-5 max-md:mt-8 h-full overflow-hidden'>
-                {selectedFile ? (
-                  <img
-                    src={URL.createObjectURL(selectedFile)}
-                    alt='Selected File'
-                    className='w-full h-full object-cover'
+            <div className='flex flex-col w-80 max-md:ml-0 border border-gray-700 rounded-lg max-md:w-full h-80'>
+              <div
+                className='flex flex-col justify-center items-center w-full rounded-full border-solid aspect-square bg-secondary__fill max-md:px-5 max-md:mt-8 h-full overflow-hidden cursor-pointer relative'
+                onClick={handleIconClick}
+              >
+                <svg className='absolute flex justify-center w-48 h-48'>
+                  <circle
+                    cx='50%'
+                    cy='50%'
+                    r='50%'
+                    fill='none'
+                    stroke='white'
+                    strokeDasharray='9 9'
+                    strokeWidth='2'
                   />
-                ) : (
-                  <label
-                    htmlFor='file-upload'
-                    className='flex justify-center items-center w-full h-full rounded-full border border-white border-dashed max-md:px-5 cursor-pointer'
+                </svg>
+
+                {selectedFile ? (
+                  <div
+                    className='absolute w-48 h-48 overflow-hidden rounded-full'
+                    style={{
+                      clipPath: 'circle(50% at 50% 50%)',
+                    }}
                   >
-                    <UploadFileIcon
-                      style={{ fontSize: '3em', color: 'white' }}
+                    <img
+                      src={URL.createObjectURL(selectedFile)}
+                      alt='Selected File'
+                      className='w-full h-full object-cover'
                     />
-                    <input
-                      id='file-upload'
-                      type='file'
-                      accept='image/*'
-                      hidden
-                      onChange={handleFileChange}
-                    />
-                  </label>
+                  </div>
+                ) : (
+                  <UploadFileIcon style={{ fontSize: '3em', color: 'white' }} />
                 )}
+                <input
+                  id='file-upload'
+                  type='file'
+                  accept='image/*'
+                  hidden
+                  onChange={handleFileChange}
+                />
               </div>
             </div>
             {/* Right Div */}

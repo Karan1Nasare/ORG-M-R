@@ -1,102 +1,77 @@
 // Components/Header.js
 
 import React from 'react';
+import { useForm } from 'react-hook-form';
 import { FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
+import {
+  FormProvider, // Import FormProvider
+  RHFSelect, // Import RHFSelect
+  RHFTextField, // Import RHFTextField
+} from '../../../hooks/hook-form';
 
 const Header = () => {
   const navigate = useNavigate();
 
   const handleAddStaffClick = () => {
-    navigate('/addStaff');
+    navigate('/staff/addStaff');
+  };
+  const methods = useForm();
+  const {
+    handleSubmit,
+    formState: { isSubmitting },
+  } = methods;
+
+  const onSubmit = async data => {
+    console.debug('onSubmit');
+    console.debug('onSubmit', data);
   };
 
   return (
-    <div
-      style={{
-        width: '100%', // Ensure the header takes the full width of the container
-        height: '104px',
-        borderRadius: '12px',
-        border: '0.6px solid #343B4F',
-        opacity: '1',
-        backgroundColor: '#0B1739',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        color: 'white',
-        margin: '0 auto', // Center the header
-        padding: '20px 30px', // Adjust padding as needed
-        boxSizing: 'border-box', // Ensure padding does not affect the width
-      }}
-    >
-      <div style={{ display: 'flex', alignItems: 'center', flex: 1 }}>
-        <input
-          type='text'
-          placeholder='Search Name, Enrollment, Standard'
-          style={{
-            width: '332px', // Fixed width for the search bar
-            backgroundColor: '#081028',
-            color: '#fff',
-            borderRadius: '5px',
-            padding: '10px',
-            marginRight: '20px',
-          }}
-        />
-        <select
-          style={{
-            backgroundColor: '#081028',
-            color: '#fff',
-            border: '1px solid #343B4F',
-            borderRadius: '5px',
-            padding: '10px',
-            marginRight: '20px',
-          }}
-        >
-          <option>Select STD</option>
-          {/* Add more options here */}
-        </select>
-        <select
-          style={{
-            backgroundColor: '#081028',
-            color: '#fff',
-            border: '1px solid #343B4F',
-            borderRadius: '5px',
-            padding: '10px',
-            marginRight: '20px',
-          }}
-        >
-          <option>Select City</option>
-          {/* Add more options here */}
-        </select>
+    <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
+      <div className='bg-secondary__fill py-9 w-full max-w-screen mx-auto flex justify-between h-28 border p-7 border-gray-700 rounded-xl '>
+        <div className='flex'>
+          <input
+            type='text'
+            placeholder='Search Name, Enrollment, Standard'
+            className='w-80 flex p-2 text-white bg-secondary__fill__dark h-10'
+          />
+          <div className='flex'>
+            <div className='w-36 border h-10 border-gray-700 flex rounded-md ml-3'>
+              <RHFSelect
+                size='small'
+                name='plan_type'
+                options={[
+                  { label: 'Bronze', value: 'bronze' },
+                  { label: 'Silver', value: 'silver' },
+                  { label: 'Gold', value: 'gold' },
+                ]}
+              />
+            </div>
+            <div className='w-36 border h-10 border-gray-700 rounded-md ml-3'>
+              <RHFSelect
+                size='small'
+                name='plan_type'
+                options={[
+                  { label: 'Bronze', value: 'bronze' },
+                  { label: 'Silver', value: 'silver' },
+                  { label: 'Gold', value: 'gold' },
+                ]}
+              />
+            </div>
+          </div>
+        </div>
         <button
-          style={{
-            backgroundColor: 'transparent',
-            color: '#fff',
-            border: '1px solid #343B4F',
-            borderRadius: '5px',
-            padding: '10px',
-            display: 'flex',
-            alignItems: 'center',
-          }}
+          onClick={handleAddStaffClick}
+          className='bg-white w-28 p-1 h-10 rounded-md flex justify-center'
         >
-          <span style={{ marginRight: '5px' }}>✕</span> Clear All
+          <span className='pt-[8%] mr-1'>
+            <FaUserPlus />
+          </span>
+          <h2 className='pt-1'>Add Staff</h2>
         </button>
       </div>
-      <button
-        onClick={handleAddStaffClick}
-        style={{
-          backgroundColor: '#fff',
-          color: '#0B1739',
-          border: '1px solid #343B4F',
-          borderRadius: '5px',
-          padding: '10px',
-          display: 'flex',
-          alignItems: 'center',
-        }}
-      >
-        <FaUserPlus style={{ marginRight: '5px' }} /> Add Staff
-      </button>
-    </div>
+    </FormProvider>
   );
 };
 

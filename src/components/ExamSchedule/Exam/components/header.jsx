@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 const Header = ({ search, setSearch }) => {
   const navigate = useNavigate();
   const handleOnClick = () => {
-    navigate('/selectPaper');
+    navigate('/examSchedule/selectPaper');
   };
   return (
     <div>

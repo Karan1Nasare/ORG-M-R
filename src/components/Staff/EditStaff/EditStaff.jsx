@@ -83,11 +83,11 @@ const EditStaff = ({ setValue, staffDataById }) => {
   return (
     <>
       <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
-        <TabTitle title='Edit Staff Details' sx={{ marginTop: '20px' }} />
+        <TabTitle title='Edit Staff' sx={{ marginTop: '20px' }} />
 
-        <div className='mt-3'>
+        <div className='mt-3 '>
           <AddStaffForm file={file} setFile={setFile} />
-          <div className='text-sm w-full mt-5 font-medium text-center bg-[#0B1739] text-gray-500 p-6 rounded-md flex items-center justify-between'>
+          <div className='text-sm w-full mt-5 font-medium text-center border border-gray-700 bg-[#0B1739] text-gray-500 p-6 rounded-xl flex items-center justify-between'>
             <Grid container spacing={4}>
               <Grid item xs={12}>
                 <label

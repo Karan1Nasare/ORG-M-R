@@ -4,6 +4,7 @@ import AddCircleIcon from '@mui/icons-material/AddCircle';
 import * as Yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
+import { useNavigate } from 'react-router-dom';
 import BannerHeader from './bannerHeader';
 import UploadImage from '../shared/uploadImage/uploadImage';
 import BannerForm from './bannerForm';
@@ -11,9 +12,12 @@ import { FormProvider } from '../../hooks/hook-form';
 import useFetcher from '../../hooks/useFetcher';
 import { addbanner } from '../../service/banner';
 import AdminImageSelect from '../Admins/Form/AdminImageSelect';
+import back from '../icon/back.svg';
+
 // import { useDropzone } from "react-dropzone";
 
 const AddBanner = ({ Bannertype }) => {
+  const navigate = useNavigate();
   const schema = Yup.object().shape({
     title: Yup.string().required('Title is required'),
     button_link: Yup.string().url('Enter a valid URL'),
@@ -64,10 +68,20 @@ const AddBanner = ({ Bannertype }) => {
     });
     console.log(data, 'asxbahslakmslxkm');
   };
+  const handleBackClick = () => {
+    navigate('/banner');
+  };
   return (
     <FormProvider onSubmit={handleSubmit(onsubmit)} methods={methods}>
-      <div className='text-start flex items-center'>
+      <div className=' flex justify-between'>
         <BannerHeader bannerTitle='Add Banner' />
+        <div
+          onClick={handleBackClick}
+          className='flex items-center cursor-pointer'
+        >
+          <img src={back} alt='' className='text-white w-8 h-8 mr-1' />
+          <button className='text-white text-2xl'>Back</button>
+        </div>
       </div>
       <div className='w-full mt-8'>
         <AdminImageSelect

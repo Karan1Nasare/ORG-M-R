@@ -67,7 +67,11 @@ const typography = {
     marginLeft: '0.5rem',
     color: colors.white,
   },
-
+  h8: {
+    fontSize: '0.82rem',
+    fontWeight: 400,
+    lineHeight: 1.2,
+  },
   ui02: {
     fontSize: '1.2rem',
     fontWeight: 400,

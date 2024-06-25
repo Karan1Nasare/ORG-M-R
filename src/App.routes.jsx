@@ -168,7 +168,7 @@ const AppRoutes = [
   {
     name: 'addAnnouncement',
     slug: 'addAnnouncement',
-    route: '/addAnnouncement',
+    route: '/announcements/addAnnouncement',
     component: AddAnnouncement,
     icon: '',
     external: false,
@@ -189,6 +189,18 @@ const AppRoutes = [
     parent: 'banner',
   },
   {
+    name: 'addBanner',
+    slug: 'addBanner',
+    route: `/banner/addBanner`,
+    component: AddBanner,
+    menu_location: '',
+    icon: '',
+    external: false,
+    auth: true,
+    wrapper: LayoutWrapper,
+    parent: 'banner',
+  },
+  {
     name: 'student',
     slug: 'student',
     route: '/student',
@@ -202,7 +214,7 @@ const AppRoutes = [
   {
     name: 'addStudent',
     slug: 'addStudent',
-    route: '/addStudent',
+    route: '/student/addStudent',
     component: AddStudent,
     icon: '',
     external: false,
@@ -213,7 +225,7 @@ const AppRoutes = [
   {
     name: 'addMultipleStudent',
     slug: 'addMultipleStudent',
-    route: '/addMultipleStudent',
+    route: '/student/addMultipleStudent',
     component: AddMultipleStudent,
     icon: '',
     external: false,
@@ -224,25 +236,13 @@ const AppRoutes = [
   {
     name: 'studentInformation',
     slug: 'studentInformation',
-    route: '/studentInformation',
+    route: '/student/studentInformation',
     component: StudentInformation,
     icon: '',
     external: false,
     auth: true,
     wrapper: LayoutWrapper,
     parent: 'student',
-  },
-  {
-    name: 'addBanner',
-    slug: 'addBanner',
-    route: `/addBanner`,
-    component: AddBanner,
-    menu_location: '',
-    icon: '',
-    external: false,
-    auth: true,
-    wrapper: LayoutWrapper,
-    parent: 'banner',
   },
 
   // Feature Route
@@ -260,7 +260,7 @@ const AppRoutes = [
   {
     name: 'addFeature',
     slug: 'addFeature',
-    route: '/addFeature',
+    route: '/features/addFeature',
     component: AddFeature,
     icon: '',
     external: false,
@@ -284,7 +284,7 @@ const AppRoutes = [
   {
     name: 'addQuestions',
     slug: 'addQuestions',
-    route: `/addQuestions`,
+    route: `/questionBank/addQuestions`,
     component: AddQuestions,
     menu_location: '',
     icon: '',
@@ -296,7 +296,7 @@ const AppRoutes = [
   {
     name: 'review',
     slug: 'review',
-    route: `/review`,
+    route: `/questionBank/review`,
     component: Review,
     menu_location: '',
     icon: '',
@@ -345,7 +345,7 @@ const AppRoutes = [
   {
     name: 'mateiral',
     slug: 'language',
-    route: '/language',
+    route: '/material/language',
     component: LanguagePage,
     icon: '',
     external: false,
@@ -367,7 +367,7 @@ const AppRoutes = [
   {
     name: '/selectPaper',
     slug: '/selectPaper',
-    route: '/selectPaper',
+    route: '/examSchedule/selectPaper',
     component: SelectPaper,
     icon: '',
     external: false,
@@ -378,7 +378,7 @@ const AppRoutes = [
   {
     name: 'examPreview',
     slug: 'examPreview',
-    route: '/examPreview/:id',
+    route: '/examSchedule/examPreview/:id',
     component: ExamPreview,
     icon: '',
     external: false,
@@ -411,7 +411,7 @@ const AppRoutes = [
   {
     name: 'addStaff',
     slug: 'addStaff',
-    route: '/addStaff',
+    route: '/staff/addStaff',
     component: AddStaff,
     icon: '',
     external: false,
@@ -422,7 +422,7 @@ const AppRoutes = [
   {
     name: 'editStaff',
     slug: 'editStaff',
-    route: '/editStaff/:id',
+    route: '/staff/editStaff/:id',
     component: EditStaff,
     icon: '',
     external: false,
@@ -433,7 +433,7 @@ const AppRoutes = [
   {
     name: 'staffInformation',
     slug: 'staffInformation',
-    route: '/staffInformation',
+    route: '/staff/staffInformation',
     component: StaffInformation,
     icon: '',
     external: false,
@@ -457,7 +457,7 @@ const AppRoutes = [
   {
     name: 'addPlan',
     slug: 'addPlan',
-    route: `/addPlan`,
+    route: `/plan/addPlan`,
     component: ManagePlanForm,
     menu_location: '',
     icon: '',
@@ -493,7 +493,7 @@ const AppRoutes = [
   {
     name: 'addNotification',
     slug: 'addNotification',
-    route: '/addNotification',
+    route: '/notification/addNotification',
     component: AddNotification,
     menu_location: '',
     icon: '',

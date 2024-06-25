@@ -17,60 +17,79 @@ const SuperAdminSideBar = () => {
     });
   }, []);
 
+  const isRouteActive = routeName => {
+    const route = getRouteByName(routeName);
+    if (route) {
+      const isActive =
+        location.pathname === route.route ||
+        location.pathname.startsWith(`${route.route}/`);
+      if (route.parent) {
+        const parentRoute = getRouteByName(route.parent);
+        if (parentRoute) {
+          return (
+            isActive || location.pathname.startsWith(`${parentRoute.route}/`)
+          );
+        }
+      }
+      return isActive;
+    }
+    return false;
+  };
+
   const menuList = [
     {
       label: 'Dashboard',
       icon: 'ic:baseline-space-dashboard',
       name: 'dashboard',
-      isActive: ['/', '/dashboard'].includes(location.pathname),
+      isActive: isRouteActive('dashboard'),
     },
     {
       label: 'Students',
       icon: 'hugeicons:message-multiple-01',
       name: 'student',
-      isActive: location.pathname === getRouteByName('student')?.route,
+      isActive: isRouteActive('student'),
     },
     {
       label: 'Event Manegement',
       icon: 'hugeicons:message-multiple-01',
       name: 'eventManagement',
-      isActive: location.pathname === getRouteByName('eventManagement')?.route,
+      isActive: isRouteActive('eventManagement'),
     },
     {
       label: 'Material',
       icon: 'mage:file-2-fill',
       name: 'material',
-      isActive: location.pathname === getRouteByName('material')?.route,
+      isActive: isRouteActive('material'),
     },
     {
       label: 'Exam Schedule',
       icon: 'flowbite:user-settings-solid',
       name: 'examSchedule',
-      isActive: location.pathname === getRouteByName('examSchedule')?.route,
+      isActive: isRouteActive('examSchedule'),
     },
     {
       label: 'Staff',
       icon: 'icon-park-solid:bookmark-one',
       name: 'staff',
-      isActive: location.pathname === getRouteByName('staff')?.route,
+      isActive: isRouteActive('staff'),
     },
     {
       label: 'Annoucement',
       icon: 'flowbite:user-settings-solid',
       name: 'announcements',
-      isActive: location.pathname === getRouteByName('announcements')?.route,
+      isActive: isRouteActive('announcements'),
     },
     {
       label: 'Banner For App',
       icon: 'mdi:announcement',
       name: 'banner',
-      isActive: location.pathname === getRouteByName('banner')?.route,
+      isActive: isRouteActive('banner'),
     },
     {
       label: 'Notification',
       icon: 'mdi:announcement',
       name: 'notification',
-      isActive: location.pathname === getRouteByName('notification')?.route,
+      isActive: isRouteActive('notification'),
     },
   ];
   return (
@@ -92,7 +111,7 @@ const SuperAdminSideBar = () => {
         >
           <div className='flex items-center space-x-2.5'>
             <Icon icon={value.icon} />
-            <Typography variant='h6'>{value.label}</Typography>
+            <Typography variant='h8'>{value.label}</Typography>
           </div>
         </div>
       ))}

@@ -49,9 +49,10 @@ const App = () => {
   const { staffList } = useStaff();
   console.log('🚀 ~ App ~ staffList:', staffList);
   return (
-    <div className=' min-h-screen p-10'>
+    <div className=' min-h-screen'>
+      <h1 className='text-3xl mb-4 flex text-white'>Staff</h1>
       <Header />
-      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10'>
+      <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6'>
         {staffList?.data?.map((staff, index) => (
           <StaffCard key={index} data={staff} />
         ))}

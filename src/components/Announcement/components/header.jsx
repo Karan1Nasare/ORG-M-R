@@ -35,7 +35,7 @@ const AnnouncementHeader = ({ onChange }) => {
           },
         }}
       />
-      <Link to='/addAnnouncement'>
+      <Link to='/announcements/addAnnouncement'>
         <Button variant='outline-add-button' startIcon={<AddCircleIcon />}>
           Add Announcement
         </Button>

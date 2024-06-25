@@ -8,7 +8,7 @@ const AddStaffForm = ({ file, setFile }) => {
   const [selectFile, setSelection] = useState(false);
   const [removeFile, setRemoveSelection] = useState(false);
   return (
-    <div className='text-sm w-full font-medium text-center bg-[#0B1739] text-gray-500   p-7 rounded-md flex items-center justify-between'>
+    <div className='text-sm w-full font-medium text-center border border-gray-700 bg-[#0B1739] text-gray-500 p-7 rounded-xl flex items-center justify-between'>
       <Stack
         direction={'row'}
         justifyContent={'space-between'}

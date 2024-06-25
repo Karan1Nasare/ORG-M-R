@@ -8,7 +8,7 @@ const Card = ({ search }) => {
   const { fetcher, getExecutorState } = useFetcher();
   const navigate = useNavigate();
   const handleOnClick = id => {
-    navigate(`/examPreview/${id}`);
+    navigate(`/examSchedule/examPreview/${id}`);
   };
 
   const [exams, setExams] = useState([]);
@@ -52,7 +52,7 @@ const Card = ({ search }) => {
           >
             <div
               onClick={() => handleOnClick(examData.id)}
-              className='absolute top-3 right-3 flex justify-end w-full pr-4'
+              className='absolute right-3 flex justify-end w-full pr-4'
             >
               <Icon icon={'mdi:eye'} className='text-white' width={25} />
             </div>
