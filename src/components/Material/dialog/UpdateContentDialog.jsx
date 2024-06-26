@@ -11,6 +11,7 @@ import { useTheme } from '@emotion/react';
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate';
 import ProfileImage from '../../../assets/images/profile-image.png';
 import TextEditor from '../../ui/TextEditor/TextEditor';
+import RichTextEditor from '../../shared/RichTextEditor';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction='up' ref={ref} {...props} />;
@@ -35,28 +36,59 @@ const ImgStyled = styled('img')(({ theme }) => ({
 
 export default function UpdateContentDialog(props) {
   const { open, handleClose, data, updateHandler } = props;
+  console.log('🚀 ~ UpdateContentDialog ~ data:', data);
   const [imgSrc, setImgSrc] = React.useState(ProfileImage);
+  const [changeData, setChangeData] = React.useState({
+    name: '',
+    description: '',
+    image: '',
+  });
   const theme = useTheme();
-  const [inputValue, setInputValue] = React.useState();
 
   React.useEffect(() => {
     if (open) {
-      setImgSrc(data?.image);
-      setInputValue(data?.content);
+      setImgSrc(data?.image || ProfileImage);
+      setChangeData({
+        name: data?.name || '',
+        description: data?.description || '',
+        image: data?.image || '',
+        _method: 'PUT',
+      });
     }
-  }, [open]);
+  }, [open, data]);
+
+  const handleInputChange = event => {
+    const { name, value } = event.target;
+    setChangeData(prevState => ({
+      ...prevState,
+      [name]: value,
+    }));
+  };
 
   const handleInputImageChange = file => {
     const reader = new FileReader();
     const { files } = file.target;
     if (files && files.length !== 0) {
-      reader.onload = () => setImgSrc(reader.result);
+      reader.onload = () => {
+        setImgSrc(reader.result);
+        setChangeData(prevState => ({
+          ...prevState,
+          image: files[0],
+        }));
+      };
       reader.readAsDataURL(files[0]);
-
-      if (reader.result !== null) {
-        setInputValue(reader.result);
-      }
     }
+  };
+
+  const handleUpdate = () => {
+    console.log('🚀 ~ handleUpdate ~ formData:', changeData);
+    const formData = new FormData();
+
+    Object.entries(changeData).forEach(([key, value]) => {
+      formData.append(key, value);
+    });
+
+    updateHandler(formData);
   };
 
   return (
@@ -67,10 +99,17 @@ export default function UpdateContentDialog(props) {
         keepMounted
         onClose={handleClose}
         aria-describedby='alert-dialog-slide-description'
+        PaperProps={{
+          sx: {
+            width: '42.063rem',
+            height: '36.069rem',
+            borderRadius: '8px',
+          },
+        }}
       >
         <DialogContent>
           <Stack>
-            <Typography sx={{ color: 'white' }}>Edit {data?.title}</Typography>
+            <Typography sx={{ color: 'white' }}>Edit {data?.name}</Typography>
             <IconButton
               aria-label='close'
               onClick={handleClose}
@@ -81,7 +120,9 @@ export default function UpdateContentDialog(props) {
                 color: 'white',
               }}
             >
-              <CloseIcon />
+              <div className='mt-3 mr-5'>
+                <CloseIcon />
+              </div>
             </IconButton>
           </Stack>
           <Divider sx={{ background: '#6B7A99', margin: '8px 0' }} />
@@ -92,8 +133,7 @@ export default function UpdateContentDialog(props) {
                 width: 'max-content',
               }}
             >
-              <ImgStyled src={imgSrc} alt='Profile Pic' />
-
+              <ImgStyled src={imgSrc || ProfileImage} alt='Profile Pic' />
               <IconButton
                 component='label'
                 role={undefined}
@@ -117,34 +157,47 @@ export default function UpdateContentDialog(props) {
                 <input
                   hidden
                   type='file'
-                  value={inputValue}
                   accept='image/png, image/jpeg'
                   onChange={handleInputImageChange}
                   id='account-settings-upload-image'
                 />
               </IconButton>
             </Stack>
-            <Stack alignItems={'center'} justifyContent={'center'} spacing={3}>
+            <Stack alignItems='center' justifyContent='center' spacing={3}>
               <TextField
                 size='small'
                 fullWidth
-                sx={{
-                  border: '1px solid #343B4F',
-                }}
-                defaultValue={data?.title}
+                name='name'
+                value={changeData.name}
+                onChange={handleInputChange}
               />
-              <TextEditor />
-              <Button
-                sx={{
-                  background: 'white',
-                  display: 'inline-block',
-                  color: '#000',
-                  fontWeight: 'normal',
-                }}
-                onClick={updateHandler}
-              >
-                Update
-              </Button>
+              <div className='mt-5 w-full'>
+                <RichTextEditor
+                  value={changeData?.description}
+                  onChange={description =>
+                    setChangeData(prevState => ({
+                      ...prevState,
+                      description,
+                    }))
+                  }
+                />
+              </div>
+              <div className='mt-6'>
+                <Button
+                  sx={{
+                    marginTop: '28px',
+                    background: 'white',
+                    display: 'inline-block',
+                    color: '#000',
+                    fontWeight: 'normal',
+                    width: '8rem',
+                    text: '18px',
+                  }}
+                  onClick={handleUpdate}
+                >
+                  Update
+                </Button>
+              </div>
             </Stack>
           </Stack>
         </DialogContent>
