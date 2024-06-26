@@ -1,4 +1,6 @@
 import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+
 import AnouncementImage from '../../../assets/announcement_card.png';
 import useFetcher from '../../../hooks/useFetcher';
 import { APIClient2 } from '../../../utilities/axios-client';
@@ -7,6 +9,7 @@ import StaffServices from '../services/services';
 const ITEMS_PER_PAGE = 6;
 
 const useStaff = () => {
+  const navigate = useNavigate();
   const { getStaff, deleteStaffById, editStaffById } = StaffServices();
   const { fetcher, getExecutorState } = useFetcher();
   const { axiosInstance } = APIClient2();
@@ -53,7 +56,7 @@ const useStaff = () => {
         executer: () => deleteStaffById(id),
         onSuccess: response => {
           console.log('delete rresponse feature: ', response);
-          getStaff();
+          navigate('/staff');
         },
       });
     } catch (err) {
@@ -98,9 +101,9 @@ const useStaff = () => {
         onSuccess: response => {
           console.log('feature rresponse feature: ', response);
           setStaffList(response.data?.data);
+          setLoading(false);
         },
       });
-      setLoading(false);
     } catch (err) {
       console.log('error while fetching questions', err);
     }

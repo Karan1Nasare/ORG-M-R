@@ -17,7 +17,7 @@ const StaffAccountInfo = ({ data }) => {
   return (
     <>
       <Stack sx={{ margin: '20px 0' }}>
-        <TabTitle title={'Chirag Gondaliya Details'} />
+        <TabTitle title={data?.name} />
       </Stack>
       <Stack>
         {/* Update User Name */}

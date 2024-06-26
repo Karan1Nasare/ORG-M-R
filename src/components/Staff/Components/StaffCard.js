@@ -9,11 +9,13 @@ import {
 } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
-const StaffCard = ({ data }) => {
+const StaffCard = ({ data, onDelete }) => {
   console.log('🚀 ~ StaffCard ~ data:', data);
   const navigate = useNavigate();
   const handleOnClick = () => {
-    navigate('/staff/staffInformation', { state: { staffData: data } });
+    navigate('/staff/staffInformation', {
+      state: { staffData: data, onDelete },
+    });
   };
 
   const subjects = [
@@ -75,23 +77,21 @@ const StaffCard = ({ data }) => {
             Primary Class -
           </Typography>
           <div className='flex flex-wrap gap-1'>
-            {/* {data?.staff_details?.classes?.map((cls, index) => ( */}
-            <span
-              // key={index}
-              style={{
-                backgroundColor: 'rgba(54, 199, 195, 0.2)',
-                color: '#36C7C3',
-              }}
-              className='px-2 h-6 w-11 rounded-full font-helvetica'
-            >
-              50
-              {/* {cls} */}
-            </span>
-            {/* ))} */}
+            {data?.staff_details?.classes?.map((cls, index) => (
+              <span
+                key={index}
+                style={{
+                  backgroundColor: 'rgba(54, 199, 195, 0.2)',
+                  color: '#36C7C3',
+                }}
+                className='px-2 h-6 w-11 rounded-full font-helvetica'
+              >
+                50
+                {cls}
+              </span>
+            ))}
           </div>
         </div>
-        {/* )} */}
-
         <div className='flex w-full overflow-x-scroll pt-1 gap-1'>
           {data?.staff_details?.primary_courses?.map((subject, index) => (
             <span

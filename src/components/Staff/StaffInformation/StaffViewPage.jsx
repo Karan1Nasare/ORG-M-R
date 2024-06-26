@@ -14,7 +14,7 @@ import StaffDetailInfo from './StaffDetailInfo';
 import StaffAccountInfo from './StaffAccountInfo';
 import GrowthReport from './GrowthReport';
 
-const StaffViewPage = ({ data }) => {
+const StaffViewPage = ({ data, onDelete }) => {
   console.log('🚀 ~ StaffViewPage ~ data:', data);
   const navigate = useNavigate();
   const [Tabvalue, setTabValue] = useState('1');
@@ -61,6 +61,7 @@ const StaffViewPage = ({ data }) => {
           </Button>
 
           <Button
+            onClick={() => onDelete(data?.id)}
             sx={{
               background: 'rgba(255,102,146,0.2)',
               color: 'rgba(255, 102, 146, 1)',

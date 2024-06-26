@@ -70,13 +70,17 @@ const StaffDetailInfo = ({ data }) => {
             <p className='text-[rgba(255,255,255,0.5)] text-sm text-left'>
               Org Name :
             </p>
-            <p className='text-[rgba(255,255,255,1)] text-left'>{data?.name}</p>
+            <p className='text-[rgba(255,255,255,1)] text-left'>
+              {data?.name || '-'}
+            </p>
           </Stack>
           <Stack>
             <p className='text-[rgba(255,255,255,0.5)] text-sm text-left'>
               Staff Full Name :
             </p>
-            <p className='text-[rgba(255,255,255,1)] text-left'>{data?.name}</p>
+            <p className='text-[rgba(255,255,255,1)] text-left'>
+              {data?.name || '-'}
+            </p>
           </Stack>
 
           <Stack>
@@ -84,7 +88,7 @@ const StaffDetailInfo = ({ data }) => {
               Alternative Phone Number
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.phone || 'N/A'}
+              {data?.staff_details?.phone || '-'}
             </p>
           </Stack>
           <Stack>
@@ -92,7 +96,7 @@ const StaffDetailInfo = ({ data }) => {
               State
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.state}
+              {data?.staff_details?.state?.name || '-'}
             </p>
           </Stack>
           <Stack>
@@ -100,7 +104,7 @@ const StaffDetailInfo = ({ data }) => {
               Address
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.address}
+              {data?.staff_details?.address || '-'}
             </p>
           </Stack>
         </Stack>
@@ -110,7 +114,7 @@ const StaffDetailInfo = ({ data }) => {
               Email :
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.email}
+              {data?.email || '-'}
             </p>
           </Stack>
           <Stack>
@@ -118,7 +122,7 @@ const StaffDetailInfo = ({ data }) => {
               Phone Number:
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.phone}
+              {data?.staff_details?.phone || '-'}
             </p>
           </Stack>
           <Stack>
@@ -126,7 +130,7 @@ const StaffDetailInfo = ({ data }) => {
               Website
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.website || 'N/A'}
+              {data?.website || '-'}
             </p>
           </Stack>
           <Stack>
@@ -134,7 +138,7 @@ const StaffDetailInfo = ({ data }) => {
               City
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.city}
+              {data?.staff_details?.city?.name || '-'}
             </p>
           </Stack>
           <Stack>
@@ -142,7 +146,7 @@ const StaffDetailInfo = ({ data }) => {
               Pincode
             </p>
             <p className='text-[rgba(255,255,255,1)] text-left'>
-              {data?.staff_details?.pincode}
+              {data?.staff_details?.pincode || '-'}
             </p>
           </Stack>
         </Stack>
