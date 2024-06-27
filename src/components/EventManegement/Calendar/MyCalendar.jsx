@@ -1,106 +1,77 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import FullCalendar from '@fullcalendar/react';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
+import dayjs from 'dayjs';
+
 import EventModal from './EventModal';
 import './MyCalendar.css';
+import useEvent from '../hooks/useEvent';
 
 const MyCalendar = () => {
+  const { event: apiEvents, onAddEvent } = useEvent();
   const [modalIsOpen, setModalIsOpen] = useState(false);
   const [newEvent, setNewEvent] = useState({
     title: '',
-    start: '',
-    end: '',
-    color: 'success',
+    start_date: '',
+    end_date: '',
+    type: 'success',
   });
-  const [events, setEvents] = useState([
-    {
-      title: 'Event Conference',
-      start: '2024-03-01',
-      end: '2024-03-02',
-      backgroundColor: '#FF6692',
-      textColor: '#0B1739',
-    },
-    {
-      title: 'Seminar #4',
-      start: '2024-03-05',
-      end: '2024-03-07',
-      backgroundColor: '#36C76C',
-      textColor: '#FFFFFF',
-    },
-    {
-      title: 'Meeting #5',
-      start: '2024-03-08T16:00:00',
-      backgroundColor: '#FFD648',
-      textColor: '#0A2540',
-    },
-    {
-      title: 'Seminar #6',
-      start: '2024-03-10',
-      backgroundColor: '#343B4F',
-      textColor: '#FFFFFF',
-    },
-    {
-      title: 'Meeting 3',
-      start: '2024-03-11T10:30:00',
-      backgroundColor: '#3D33FF',
-      textColor: '#EFF4FA',
-    },
-    {
-      title: 'Meetup',
-      start: '2024-03-11T12:00:00',
-      backgroundColor: '#FF6692',
-      textColor: '#081028',
-    },
-    {
-      title: 'Submission',
-      start: '2024-03-11T14:30:00',
-      backgroundColor: '#FFD648',
-      textColor: '#0B1739',
-    },
-    {
-      title: 'Attend event',
-      start: '2024-03-12T07:00:00',
-      backgroundColor: '#36C76C',
-      textColor: '#FFFFFF',
-    },
-    {
-      title: 'Submission #1',
-      start: '2024-03-15T16:00:00',
-      backgroundColor: '#F49B36',
-      textColor: '#0A2540',
-    },
-    {
-      title: 'Project Submission',
-      start: '2024-03-27',
-      backgroundColor: '#3D33FF',
-      textColor: '#EFF4FA',
-    },
-  ]);
+  const [events, setEvents] = useState([]);
+
+  const colorMap = {
+    success: '#36C76C',
+    danger: '#FF6692',
+    primary: '#3D33FF',
+    warning: '#FFD648',
+  };
+
+  useEffect(() => {
+    if (apiEvents && apiEvents.length > 0) {
+      const formattedEvents = apiEvents.map(event => ({
+        title: event.title,
+        start: dayjs(event.start_date).format('YYYY-MM-DD'),
+        end: dayjs(event.end_date).add(1, 'day').format('YYYY-MM-DD'), // Add one day to make the end date inclusive
+        backgroundColor: colorMap[event.type] || '#343B4F',
+        textColor: '#FFFFFF',
+      }));
+      setEvents(formattedEvents);
+    }
+  }, [apiEvents]);
+
   const openModal = () => setModalIsOpen(true);
   const closeModal = () => setModalIsOpen(false);
+
   const handleEventInput = e => {
     const { name, value } = e.target;
     setNewEvent({ ...newEvent, [name]: value });
   };
+
   const addNewEvent = () => {
-    const colorMap = {
-      success: '#36C76C',
-      danger: '#FF6692',
-      primary: '#3D33FF',
-      warning: '#FFD648',
+    const formattedNewEvent = {
+      title: newEvent.title,
+      start_date: dayjs(newEvent.start_date).valueOf(), // Convert to Unix timestamp
+      end_date: dayjs(newEvent.end_date).valueOf(), // Convert to Unix timestamp
+      type: newEvent.type,
     };
+
     setEvents([
       ...events,
       {
-        ...newEvent,
-        backgroundColor: colorMap[newEvent.color],
+        title: newEvent.title,
+        start: dayjs(newEvent.start_date).format('YYYY-MM-DD'),
+        end: dayjs(newEvent.end_date).add(1, 'day').format('YYYY-MM-DD'), // Add one day to make the end date inclusive
+        backgroundColor: colorMap[newEvent.type] || '#343B4F',
         textColor: '#FFFFFF',
       },
     ]);
-    setNewEvent({ title: '', start: '', end: '', color: 'success' });
+
+    onAddEvent(formattedNewEvent);
+
+    setNewEvent({ title: '', start_date: '', end_date: '', type: 'success' });
     closeModal();
   };
+
   const renderEventContent = eventInfo => {
     return (
       <div
@@ -113,10 +84,10 @@ const MyCalendar = () => {
       >
         <b>{eventInfo.timeText}</b>
         <i>{eventInfo.event.title}</i>
-        {console.log(eventInfo)}
       </div>
     );
   };
+
   return (
     <div className='p-4 bg1-bg1 text-light rounded-lg'>
       <FullCalendar
@@ -146,4 +117,5 @@ const MyCalendar = () => {
     </div>
   );
 };
+
 export default MyCalendar;

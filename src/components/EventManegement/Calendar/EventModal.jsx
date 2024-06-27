@@ -1,8 +1,9 @@
-// src/EventModal.js
 import React from 'react';
 import Modal from 'react-modal';
+import dayjs from 'dayjs';
 
 Modal.setAppElement('#root');
+
 const EventModal = ({
   isOpen,
   onRequestClose,
@@ -10,6 +11,8 @@ const EventModal = ({
   handleEventInput,
   addNewEvent,
 }) => {
+  const currentDate = new Date().toISOString().slice(0, 16);
+
   return (
     <Modal
       isOpen={isOpen}
@@ -36,9 +39,9 @@ const EventModal = ({
           <label className='inline-flex items-center'>
             <input
               type='radio'
-              name='color'
+              name='type'
               value='success'
-              checked={event.color === 'success'}
+              checked={event.type === 'success'}
               onChange={handleEventInput}
               className='form-radio text-success'
             />
@@ -47,9 +50,9 @@ const EventModal = ({
           <label className='inline-flex items-center'>
             <input
               type='radio'
-              name='color'
+              name='type'
               value='danger'
-              checked={event.color === 'danger'}
+              checked={event.type === 'danger'}
               onChange={handleEventInput}
               className='form-radio text-danger'
             />
@@ -58,9 +61,9 @@ const EventModal = ({
           <label className='inline-flex items-center'>
             <input
               type='radio'
-              name='color'
+              name='type'
               value='primary'
-              checked={event.color === 'primary'}
+              checked={event.type === 'primary'}
               onChange={handleEventInput}
               className='form-radio text-primary'
             />
@@ -69,9 +72,9 @@ const EventModal = ({
           <label className='inline-flex items-center'>
             <input
               type='radio'
-              name='color'
+              name='type'
               value='warning'
-              checked={event.color === 'warning'}
+              checked={event.type === 'warning'}
               onChange={handleEventInput}
               className='form-radio text-warning'
             />
@@ -84,10 +87,11 @@ const EventModal = ({
           </label>
           <input
             type='datetime-local'
-            name='start'
-            value={event.start}
+            name='start_date'
+            value={event.start_date}
             onChange={handleEventInput}
             className='mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md bg-gray-800 text-white'
+            min={currentDate} // Restrict to current date and beyond
           />
         </div>
         <div>
@@ -96,10 +100,11 @@ const EventModal = ({
           </label>
           <input
             type='datetime-local'
-            name='end'
-            value={event.end}
+            name='end_date'
+            value={event.end_date}
             onChange={handleEventInput}
             className='mt-1 p-2 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md bg-gray-800 text-white'
+            min={currentDate} // Restrict to current date and beyond
           />
         </div>
         <div className='flex justify-end space-x-4'>
@@ -122,4 +127,5 @@ const EventModal = ({
     </Modal>
   );
 };
+
 export default EventModal;

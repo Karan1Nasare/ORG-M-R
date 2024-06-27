@@ -86,5 +86,6 @@ const URLS = {
   GET_EVENT: () => `/events`,
   GET_STATES: '/states',
   GET_CITIES: '/cities',
+  EVENTS: '/events',
 };
 export default URLS;
