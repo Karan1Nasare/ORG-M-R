@@ -12,6 +12,14 @@ const useAddStaff = () => {
     return axiosInstance.post(URLS.ADD_STAFF(), data);
   };
 
+  const getStates = async () => {
+    return axiosInstance.get(URLS.GET_STATES);
+  };
+
+  const getAllCities = async params => {
+    return axiosInstance.get(URLS.GET_CITIES, { params });
+  };
+
   // add staff
   const onAddStaff = useCallback(async staff => {
     console.log('🚀 ~ AddStaff ~ staff:', staff);
@@ -31,6 +39,9 @@ const useAddStaff = () => {
 
   return {
     onAddStaff,
+    getAllCities,
+    getStates,
+    getExecutorState,
   };
 };
 

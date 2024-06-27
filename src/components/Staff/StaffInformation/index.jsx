@@ -5,14 +5,14 @@ import StaffViewPage from './StaffViewPage';
 
 const Index = () => {
   const location = useLocation();
-  const { staffData, onDelete } = location.state || {};
+  const { staffData } = location.state || {};
 
   if (!staffData) {
     return <div>No staff data available.</div>;
   }
   return (
     <div>
-      <StaffViewPage data={staffData} onDelete={onDelete} />
+      <StaffViewPage data={staffData} />
     </div>
   );
 };

@@ -8,7 +8,7 @@ const URLS = {
   CHANGE_PASSWORD: '/change-password',
   FORGOT_PASSWORD: '/password/email',
   RESET_PASSWORD: token => `/password/reset?token=${token}`,
-  DASHBOARD: () => `/dashboard`,
+  DASHBOARD: () => `/organisations/dashboard`,
   ADD_PLAN: () => `/plans`,
   GET_PLAN: () => `/plans`,
   EDIT_PLAN: id => `/plans/${id}`,
@@ -84,5 +84,7 @@ const URLS = {
   EDIT_ANNOUNCEMENT: id => `/announcements/${id}`,
   DELETE_ANNOUNCEMENT: id => `/announcements/${id}`,
   GET_EVENT: () => `/events`,
+  GET_STATES: '/states',
+  GET_CITIES: '/cities',
 };
 export default URLS;

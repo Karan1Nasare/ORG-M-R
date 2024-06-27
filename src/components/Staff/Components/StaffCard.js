@@ -10,11 +10,10 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const StaffCard = ({ data, onDelete }) => {
-  console.log('🚀 ~ StaffCard ~ data:', data);
   const navigate = useNavigate();
   const handleOnClick = () => {
     navigate('/staff/staffInformation', {
-      state: { staffData: data, onDelete },
+      state: { staffData: data },
     });
   };
 

@@ -1,29 +1,55 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Card, CardContent, Typography, Box } from '@mui/material';
 
 import totalStudentIcon from '../../assets/icon/totalStudentIcon.svg';
 import totalStaffIcon from '../../assets/icon/totalStaffIcon.svg';
 import studentStaffReportIcon from '../../assets/icon/studentStaffReportIcon.svg';
 import AreaChartLayout from '../shared/Chart/areaChartLayout';
-
-const card = [
-  {
-    gradientColor:
-      'linear-gradient(180deg, rgba(31, 64, 238, 0.12) 0%, rgba(31, 64, 238, 0.03) 100%)',
-    title: 'Total Students',
-    value: '16,689',
-    icon: totalStudentIcon,
-  },
-  {
-    gradientColor:
-      'linear-gradient(180deg, rgba(22, 205, 199, 0.13) 0%, rgba(22, 205, 199, 0.03) 100%)',
-    title: 'Total Staff',
-    value: '800',
-    icon: totalStaffIcon,
-  },
-];
+import { APIClient } from '../../utilities/axios-client';
+import URLS from '../../constants/api';
 
 const OrganizationCard = () => {
+  const [data, setData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const { API } = APIClient();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      // TODO: use useFetcher api hook for handling api calls
+      try {
+        const response = await API('GET', URLS.DASHBOARD(), {}, true);
+        if (response.status !== 200) {
+          throw response;
+        }
+        setData(response.data.data);
+        setLoading(false);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, []);
+
+  const card = [
+    {
+      gradientColor:
+        'linear-gradient(180deg, rgba(31, 64, 238, 0.12) 0%, rgba(31, 64, 238, 0.03) 100%)',
+      title: 'Total Students',
+      value: data?.student_count,
+      icon: totalStudentIcon,
+    },
+    {
+      gradientColor:
+        'linear-gradient(180deg, rgba(22, 205, 199, 0.13) 0%, rgba(22, 205, 199, 0.03) 100%)',
+      title: 'Total Staff',
+      value: data?.staff_count,
+      icon: totalStaffIcon,
+    },
+  ];
+
   return (
     <>
       <div className='text-white'>

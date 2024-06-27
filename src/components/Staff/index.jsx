@@ -7,7 +7,7 @@ import useStaff from './hooks/useStaff';
 import Loader from '../shared/Loader';
 
 const App = () => {
-  const { staffList, loading, error, confirmDeleteHandler } = useStaff();
+  const { staffList, loading, error, onDeleteStaff } = useStaff();
 
   if (loading) {
     return <Loader />;
@@ -25,7 +25,7 @@ const App = () => {
       <Header />
       <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-6'>
         {staffList?.data?.map((staff, index) => (
-          <StaffCard key={index} data={staff} onDelete={confirmDeleteHandler} />
+          <StaffCard key={index} data={staff} onDelete={onDeleteStaff} />
         ))}
       </div>
     </div>

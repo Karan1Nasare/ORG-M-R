@@ -1,15 +1,10 @@
 /*   import/no-extraneous-dependencies */
+
 import React, { useEffect, useState } from 'react';
-import * as zod from 'zod';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { Controller, useForm, useFormContext } from 'react-hook-form';
+import { Controller, useForm, useWatch } from 'react-hook-form';
 import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { object, string } from 'yup';
-import { useNavigate } from 'react-router-dom';
-import back from '../../icon/back.svg';
-
+import { useLocation, useNavigate } from 'react-router-dom';
 import AddStaffForm from './AddStaffForm';
 import {
   FormProvider,
@@ -18,70 +13,25 @@ import {
   RHFTextField,
 } from '../../../hooks/hook-form';
 import Button from '../../shared/buttons/Button';
-import colors from '../../../theme/colors';
-import { useStore } from '../../../store/context-store';
+import back from '../../icon/back.svg';
 import TabTitle from '../../shared/TabTitle';
 import useAddStaff from './hooks/useAddStaff';
-
-// const staffSchema = object({
-//   organisation: string().required('Select at least one organization'),
-//   class: string().required('Select at least one class'),
-//   primary_class: string().required('Select at least one primary class'),
-//   name: string().required('Staff Full Name is required'),
-//   email: string().email('Invalid email').required('Staff Email is required'),
-//   phone: string().required('Phone Number is required'),
-//   staff_id: string().required('Staff ID is required'),
-//   subject: string().required('Select at least one subject'),
-//   standard: string().required('Select at least one standard'),
-//   address: string().required('Address is required'),
-//   city: string().required('City is required'),
-//   state: string().required('State is required'),
-//   degree: string().required('Degree is required'),
-//   password: string()
-//     .min(8, 'Password must be at least 8 characters')
-//     .required('Password is required'),
-//   password_confirmation: string()
-//     .oneOf([string().ref('password')], 'Passwords must match')
-//     .required('Confirm Password is required'),
-// });
+import useFetcher from '../../../hooks/useFetcher';
+import useSubject from '../../Material/hooks/useSubject';
+import useCourseStd from '../../Material/hooks/useCourseStd';
 
 const AddStaff = ({ setValue }) => {
+  const { staffState } = useLocation();
   const navigate = useNavigate();
-  const { onAddStaff } = useAddStaff();
+  const { fetcher } = useFetcher();
+  const { onAddStaff, getAllCities, getStates } = useAddStaff();
+  const { fetchSubjectList, subjectList } = useSubject();
+  const { courseStdList } = useCourseStd();
   const [file, setFile] = useState();
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [Store, StoreDispatch] = useStore();
-
-  const onSubmit = async data => {
-    console.debug('onSubmit', file);
-    console.debug('onSubmit', data);
-    const formData = new FormData();
-
-    // Convert multi-select fields to arrays
-    const multiSelectFields = [
-      'organisation',
-      'class',
-      'primary_class',
-      'subject',
-      'standard',
-    ];
-    multiSelectFields.forEach(field => {
-      formData.append(field, JSON.stringify(data[field]));
-    });
-
-    // Append the remaining form fields to the FormData object
-    Object.entries(data).forEach(([key, value]) => {
-      if (!multiSelectFields.includes(key)) {
-        formData.append(key, value);
-      }
-    });
-
-    formData.append('image', file[0]);
-    formData.append('subject_id', '1');
-
-    onAddStaff(formData);
-  };
+  const [states, setState] = useState([]);
+  const [cities, setCities] = useState([]);
 
   const methods = useForm({
     defaultValues: {
@@ -95,13 +45,86 @@ const AddStaff = ({ setValue }) => {
   const {
     control,
     handleSubmit,
-    errors,
-    formState: { isSubmitting },
+    watch,
+    formState: { errors },
   } = methods;
+
+  const values = watch();
+
+  const onSubmit = async data => {
+    const formData = new FormData();
+
+    const multiSelectFields = ['organisation', 'class', 'primary_class'];
+    multiSelectFields.forEach(field => {
+      data[field]?.forEach((item, index) => {
+        formData.append(`${field}[${index}]`, item?.value || item);
+      });
+    });
+
+    Object.entries(data).forEach(([key, value]) => {
+      if (!multiSelectFields.includes(key)) {
+        formData.append(key, value);
+      }
+    });
+
+    if (file && file[0]) {
+      formData.append('image', file[0]);
+    }
+    formData.append('subject_id', '1');
+
+    onAddStaff(formData);
+  };
 
   const handleBackClick = () => {
     navigate('/staff');
   };
+
+  useEffect(() => {
+    console.log('🚀 ~ useEffect ~ staffState:', staffState);
+
+    if (staffState && staffState?.staff_id) {
+      console.log('111111111staff_id', staffState.staff_id);
+    }
+  }, []);
+
+  useEffect(() => {
+    setCities([]);
+    if (values?.state) {
+      fetcher({
+        key: 'get_city',
+        executer: () => getAllCities({ state_id: values?.state }),
+        onSuccess: res => {
+          setCities(res?.data?.data);
+        },
+        showSuccessToast: false,
+      });
+    }
+  }, [values?.state]);
+
+  useEffect(() => {
+    fetcher({
+      key: 'get_state',
+      executer: () => getStates(),
+      onSuccess: res => {
+        setState(res?.data?.data);
+      },
+      showSuccessToast: false,
+    });
+  }, []);
+
+  useEffect(() => {
+    (async () => {
+      console.log(
+        'values?.standard?.value',
+        values?.standard,
+        values?.standard?.value,
+      );
+      if (values?.standard) {
+        await fetchSubjectList(values?.standard);
+        console.log('subject list', subjectList);
+      }
+    })();
+  }, [values?.standard]);
 
   return (
     <>
@@ -131,8 +154,8 @@ const AddStaff = ({ setValue }) => {
                 <RHFMultiSelect
                   name='organisation'
                   options={[
-                    { label: 'Organization 1', value: 'Organization 1' },
-                    { label: 'Organization 2', value: 'Organization 2' },
+                    { label: 'Organization 1', value: '1' },
+                    { label: 'Organization 2', value: '2' },
                   ]}
                   placeholder='Select Organization'
                   chip
@@ -149,8 +172,8 @@ const AddStaff = ({ setValue }) => {
                   size='small'
                   name='class'
                   options={[
-                    { label: 'Class 1', value: 'Class 1' },
-                    { label: 'Class 2', value: 'Class 2' },
+                    { label: 'Class 1', value: '1' },
+                    { label: 'Class 2', value: '2' },
                   ]}
                   placeholder='Select Class'
                   chip
@@ -167,8 +190,8 @@ const AddStaff = ({ setValue }) => {
                   size='small'
                   name='primary_class'
                   options={[
-                    { label: 'Primay Class 1', value: 'Primay Class 1' },
-                    { label: 'Primay Class 2', value: 'Primay Class 2' },
+                    { label: 'Primay Class 1', value: '1' },
+                    { label: 'Primay Class 2', value: '2' },
                   ]}
                   placeholder='Select Primary Class'
                   chip
@@ -220,38 +243,40 @@ const AddStaff = ({ setValue }) => {
               </Grid>
               <Grid item md={6} sm={12}>
                 <label
-                  htmlFor='class'
-                  className='block text-sm text-white text-start mb-2'
-                >
-                  Subject
-                </label>
-                <RHFMultiSelect
-                  size='small'
-                  name='subject'
-                  options={[
-                    { label: 'Subject 1', value: 'Subject 1' },
-                    { label: 'Subject 2', value: 'Subject 2' },
-                  ]}
-                  placeholder='Select Subject'
-                  chip
-                />
-              </Grid>
-              <Grid item md={6} sm={12}>
-                <label
                   htmlFor='standard'
                   className='block text-sm text-white text-start mb-2'
                 >
                   Standard
                 </label>
-                <RHFMultiSelect
+                <RHFSelect
                   size='small'
                   name='standard'
-                  options={[
-                    { label: 'Standard 1', value: 'Standard 1' },
-                    { label: 'Standard 2', value: 'Standard 2' },
-                  ]}
-                  placeholder='Select Standard'
-                  chip
+                  placeholder='Selected Standard'
+                  options={courseStdList?.map(standard => ({
+                    label: standard?.name,
+                    value: standard?.id,
+                  }))}
+                  fullWidth
+                  required
+                />
+              </Grid>
+              <Grid item md={6} sm={12}>
+                <label
+                  htmlFor='class'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  Subject
+                </label>
+                <RHFSelect
+                  size='small'
+                  name='subject'
+                  placeholder='Selected Subject'
+                  options={subjectList?.map(subject => ({
+                    label: subject?.name,
+                    value: subject?.id,
+                  }))}
+                  fullWidth
+                  required
                 />
               </Grid>
 
@@ -267,23 +292,39 @@ const AddStaff = ({ setValue }) => {
                 />
               </Grid>
               <Grid item md={6} sm={12}>
-                <RHFTextField
+                <label
+                  htmlFor='state'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  State
+                </label>
+                <RHFSelect
                   size='small'
-                  name='city'
-                  type='text'
-                  label='City*'
-                  placeholder='Enter City'
+                  name='state'
+                  placeholder='Enter State'
+                  options={states?.map(state => ({
+                    label: state?.name,
+                    value: state?.id,
+                  }))}
                   fullWidth
                   required
                 />
               </Grid>
               <Grid item md={6} sm={12}>
-                <RHFTextField
+                <label
+                  htmlFor='standard'
+                  className='block text-sm text-white text-start mb-2'
+                >
+                  City
+                </label>
+                <RHFSelect
                   size='small'
-                  name='state'
-                  type='text'
-                  label='State*'
-                  placeholder='Enter State'
+                  name='city'
+                  placeholder='Enter City'
+                  options={cities.map(city => ({
+                    label: city.name,
+                    value: city.id,
+                  }))}
                   fullWidth
                   required
                 />

@@ -85,9 +85,9 @@ const useStaff = () => {
     setOpenDelete(false);
   };
 
-  const confirmDeleteHandler = () => {
-    if (selectedData) {
-      onDeleteStaff(selectedData.id);
+  const confirmDeleteHandler = id => {
+    if (id) {
+      onDeleteStaff(id);
     }
     setOpenDelete(false);
   };
@@ -140,7 +140,7 @@ const useStaff = () => {
     currentPage,
     handlePageChange,
     totalPages: Math.ceil(staffList.length / ITEMS_PER_PAGE),
-    confirmUpdateHandler,
+    onDeleteStaff,
   };
 };
 

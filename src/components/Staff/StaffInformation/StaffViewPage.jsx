@@ -1,3 +1,5 @@
+/* eslint-disable import/no-cycle */
+
 import { Stack, Tab, Tabs } from '@mui/material';
 import React, { useEffect, useState } from 'react';
 import { FiTrash2 } from 'react-icons/fi';
@@ -13,15 +15,36 @@ import ArrowRight from '../../icon/ArrowRight';
 import StaffDetailInfo from './StaffDetailInfo';
 import StaffAccountInfo from './StaffAccountInfo';
 import GrowthReport from './GrowthReport';
+import StaffServices from '../services/services';
+import useFetcher from '../../../hooks/useFetcher';
+import { getRouteByName } from '../../../App.routes';
 
-const StaffViewPage = ({ data, onDelete }) => {
+const StaffViewPage = ({ data }) => {
   console.log('🚀 ~ StaffViewPage ~ data:', data);
+  const { deleteStaffById } = StaffServices();
+  const { fetcher, getExecutorState } = useFetcher();
+
   const navigate = useNavigate();
   const [Tabvalue, setTabValue] = useState('1');
   const [organizationDetails, setorganizationDetails] = useState();
 
   const handleEditClick = id => {
-    navigate(`/editStaff/${id}`);
+    navigate(`/staff/editStaff/${id}`);
+  };
+
+  const handleDelete = id => {
+    try {
+      fetcher({
+        key: 'deleteAnnouncements',
+        executer: () => deleteStaffById(id),
+        onSuccess: response => {
+          console.log('delete rresponse feature: ', response);
+          navigate('/staff');
+        },
+      });
+    } catch (err) {
+      console.log('error while fetching questions', err);
+    }
   };
 
   const handleChange = (event, newValue) => {
@@ -61,7 +84,7 @@ const StaffViewPage = ({ data, onDelete }) => {
           </Button>
 
           <Button
-            onClick={() => onDelete(data?.id)}
+            onClick={() => handleDelete(data?.id)}
             sx={{
               background: 'rgba(255,102,146,0.2)',
               color: 'rgba(255, 102, 146, 1)',

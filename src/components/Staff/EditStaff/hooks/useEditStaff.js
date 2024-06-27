@@ -51,14 +51,7 @@ const useEditStaff = () => {
     }
   }, []);
 
-  useEffect(() => {
-    if (id) {
-      fetchStaffById(id);
-    }
-  }, []);
-
   return {
-    staffDataById,
     onEditStaff,
   };
 };
