@@ -43,12 +43,12 @@ const Card = ({ search }) => {
   }, [search]);
 
   return (
-    <div className='grid gap-8 mt-8 grid-cols-3'>
+    <div className='grid gap-6 mt-6 grid-cols-3'>
       {exams.map((examData, index) => {
         return (
           <div
             key={index}
-            className='relative p-7 bg-secondary__fill rounded-md border border-gray-700 flex-col justify-start items-end gap-3 inline-flex'
+            className='relative p-6 bg-secondary__fill rounded-md border border-gray-700 flex-col justify-start items-end gap-3 inline-flex'
           >
             <div
               onClick={() => handleOnClick(examData.id)}
@@ -56,7 +56,7 @@ const Card = ({ search }) => {
             >
               <Icon icon={'mdi:eye'} className='text-white' width={25} />
             </div>
-            <div className='self-stretch justify-start items-start gap-3 inline-flex'>
+            <div className='self-stretch justify-start items-start gap-3 pb-1 inline-flex'>
               <div className='flex-col justify-start items-start gap-1.5 inline-flex'>
                 <h1 className="w-[314px] text-left text-white text-[15px] font-normal font-['Helvetica']">
                   {examData.name}
@@ -70,26 +70,24 @@ const Card = ({ search }) => {
               </div>
             </div>
             <div className='self-stretch justify-between items-center inline-flex'>
-              <div className="grow shrink basis-0 text-left text-gray-400 text-xs font-normal font-['Manrope'] leading-none">
-                <h2>
-                  Subject :<br />
-                  {examData.subject}
-                </h2>
+              <div className="grow shrink basis-0 pb-1 text-left text-gray-400 text-xs font-normal font-['Manrope'] leading-none">
+                <h2 className='pb-1'>Subject :</h2>
+                <h2>{examData.subject}</h2>
               </div>
               <div className="text-right text-gray-400 text-xs font-normal font-['Manrope'] leading-none">
-                Total Time :<br />
-                {examData.time}
+                <h2 className='pb-1'>Total Time :</h2>
+                <h2>{examData.time}</h2>
               </div>
             </div>
-            <div className='self-stretch py-px justify-between items-center inline-flex'>
+            <div className='self-stretch pb-1 py-px justify-between items-center inline-flex'>
               <div className='px-3 py-[3px] bg-green__opacity rounded-[999px] justify-start items-start gap-2.5 flex'>
                 <div className="text-green text-xs font-semibold font-['Manrope']">
                   Std - {examData.standard}
                 </div>
               </div>
               <div className="text-right text-gray-400 text-xs font-normal font-['Manrope'] leading-none">
-                No of Examiner :<br />
-                {examData.examiner}
+                <h2 className='pb-1'>No of Examiner :</h2>
+                <h2>{examData.examiner}</h2>
               </div>
             </div>
             <div className='self-stretch justify-between items-center inline-flex'>
