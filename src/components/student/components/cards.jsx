@@ -16,7 +16,10 @@ const Cards = ({ cards }) => {
       ) : (
         cards.map((card, index) => {
           const userDetails = card?.user_details;
-          const imageUrl = typeof userDetails?.image === 'object' ? userDetails?.image?.url : "";
+          const imageUrl =
+            typeof userDetails?.image === 'object'
+              ? userDetails?.image?.url
+              : '';
 
           return (
             <div
@@ -25,7 +28,11 @@ const Cards = ({ cards }) => {
             >
               <div className='flex text-white justify-between'>
                 <div className='flex mx-2 gap-3'>
-                  <img className='h-14 w-14 rounded-full' src={imageUrl} alt='' />
+                  <img
+                    className='h-14 w-14 rounded-full'
+                    src={imageUrl}
+                    alt=''
+                  />
                   <div className='text-left pl-1 text-white mx-2 flex flex-col gap-[5px]'>
                     <h2 className='text-base'>{card.name}</h2>
                     <h3 className='text-xs'>{card.email}</h3>
