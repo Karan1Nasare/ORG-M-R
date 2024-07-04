@@ -9,7 +9,12 @@ import useAddNotification from './hooks/useAddNotification';
 
 const AddNotification = () => {
   const navigate = useNavigate();
-  const methods = useForm();
+  const methods = useForm({
+    defaultValues: {
+      title: '',
+      description: '',
+    },
+  });
   const { handleSubmit } = methods;
 
   const {
@@ -35,9 +40,21 @@ const AddNotification = () => {
     const combinedData = {
       ...formData,
       user_ids: selectedAdminIds,
-      image: selectedFile,
     };
-    onAddNotification(combinedData);
+
+    const Data = new FormData();
+    Data.append('image', selectedFile);
+
+    Object.keys(combinedData).forEach(key => {
+      if (Array.isArray(combinedData[key])) {
+        combinedData[key].forEach((value, index) => {
+          Data.append(`${key}[${index}]`, value);
+        });
+      } else {
+        Data.append(key, combinedData[key]);
+      }
+    });
+    onAddNotification(Data);
   };
 
   const handleBackClick = () => {

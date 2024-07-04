@@ -1,10 +1,39 @@
 import React, { useState } from 'react';
 import { Button, Typography } from '@mui/material';
+import { Icon } from '@iconify/react/dist/iconify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import BannerPreviewDialog from '../../banner/bannerPreview';
+import ConfirmDelete from '../../ui/Dialog/ConfirmDelete';
+import axiosInstance from '../../../utilities/axios-client';
 
-const CarouselItem = ({ backgroundImage, image }) => {
+const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
+  const [openDelete, setOpenDelete] = useState(false);
+
+  const handleCloseDelete = () => {
+    setOpenDelete(false);
+  };
+  const DeleteBannerById = async () => {
+    try {
+      const response = await axiosInstance.delete(`/banners/${item.id}`);
+      if (response.data.success) {
+        onDelete(item.id);
+      }
+    } catch (error) {
+      console.error('Error:', error);
+    }
+    handleCloseDelete();
+  };
+  const confirmDeleteHandler = () => {
+    if (item.id) {
+      DeleteBannerById();
+    }
+    setOpenDelete(false);
+  };
+
+  const openDeleteDialog = () => {
+    setOpenDelete(true);
+  };
 
   const openPreviewDialog = () => {
     setIsPreviewOpen(true);
@@ -13,10 +42,9 @@ const CarouselItem = ({ backgroundImage, image }) => {
   const closePreviewDialog = () => {
     setIsPreviewOpen(false);
   };
+
   return (
-    <div
-      className={`carousel-item bg-blue-900 rounded-xl overflow-hidden shadow-lg p-8`}
-    >
+    <div className='bg-blue-900 rounded-xl w-[95%] overflow-hidden shadow-lg p-4'>
       <div className='relative rounded-xl group'>
         <img
           className='w-full h-48 object-cover rounded-lg'
@@ -30,9 +58,8 @@ const CarouselItem = ({ backgroundImage, image }) => {
             src={image}
             alt='University Logo'
           />
-          <Typography variant='description' className='text-start'>
-            The Gujarat University is a public state university located at
-            Ahmedabad, Gujarat, India.
+          <Typography variant='description' className='text-white text-sm mb-2'>
+            {item?.title}
           </Typography>
           <Button
             variant='contained'
@@ -53,12 +80,31 @@ const CarouselItem = ({ backgroundImage, image }) => {
             style={{ fontSize: '3rem' }}
             onClick={openPreviewDialog}
           />
+          <Icon
+            icon={'material-symbols:delete'}
+            color='red'
+            width={30}
+            onClick={openDeleteDialog}
+            className='cursor-pointer'
+          />
         </div>
       </div>
       <BannerPreviewDialog
         isOpen={isPreviewOpen}
         onClose={closePreviewDialog}
+        banneritem={item}
       />
+      {openDelete ? (
+        <ConfirmDelete
+          fullMessage='Are you sure you want to Delete Banner?'
+          title='Delete Banner'
+          handleClose={handleCloseDelete}
+          open={openDelete}
+          deleteHandler={confirmDeleteHandler}
+        />
+      ) : (
+        ''
+      )}
     </div>
   );
 };
