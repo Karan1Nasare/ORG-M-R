@@ -1,3 +1,4 @@
+/* eslint-disable object-shorthand */
 import React, { useState, Fragment, useEffect, useRef } from 'react';
 import { Icon } from '@iconify/react';
 import { useDropzone } from 'react-dropzone';
@@ -17,6 +18,7 @@ const FileUploaderImage = ({
   setSelection,
   imgSrc,
   isRounded,
+  accept = { 'image/*': ['.png', '.jpg', '.jpeg', '.gif'] },
 }) => {
   const [files, setFiles] = useState([]);
   const [errorMsg, setErrorMsg] = useState('');
@@ -36,9 +38,7 @@ const FileUploaderImage = ({
   const { getRootProps, getInputProps } = useDropzone({
     multiple: false,
     maxSize: 10000000,
-    accept: {
-      'image/*': ['.png', '.jpg', '.jpeg', '.gif'],
-    },
+    accept: accept,
     onDrop: acceptedFiles => {
       const file = acceptedFiles.map(rowFile => Object.assign(rowFile));
       setFiles(file);
@@ -73,7 +73,7 @@ const FileUploaderImage = ({
         />
       );
     }
-    return null;
+    return file.name;
   };
 
   const handleRemoveFile = () => {

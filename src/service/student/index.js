@@ -50,3 +50,12 @@ export const getAllCourses = async params => {
 export const deleteAdminData = async id => {
   return axiosInstance.delete(URLS.DELETE_ADMIN(id));
 };
+
+export const addMultipletudent = async data => {
+  if (!data || typeof data !== 'object' || !Object.keys(data).length) {
+    throw new Error('Invalid data: Data is required and cannot be empty');
+  }
+  const formData = new FormData();
+  formData.append('file', data);
+  return axiosInstance.post(URLS.IMPORT_STUDENT, formData);
+};

@@ -1,15 +1,44 @@
-import React from 'react';
+import React, { useState } from 'react';
+import toast from 'react-hot-toast';
 import { IoIosAddCircleOutline } from 'react-icons/io';
 import TabTitle from '../../shared/TabTitle';
 import AddMultipleForm from './AddMultipleForm';
+import useFetcher from '../../../hooks/useFetcher';
+import { addMultipletudent } from '../../../service/student';
 
 const AddMultiple = () => {
+  const [file, setFile] = useState();
+  const { fetcher } = useFetcher();
+
+  const handleImportStudent = () => {
+    if (file) {
+      fetcher({
+        key: 'import_student',
+        executer: () => addMultipletudent(file[0]),
+        onSuccess: res => {
+          console.log('Response:', res);
+        },
+        onFailure: err => {
+          console.error(
+            'Error while adding student',
+            err?.response?.data?.message,
+          );
+        },
+        showSuccessToast: true,
+        showErrorToast: true,
+        onSuccessRoute: '/student',
+      });
+    } else {
+      toast.error('Please select a file');
+    }
+  };
+
   return (
     <div>
       <TabTitle title='Add Multiple Student' sx={{ marginTop: '20px' }} />
 
       <div className='mt-5 border rounded-xl border-gray-700'>
-        <AddMultipleForm />
+        <AddMultipleForm file={file} setFile={setFile} accept={'*'} />
       </div>
       <div className='flex flex-col items-start p-8 text-white rounded-xl border border-gray-700 border-solid bg-secondary__fill mt-7 max-md:px-5'>
         <div className='flex gap-3.5 text-lg'>
@@ -48,7 +77,7 @@ const AddMultiple = () => {
           <span className='pt-1 mr-1'>
             <IoIosAddCircleOutline size={19} />
           </span>
-          <button>Add Student</button>
+          <button onClick={handleImportStudent}>Add Student</button>
         </div>
       </div>
     </div>
