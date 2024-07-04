@@ -87,5 +87,8 @@ const URLS = {
   GET_STATES: '/states',
   GET_CITIES: '/cities',
   EVENTS: '/events',
+  GET_STUDENT: '/students',
+  ADD_STUDENT: '/students',
+  GET_ALL_COURSES: '/getallcoursedata',
 };
 export default URLS;

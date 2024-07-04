@@ -33,6 +33,8 @@ const useFetcher = () => {
       if (response.status === 200) {
         onSuccess?.(response);
         if (showSuccessToast) {
+          toast.dismiss();
+
           toast.success(ToastMessage || response.data?.message, {
             position: 'top-right',
             icon: SuccessIcon,
@@ -66,6 +68,7 @@ const useFetcher = () => {
         errorMessage = error.response.data.message;
       }
       if (showErrorToast) {
+        toast.dismiss();
         toast.error(ToastMessage || errorMessage, {
           position: 'top-right',
           icon: ErrorIcon,

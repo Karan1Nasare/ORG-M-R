@@ -1,42 +1,66 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { PaginationItem } from '@mui/material';
+import { useNavigate } from 'react-router-dom';
 import { FaEye } from 'react-icons/fa';
 import Cards from './components/cards';
 import Header from './components/Header/Header';
 import Pagination from '../shared/Pagination';
 import { students } from './Student-data';
+import { getAllStudent } from '../../service/student';
+import useFetcher from '../../hooks/useFetcher';
+import Loader from '../shared/Loader';
+import colors from '../../theme/colors';
 
 // Ensure the path is correct
 
 const Index = () => {
-  const [inputValue, setInputValue] = useState('');
-  const [filteredCards, setFilteredCards] = useState(students);
-  const [currentPage, setCurrentPage] = useState(1);
-  const ITEMS_PER_PAGE = 6;
+  // TODO: useAdmin hooks
+  const [studentData, setStudentData] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [page, setPage] = useState(1);
+  const [totalPage, setTotalPage] = useState();
+  const itemsPerPage = 6;
+  const { fetcher, getExecutorState } = useFetcher();
 
-  const handleSearchClick = () => {
-    const filtered = students.filter(
-      card =>
-        card.name.toLowerCase().includes(inputValue.toLowerCase()) ||
-        card.enrollment.toLowerCase().includes(inputValue.toLowerCase()) ||
-        card.standard.toLowerCase().includes(inputValue.toLowerCase()),
-    );
-    setFilteredCards(filtered);
-    setCurrentPage(1); // Reset to the first page when a search is performed
-  };
+  const fetchAdmins = useCallback(() => {
+    fetcher({
+      key: 'fetch_student',
+      executer: () =>
+        getAllStudent({
+          search: searchTerm,
+          page,
+          page_size: itemsPerPage,
+        }),
+      onSuccess: response => {
+        const responseData = response.data?.data;
+        const totalRecords = responseData?.total;
+        setTotalPage(Math.ceil(totalRecords / itemsPerPage));
+        setStudentData(responseData);
+      },
+      onFailureRoute: '',
+      onFailure: err => {
+        console.error('Error while fetching admins', err);
+      },
+      showSuccessToast: false,
+    });
+  }, [searchTerm, page]);
 
   useEffect(() => {
-    handleSearchClick();
-  }, [inputValue]);
+    fetchAdmins();
+  }, [searchTerm, page]);
 
-  const handleInputChange = e => {
-    setInputValue(e.target.value);
+  const navigate = useNavigate();
+
+  const handleSearchChange = event => {
+    setPage(1);
+    setSearchTerm(event.target.value);
   };
 
-  // Paginate the filtered cards
-  const paginatedCards = filteredCards.slice(
-    (currentPage - 1) * ITEMS_PER_PAGE,
-    currentPage * ITEMS_PER_PAGE,
-  );
+  const handlePageChange = (event, value) => {
+    setPage(value);
+  };
 
   return (
     <>
@@ -50,9 +74,8 @@ const Index = () => {
         }}
       >
         <Header
-          inputValue={inputValue}
-          handleInputChange={handleInputChange}
-          handleSearchClick={handleSearchClick}
+          inputValue={searchTerm}
+          handleInputChange={handleSearchChange}
         />
         <div
           className='mt-5'
@@ -62,13 +85,36 @@ const Index = () => {
             paddingBottom: '200px', // Add padding to ensure last item is not cut off
           }}
         >
-          <Cards cards={paginatedCards} />
-          <Pagination
-            totalCards={filteredCards.length}
-            cardsPerPage={ITEMS_PER_PAGE}
-            currentPage={currentPage}
-            setCurrentPage={setCurrentPage}
-          />
+          <Cards cards={studentData} />
+
+          {getExecutorState('fetch_student').isLoading && <Loader />}
+          {!getExecutorState('fetch_student').isLoading &&
+            studentData &&
+            studentData.length > 0 && (
+              <Pagination
+                count={totalPage}
+                page={page}
+                onChange={handlePageChange}
+                renderItem={item => <PaginationItem {...item} />}
+                sx={{
+                  mt: '25px',
+                  '& .MuiPaginationItem-root': {
+                    color: 'rgba(125, 143, 179, 1)',
+                    '&.Mui-selected': {
+                      color: colors.white,
+                    },
+                    '&:hover': {
+                      backgroundColor: colors.secondary__fill__dark,
+                      color: colors.white,
+                    },
+                  },
+                  '& .MuiPaginationItem-previousNext': {
+                    backgroundColor: colors.white,
+                    color: colors.black,
+                  },
+                }}
+              />
+            )}
         </div>
       </div>
     </>
