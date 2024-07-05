@@ -43,7 +43,7 @@ const services = () => {
   };
 
   const addChapter = async data => {
-    return axiosInstance.post(URLS.ADD_CHAPTER(data));
+    return axiosInstance.post(URLS.ADD_CHAPTER(), data);
   };
 
   const deleteChapterById = async id => {

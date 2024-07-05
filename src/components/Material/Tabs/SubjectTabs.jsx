@@ -70,9 +70,12 @@ const SubjectTabs = () => {
     setOpenView(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     if (selectedData) {
-      onDelete(selectedData.id);
+      const isDeleted = await onDelete(selectedData.id);
+      if (isDeleted) {
+        fetchSubject();
+      }
     }
     setOpenDelete(false);
   };
@@ -81,10 +84,13 @@ const SubjectTabs = () => {
     setOpenDelete(false);
   };
 
-  const updateHandler = data => {
+  const updateHandler = async data => {
     console.log('🚀 ~ updateHandler ~ data:', data);
     if (selectedData) {
-      onUpdate(selectedData.id, data);
+      const isUpdated = await onUpdate(selectedData.id, data);
+      if (isUpdated) {
+        fetchSubject();
+      }
     }
     setOpenEdit(false);
   };
@@ -182,7 +188,7 @@ const SubjectTabs = () => {
 
       {/* Delete Dialog Confirmation */}
       <ConfirmDelete
-        fullMessage={'Are you sure want to Delete Course ?'}
+        fullMessage={'Are you sure want to Delete Subject ?'}
         title={'Delete Course'}
         handleClose={handleCloseDelete}
         deleteHandler={confirmDeleteHandler}

@@ -91,5 +91,12 @@ const URLS = {
   GET_STATES: '/states',
   GET_CITIES: '/cities',
   EVENTS: '/events',
+  GET_MATERIAL_OPTION: (courseId, subjectId, chapterId) => {
+    let url = '/getallcoursedata?';
+    if (courseId) url += `course_id=${courseId}`;
+    if (subjectId) url += `&subject_id=${subjectId}`;
+    if (chapterId) url += `&chapter_id=${chapterId}`;
+    return url;
+  },
 };
 export default URLS;

@@ -49,7 +49,7 @@ const ChapterTabs = () => {
       },
       showSuccessToast: false,
     });
-  }, [searchTerm, page]);
+  }, [searchTerm, page, chapterData]);
 
   const handlePageChange = (event, value) => {
     setPage(value);
@@ -75,9 +75,12 @@ const ChapterTabs = () => {
     setOpenView(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     if (selectedData) {
-      onDelete(selectedData.id);
+      const isDeleted = await onDelete(selectedData.id);
+      if (isDeleted) {
+        fetchChapter();
+      }
     }
     setOpenDelete(false);
   };
@@ -85,11 +88,14 @@ const ChapterTabs = () => {
     setOpenDelete(false);
   };
 
-  const updateHandler = data => {
-    console.log('🚀 ~ updateHandler ~ data:', data);
+  const updateHandler = async data => {
     if (selectedData) {
-      onUpdate(selectedData.id, data);
+      const updated = await onUpdate(selectedData.id, data);
+      if (updated) {
+        fetchChapter();
+      }
     }
+
     setOpenEdit(false);
   };
 

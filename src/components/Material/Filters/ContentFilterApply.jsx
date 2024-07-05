@@ -81,7 +81,7 @@ const ContentFilterApply = () => {
 
   return (
     <>
-      <div className='flex flex-wrap justify-between gap-5 p-5 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
+      <div className='flex flex-wrap justify-between gap-5 p-8 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
         {/* <div className='flex items-center bg-[#0B1739] p-4 space-x-4 justify-between'> */}
         <MaterialDropDown2 setApplyFilter={setFilters} />
         <Stack

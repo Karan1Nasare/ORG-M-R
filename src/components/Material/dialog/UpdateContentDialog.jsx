@@ -36,8 +36,7 @@ const ImgStyled = styled('img')(({ theme }) => ({
 
 export default function UpdateContentDialog(props) {
   const { open, handleClose, data, updateHandler } = props;
-  console.log('🚀 ~ UpdateContentDialog ~ data:', data);
-  const [imgSrc, setImgSrc] = React.useState(ProfileImage);
+  const [imgSrc, setImgSrc] = React.useState();
   const [changeData, setChangeData] = React.useState({
     name: '',
     description: '',
@@ -47,12 +46,14 @@ export default function UpdateContentDialog(props) {
 
   React.useEffect(() => {
     if (open) {
-      setImgSrc(data?.image || ProfileImage);
+      setImgSrc(data?.image.url);
       setChangeData({
         name: data?.name || '',
         description: data?.description || '',
         image: data?.image || '',
         _method: 'PUT',
+        ...(data?.subject_id && { subject_id: data.subject_id }),
+        ...(data?.course_id && { course_id: data.course_id }),
       });
     }
   }, [open, data]);
@@ -133,7 +134,7 @@ export default function UpdateContentDialog(props) {
                 width: 'max-content',
               }}
             >
-              <ImgStyled src={imgSrc || ProfileImage} alt='Profile Pic' />
+              <ImgStyled src={imgSrc} alt='Profile Pic' />
               <IconButton
                 component='label'
                 role={undefined}
