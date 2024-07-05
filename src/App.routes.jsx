@@ -595,9 +595,7 @@ export const getRouteByName = name => {
 };
 const AppRouter = () => {
   const [Store, StoreDispatch] = useStore();
-  useEffect(() => {
-    StoreDispatch({ type: 'Log', data: {} });
-  }, []);
+
   return (
     <BrowserRouter>
       <div className='main-content'>

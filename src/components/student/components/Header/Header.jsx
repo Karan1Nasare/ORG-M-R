@@ -6,7 +6,7 @@ import { Grid, Stack } from '@mui/material';
 import { Icon } from '@iconify/react';
 // import { TiUserAdd } from 'react-icons/ti';
 
-const Header = ({ inputValue, handleInputChange, handleSearchClick }) => {
+const Header = ({ inputValue, handleInputChange }) => {
   const navigate = useNavigate();
   const handleAddStudentsClick = () => {
     navigate('/student/addStudent');

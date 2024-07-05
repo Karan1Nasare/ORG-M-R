@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import React, {
   createContext,
   useReducer,
@@ -24,6 +23,8 @@ const InitialState = {
 export const DefaultState = localStorage.getItem('last_state')
   ? JSON.parse(localStorage.getItem('last_state'))
   : InitialState;
+
+console.log('default State', DefaultState);
 
 export const StoreContext = createContext(DefaultState);
 export const StoreDispatchContext = createContext();
@@ -52,11 +53,6 @@ export const ContextStoreProvider = ({ children }) => {
         localStorage.removeItem('last_state');
         localStorage.removeItem('otpTimeout');
         return InitialState;
-      }
-
-      case 'Log': {
-        console.log(action);
-        return State;
       }
 
       case 'ADD_QUESTION_BANK': {
@@ -92,8 +88,7 @@ export const ContextStoreProvider = ({ children }) => {
       //   return State;
       // }
       default: {
-        State = DefaultState;
-        return State;
+        return DefaultState;
       }
     }
     // return null;

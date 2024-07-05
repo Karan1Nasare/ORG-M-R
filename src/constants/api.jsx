@@ -98,5 +98,9 @@ const URLS = {
     if (chapterId) url += `&chapter_id=${chapterId}`;
     return url;
   },
+  GET_STUDENT: '/students',
+  ADD_STUDENT: '/students',
+  GET_ALL_COURSES: '/getallcoursedata',
+  IMPORT_STUDENT: '/students/import',
 };
 export default URLS;

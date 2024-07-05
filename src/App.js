@@ -1,4 +1,5 @@
 import React, { Suspense } from 'react';
+import { Toaster } from 'react-hot-toast';
 import './App.css';
 import { ThemeProvider } from '@mui/material';
 import themeList from './theme';
@@ -12,6 +13,7 @@ function App() {
         <ThemeProvider theme={themeList[0]}>
           <Suspense fallback={<div>Loading...</div>}>
             <AppRouter />
+            <Toaster position='top-right' reverseOrder={false} />
           </Suspense>
         </ThemeProvider>
       </ContextStoreProvider>
