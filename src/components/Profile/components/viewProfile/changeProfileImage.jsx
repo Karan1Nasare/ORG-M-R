@@ -7,7 +7,8 @@ import { useNavigate } from 'react-router-dom';
 import ProfileImage from '../../../../assets/profile.svg';
 import ProfileDetailInfo from '../tabs/profileDetailInfo';
 
-const ChangeProfileIamge = ({ setIsChangeProfile }) => {
+const ChangeProfileIamge = ({ profileData, setIsChangeProfile }) => {
+  console.log('🚀 ~ ChangeProfileIamge ~ profileData:', profileData);
   const navigate = useNavigate();
 
   const [selectedFile, setSelectedFile] = useState(null);
@@ -28,19 +29,19 @@ const ChangeProfileIamge = ({ setIsChangeProfile }) => {
 
   return (
     <>
-      <div className='bg-darkBlue p-6 mt-5 rounded-lg shadow-lg flex items-center justify-between'>
+      <div className='bg-darkBlue p-6 mt-5 border border-gray-700 rounded-lg shadow-lg flex items-center justify-between'>
         <div className='flex items-center'>
           <div className='flex items-center justify-center'>
             <div className='w-32 h-32 rounded-full overflow-hidden'>
               <img
-                src={ProfileImage}
+                src={profileData?.image?.url || ProfileImage}
                 alt='Circular'
                 className='object-cover w-full h-full'
               />
             </div>
           </div>
           <div className='ml-4 text-start'>
-            <p className='text-white text-lg'>Upload Your Banner</p>
+            <p className='text-white text-lg'>Upload Your Profile Picture</p>
             <p className='text-gray-400 text-sm'>
               Allowed JPG, GIF or PNG. Max size of 800K
             </p>
@@ -66,7 +67,7 @@ const ChangeProfileIamge = ({ setIsChangeProfile }) => {
           </button>
         </div>
       </div>
-      <ProfileDetailInfo />
+      <ProfileDetailInfo profileData={profileData} />
     </>
   );
 };
