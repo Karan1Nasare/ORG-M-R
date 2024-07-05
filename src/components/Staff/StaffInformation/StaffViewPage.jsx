@@ -29,7 +29,7 @@ const StaffViewPage = ({ data }) => {
   const [organizationDetails, setorganizationDetails] = useState();
 
   const handleEditClick = id => {
-    navigate(`/staff/editStaff/${id}`);
+    navigate(`/staff/addStaff`, { state: { staffData: data } });
   };
 
   const handleDelete = id => {
