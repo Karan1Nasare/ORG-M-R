@@ -30,7 +30,7 @@ const useFetcher = () => {
     try {
       const response = await executer();
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         onSuccess?.(response);
         if (showSuccessToast) {
           toast.success(ToastMessage || response.data?.message, {

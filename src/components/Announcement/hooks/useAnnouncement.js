@@ -52,6 +52,23 @@ const useAnnouncements = () => {
     setSelectedData(data);
   };
 
+  const fetchAnnouncementList = async () => {
+    try {
+      setLoading(true);
+      fetcher({
+        key: 'announcements',
+        executer: () => getAnnouncement(),
+        onSuccess: response => {
+          console.log('feature rresponse feature: ', response);
+          setAnnouncementList(response.data?.data);
+        },
+      });
+      setLoading(false);
+    } catch (err) {
+      console.log('error while fetching questions', err);
+    }
+  };
+
   const onDeleteAnnouncement = id => {
     try {
       fetcher({
@@ -59,7 +76,7 @@ const useAnnouncements = () => {
         executer: () => deleteAnnouncementById(id),
         onSuccess: response => {
           console.log('delete rresponse feature: ', response);
-          getAnnouncement();
+          fetchAnnouncementList();
         },
       });
     } catch (err) {
@@ -74,6 +91,7 @@ const useAnnouncements = () => {
         executer: () => editAnnouncementById(id, data),
         onSuccess: response => {
           console.log('edit rresponse feature: ', response);
+          fetchAnnouncementList();
         },
       });
     } catch (err) {
@@ -93,23 +111,6 @@ const useAnnouncements = () => {
       onDeleteAnnouncement(selectedData.id);
     }
     setOpenDelete(false);
-  };
-
-  const fetchAnnouncementList = async () => {
-    try {
-      setLoading(true);
-      fetcher({
-        key: 'announcements',
-        executer: () => getAnnouncement(),
-        onSuccess: response => {
-          console.log('feature rresponse feature: ', response);
-          setAnnouncementList(response.data?.data);
-        },
-      });
-      setLoading(false);
-    } catch (err) {
-      console.log('error while fetching questions', err);
-    }
   };
 
   const handlePageChange = (event, newPage) => {
