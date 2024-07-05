@@ -13,7 +13,6 @@ const useAddMaterial = () => {
 
   // add course
   const AddCourseStd = useCallback(async course => {
-    console.log('🚀 ~ AddCourseStd ~ course:', course);
     try {
       fetcher({
         key: 'add-courseStd',

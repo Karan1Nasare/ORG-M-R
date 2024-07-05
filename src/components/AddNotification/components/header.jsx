@@ -18,9 +18,11 @@ const Header = ({
   setSelectedAdminIds,
 }) => {
   const [data, setData] = useState([]);
+
   const handleRemoveAdmin = idToRemove => {
     const updatedAdminIds = selectedAdminIds.filter(id => id !== idToRemove);
     setSelectedAdminIds(updatedAdminIds);
+
     const updatedData = data.map(admin => {
       if (admin.id === idToRemove) {
         return { ...admin, isChecked: false };
@@ -34,6 +36,12 @@ const Header = ({
       setData(initialData);
     }
   }, [initialData]);
+  useEffect(() => {
+    if (initialData && initialData.length > 0) {
+      setData(initialData);
+    }
+  }, [initialData]);
+
   useEffect(() => {
     const selectedIds = data
       .filter(admin => admin.isChecked)

@@ -20,7 +20,7 @@ const CourseFilterApply = () => {
     }
   };
   return (
-    <div className='flex justify-between gap-5 p-5 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
+    <div className='flex justify-between gap-5 p-8 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
       {/* <div className='flex items-center bg-[#0B1739] p-4 space-x-4 justify-between'> */}
       <div className='flex flex-row gap-2 items-center flex-1'>
         <div className='flex items-center gap-4'>
@@ -28,13 +28,13 @@ const CourseFilterApply = () => {
             <input
               type='text'
               placeholder='Search Name, Enrollment, Standard'
-              className='justify-center items-start self-start px-3 py-3   bg-secondary__fill__dark   text-white w-72 rounded-md'
+              className='justify-center items-start self-start px-3 py-3 h-11 text-sm bg-secondary__fill__dark   text-white w-80 rounded-md'
               value={inputValue}
               onChange={handleInputChange}
               onKeyPress={handleKeyPress}
             />
           </div>
-          <button className='bg-[#0A1330] rounded-md w-9 h-9 flex items-center justify-center'>
+          <button className='bg-[#0A1330] rounded-md w-11 h-11 flex items-center justify-center'>
             <Icon
               icon={'octicon:filter-16'}
               className='text-white'

@@ -1,17 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useFormContext, Controller } from 'react-hook-form';
 import { TextField, Grid, Button, Typography } from '@mui/material';
+import dayjs from 'dayjs';
 import { RHFSelect, RHFTextField } from '../../../hooks/hook-form';
 import RichTextEditor from '../../shared/RichTextEditor';
 import ImageUpload from '../../ui/Form/ImageUpload';
+import useCourseStd from '../../Material/hooks/useCourseStd';
+import useEvent from '../../EventManegement/hooks/useEvent';
 
-const AnnouncementForm = ({ setValue, eventList }) => {
-  console.log('🚀 ~ AnnouncementForm ~ eventList:', eventList);
+const AnnouncementForm = ({ setValue }) => {
+  const { courseStdList } = useCourseStd();
+  const { event } = useEvent();
   const { control, handleSubmit } = useFormContext();
   const [file, setFile] = useState();
 
   const handleInputChange = (name, value) => {
     setValue(name, value);
+  };
+
+  const handleDateChange = e => {
+    const formattedDate = dayjs(e.target.value).format('DD-MM-YYYY');
+    console.log('Formatted Date:', formattedDate);
+    setValue('date', formattedDate);
   };
 
   useEffect(() => {
@@ -29,8 +39,8 @@ const AnnouncementForm = ({ setValue, eventList }) => {
             size='small'
             name='type'
             options={[
-              { label: 'Student', value: 'Student' },
-              { label: 'Staff', value: 'Staff' },
+              { label: 'Student', value: 'student' },
+              { label: 'Staff', value: 'staff' },
             ]}
             setValue={setValue}
           />
@@ -62,7 +72,10 @@ const AnnouncementForm = ({ setValue, eventList }) => {
                 <RHFSelect
                   size='small'
                   name='event_id'
-                  options={[{ id: '1', label: 'Event', value: '1' }]}
+                  options={event?.map(eventList => ({
+                    label: eventList?.title,
+                    value: eventList?.id,
+                  }))}
                   setValue={setValue}
                 />
               </div>
@@ -99,7 +112,10 @@ const AnnouncementForm = ({ setValue, eventList }) => {
                 <RHFSelect
                   size='small'
                   name='standard'
-                  options={[{ label: 'Event', value: 'Event' }]}
+                  options={courseStdList?.map(standard => ({
+                    label: standard?.name,
+                    value: standard?.id,
+                  }))}
                   setValue={setValue}
                 />
               </div>
@@ -134,7 +150,7 @@ const AnnouncementForm = ({ setValue, eventList }) => {
                     type='date'
                     fullWidth
                     className='justify-center items-start bg-[#0B1739] px-3 py-3 mt-2 text-sm leading-5 rounded border border-[#343B4F] border-solid text-stone-300 max-md:pr-5 max-md:max-w-full'
-                    onChange={e => setValue('date', e.target.value)}
+                    onChange={handleDateChange}
                   />
                 </div>
 

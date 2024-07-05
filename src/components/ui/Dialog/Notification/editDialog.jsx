@@ -4,49 +4,54 @@ import AnnouncementImage from '../../../../assets/announcement_card.png';
 import RichTextEditor from '../../../shared/RichTextEditor';
 
 const EditDialogCard = ({
-  id,
-  initialTitle,
-  initialDescription,
+  updateData,
   heading,
   isOpen,
   onClose,
   handleUpdateNotification,
 }) => {
-  const [title, setTitle] = useState(initialTitle);
-  const [description, setDescription] = useState(initialDescription);
+  console.log('🚀 ~ updateData:', updateData);
+  const [title, setTitle] = useState(updateData?.title || '');
+  const [description, setDescription] = useState(updateData?.description || '');
+  const [imgSrc, setImgSrc] = useState(
+    updateData?.image?.url || AnnouncementImage,
+  );
   const [selectedFile, setSelectedFile] = useState(null);
 
   useEffect(() => {
-    setTitle(initialTitle);
-    setDescription(initialDescription);
-    setSelectedFile(null);
-  }, [initialTitle, initialDescription]);
+    if (updateData) {
+      setTitle(updateData?.title);
+      setDescription(updateData?.description);
+      setImgSrc(updateData?.image?.url || AnnouncementImage);
+      setSelectedFile(null);
+    }
+  }, [updateData]);
 
   const handleFileChange = event => {
     const file = event.target.files[0];
     if (file) {
-      const fileName = `${Date.now()}-${file.name}`;
-      const imageUrl = `https://mr-education-app.s3.ap-south-1.amazonaws.com/uploads/notification/${fileName}`;
-
-      const fileData = {
-        url: imageUrl,
-        mime_type: file.type,
-        name: file.name,
-        size: file.size,
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImgSrc(reader.result);
       };
-
-      setSelectedFile(fileData);
+      reader.readAsDataURL(file);
+      setSelectedFile(file);
     }
   };
 
   const handleUpdateClick = () => {
-    const updatedNotification = {
-      title,
-      description,
-      image: selectedFile,
-    };
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('description', description);
+    formData.append('_method', 'PUT');
+    if (selectedFile) {
+      formData.append('image', selectedFile);
+    }
+    updateData?.users?.forEach(user => {
+      formData.append(`user_ids[${user.id}]`, user.id);
+    });
 
-    handleUpdateNotification(id, updatedNotification);
+    handleUpdateNotification(updateData?.id, formData);
   };
 
   if (!isOpen) {
@@ -69,21 +74,12 @@ const EditDialogCard = ({
         {/* Image Section */}
         <div className='flex overflow-hidden relative rounded flex-col justify-center items-center px-20 pt-11 pb-20 mt-11 text-base text-center text-white whitespace-nowrap min-h-[158px] max-md:px-5 max-md:mt-10 max-md:max-w-full'>
           <div className='absolute inset-0 flex items-center justify-center'>
-            {selectedFile ? (
-              <img
-                loading='lazy'
-                src={selectedFile.url}
-                className='object-cover w-full h-full opacity-50'
-                alt='Selected Image'
-              />
-            ) : (
-              <img
-                loading='lazy'
-                src={AnnouncementImage}
-                className='object-cover w-full h-full opacity-50'
-                alt='Default Image'
-              />
-            )}
+            <img
+              loading='lazy'
+              src={imgSrc}
+              className='object-cover w-full h-full opacity-50'
+              alt='Selected Image'
+            />
           </div>
           <div className='relative z-10 flex flex-col items-center justify-center'>
             <label htmlFor='fileInput' className='cursor-pointer'>
@@ -129,6 +125,7 @@ const EditDialogCard = ({
 
         {/* Update Button */}
         <button
+          type='submit'
           className='justify-center self-center px-7 py-3 mt-8 text-base text-center whitespace-nowrap bg-white rounded-lg text-slate-900 max-md:px-5'
           onClick={handleUpdateClick}
         >

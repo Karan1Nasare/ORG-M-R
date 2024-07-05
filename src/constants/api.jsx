@@ -7,6 +7,10 @@ const URLS = {
   UPDATE_PROFILE: '/profile/update',
   CHANGE_PASSWORD: '/change-password',
   FORGOT_PASSWORD: '/password/email',
+  UPDATE_USERNAME: () => `/change-username`,
+  UPDATE_PHONE: () => `/change-phone`,
+  UPDATE_EMAIL: () => `/change-email`,
+  UPDATE_PASSWORD: () => `/change-password`,
   RESET_PASSWORD: token => `/password/reset?token=${token}`,
   DASHBOARD: () => `/organisations/dashboard`,
   ADD_PLAN: () => `/plans`,
@@ -87,5 +91,12 @@ const URLS = {
   GET_STATES: '/states',
   GET_CITIES: '/cities',
   EVENTS: '/events',
+  GET_MATERIAL_OPTION: (courseId, subjectId, chapterId) => {
+    let url = '/getallcoursedata?';
+    if (courseId) url += `course_id=${courseId}`;
+    if (subjectId) url += `&subject_id=${subjectId}`;
+    if (chapterId) url += `&chapter_id=${chapterId}`;
+    return url;
+  },
 };
 export default URLS;

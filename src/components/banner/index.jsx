@@ -1,6 +1,5 @@
 import { Typography, Button } from '@mui/material';
 import React, { memo, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import BannerHeader from './bannerHeader';
 import CardCarousel from '../shared/Carousel/cardCarousel';
@@ -19,9 +18,7 @@ const Banner = ({ bannerTitle }) => {
     (bannerlist && bannerlist?.filter(item => item?.type === 'Student')) || [];
   const StaffBanner =
     (bannerlist && bannerlist?.filter(item => item?.type === 'Staff')) || [];
-  console.log('🚀 ~ Banner ~ StaffBanner:', StudentBanner, bannerlist);
 
-  const navigate = useNavigate();
   const handleOnClick = slug => {
     setIsAddBanner({ open: true, type: slug });
     // navigate(`/addBanner?type=${slug.toLowerCase()}`);
@@ -43,9 +40,7 @@ const Banner = ({ bannerTitle }) => {
       onSuccess: res => {
         setBannerList(res?.data?.data || []);
       },
-      onFailure: error => {
-        console.log(error);
-      },
+
       showErrorToast: true,
       showSuccessToast: false,
     });

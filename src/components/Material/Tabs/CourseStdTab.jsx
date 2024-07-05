@@ -36,7 +36,7 @@ const CourseStdTab = () => {
   const itemsPerPage = 9;
   const { fetcher, getExecutorState } = useFetcher();
 
-  const fetchChapter = useCallback(() => {
+  const fetchCourse = useCallback(() => {
     fetcher({
       key: 'fetch_course',
       executer: () =>
@@ -64,7 +64,7 @@ const CourseStdTab = () => {
   };
 
   useEffect(() => {
-    fetchChapter();
+    fetchCourse();
   }, [searchTerm, page]);
 
   const editHandler = row => {
@@ -86,9 +86,12 @@ const CourseStdTab = () => {
     setOpenView(false);
   };
 
-  const confirmDeleteHandler = () => {
+  const confirmDeleteHandler = async () => {
     if (selectedData) {
-      onDelete(selectedData.id);
+      const isDeleted = await onDelete(selectedData.id);
+      if (isDeleted) {
+        fetchCourse();
+      }
     }
     setOpenDelete(false);
   };
@@ -105,9 +108,12 @@ const CourseStdTab = () => {
     setSelectedData(updatedData);
   };
 
-  const updateHandler = data => {
+  const updateHandler = async data => {
     if (selectedData) {
-      onUpdate(selectedData.id, data);
+      const isUpdated = await onUpdate(selectedData.id, data);
+      if (isUpdated) {
+        fetchCourse();
+      }
     }
     setOpenEdit(false);
   };
