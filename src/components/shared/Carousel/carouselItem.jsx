@@ -102,7 +102,7 @@ const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
           title='Delete Banner'
           handleClose={handleCloseDelete}
           open={openDelete}
-          deleteLanguage={() => confirmDeleteHandler()}
+          deleteHandler={() => confirmDeleteHandler()}
         />
       ) : (
         ''

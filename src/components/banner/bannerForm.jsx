@@ -55,7 +55,7 @@ const BannerForm = ({ Bannertype }) => {
           fullWidth
           sx={{
             borderColor: '#869ab8',
-            '& .MuiInputBase-root': { p: 0 },
+            '& .MuiInputBase-root': { p: 2 },
           }}
         />
       </div>
