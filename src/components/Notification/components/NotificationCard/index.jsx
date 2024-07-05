@@ -58,10 +58,7 @@ function NotificationCard({
     <section className='flex flex-col p-8 rounded-lg border border-gray-700 border-solid bg-secondary__fill  max-md:px-5'>
       <header className='flex gap-3 justify-between w-full max-md:flex-wrap max-md:max-w-full'>
         <div className='flex gap-3 justify-center'>
-          <Image
-            src='https://cdn.builder.io/api/v1/image/assets/TEMP/075c13b2da664ca5633519aac1c19411aa4d8cff7b28bc5cae6ebdbb9f417557?apiKey=33d350ef18e9405bbdd3cdc1375c0c2b&'
-            alt='Exam schedule icon'
-          />
+          <Image src={data?.image?.url} alt='Exam schedule icon' />
           <div className='flex flex-col'>
             <h1 className='text-base text-white flex'>{data?.title}</h1>
             <div className='flex'>

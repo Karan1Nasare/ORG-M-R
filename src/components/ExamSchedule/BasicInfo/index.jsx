@@ -66,7 +66,7 @@ function Index() {
   }, []);
 
   return (
-    <div className='min-h-screen flex flex-col items-start justify-start p-8'>
+    <div className='min-h-screen flex flex-col items-start justify-start p-2'>
       <div className='flex w-full max-w-screen mx-auto space-x-8 mb-6'>
         <button
           className={`flex items-center space-x-2 px-4 py-2 ${
@@ -91,7 +91,7 @@ function Index() {
           <span>Select Background</span>
         </button>
       </div>
-      <div className='w-full max-w-4xl'>
+      <div className='w-full max-w-screen mx-auto'>
         {activeTab === 'basicInfo' && (
           <ExamForm examDetail={basicInfo} setExamDetails={setBasicInfo} />
         )}

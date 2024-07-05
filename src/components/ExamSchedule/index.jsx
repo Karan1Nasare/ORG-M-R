@@ -3,7 +3,7 @@ import Exam from './Exam/index';
 
 const Index = () => {
   return (
-    <div>
+    <div className='overflow-y-scroll'>
       <Exam />
     </div>
   );

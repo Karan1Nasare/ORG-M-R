@@ -1,20 +1,10 @@
-import React from 'react';
-import { Card } from '@mui/material';
+import React, { memo } from 'react';
 import { Carousel } from 'primereact/carousel';
-
 import CarouselItem from './carouselItem';
 import './cardCarousel.css';
 import CardBg from './cardbg.png';
 
-const CardCarousel = () => {
-  const items = [
-    { imageUrl: 'https://via.placeholder.com/300x150' },
-    { imageUrl: 'https://via.placeholder.com/300x150' },
-    { imageUrl: 'https://via.placeholder.com/300x150' },
-    { imageUrl: 'https://via.placeholder.com/300x150' },
-    { imageUrl: 'https://via.placeholder.com/300x150' },
-  ];
-
+const CardCarousel = ({ BannerData }) => {
   const responsiveOptions = [
     {
       breakpoint: '1400px',
@@ -38,26 +28,32 @@ const CardCarousel = () => {
     },
   ];
 
-  const itemTemplate = item => (
-    <Card className='w-96 mx-2'>
-      <div className='App bg-darkBlue flex items-center justify-center h-60'>
-        <CarouselItem backgroundImage={CardBg} image={CardBg} />
+  const itemTemplate = item => {
+    return (
+      <div className='w-full px-2'>
+        <div className='bg-darkBlue border border-gray-700 rounded-xl flex items-center justify-center h-60'>
+          <CarouselItem
+            backgroundImage={CardBg}
+            image={item?.image?.url}
+            item={item}
+          />
+        </div>
       </div>
-    </Card>
-  );
+    );
+  };
 
   return (
-    <div className='relative mb-10 mt-8 w-full card'>
+    <div className='relative mb-10 mt-8 w-full overflow-hidden'>
       <Carousel
-        value={items}
+        value={BannerData}
         numVisible={3}
         numScroll={1}
         responsiveOptions={responsiveOptions}
         itemTemplate={itemTemplate}
-        circular
+        className='w-full'
       />
     </div>
   );
 };
 
-export default CardCarousel;
+export default memo(CardCarousel);

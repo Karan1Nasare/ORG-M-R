@@ -94,7 +94,7 @@ const SuperAdminSideBar = () => {
   ];
   return (
     <div className='flex flex-col text-lg text-start text-white '>
-      <div className='ml-8'>
+      <div className='ml-5'>
         <Typography variant='sidebar_menu_h' className='uppercase'>
           Main Menu
         </Typography>
@@ -102,7 +102,7 @@ const SuperAdminSideBar = () => {
       {menuList.map((value, index) => (
         <div
           key={index}
-          className={`h-12 ml-4 p-4 items-start mt-4 w-full rounded-md cursor-pointer  ${
+          className={`h-12 ml-1 p-4 items-start mt-4 w-full rounded-md cursor-pointer  ${
             value.isActive
               ? 'bg-sidebar_active text-primary'
               : 'bg-blue hover:bg-sidebar_active hover:text-primary'

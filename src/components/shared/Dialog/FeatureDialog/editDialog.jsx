@@ -61,7 +61,7 @@ const EditAnnouncementCard = ({
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-20 text-start'>
-      <div className='flex flex-col px-8 py-7 rounded-3xl border border-gray-700 border-solid text-start bg-secondary__fill w-42.6 max-md:px-5'>
+      <div className='flex flex-col h-3/4 overflow-y-scroll px-8 py-7 rounded-3xl border border-gray-700 border-solid text-start bg-secondary__fill w-42.6 max-md:px-5'>
         <div className='flex gap-5 text-xl text-white max-md:flex-wrap max-md:max-w-full'>
           <div className='flex-auto my-auto '>Edit Announcement</div>
           <IconButton

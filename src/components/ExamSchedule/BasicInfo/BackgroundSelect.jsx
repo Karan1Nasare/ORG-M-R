@@ -38,7 +38,7 @@ const BackgroundSelect = () => {
   };
 
   return (
-    <div className='bg-[rgba(11,23,57,1)] text-white p-8 rounded-lg w-full'>
+    <div className='bg-[rgba(11,23,57,1)] border border-gray-700 text-white p-8 rounded-lg w-full'>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center'>
         {getCurrentPageImages().map((url, index) => (
           <div

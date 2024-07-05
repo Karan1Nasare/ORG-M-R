@@ -2,6 +2,7 @@ import React from 'react';
 import AdminProfile from '../../../../../assets/adminProfile.png';
 
 const SelectAdminCard = ({ data, toggleChecked }) => {
+  console.log(data, 'data');
   return (
     <>
       {/* Render all cards if data is provided */}
