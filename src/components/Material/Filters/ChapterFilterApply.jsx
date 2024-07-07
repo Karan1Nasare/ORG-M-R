@@ -1,7 +1,6 @@
 import { Icon } from '@iconify/react';
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { height } from '@mui/system';
 import { Box, Grid, Stack } from '@mui/material';
 import PATH_DASHBOARD from '../../../routes/path';
 import TextField from '../../shared/input/TextField';
@@ -28,7 +27,7 @@ const ChapterFilterApply = () => {
 
   const navigate = useNavigate();
   return (
-    <div className='flex justify-between gap-5 p-8 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
+    <div className='flex justify-between gap-5 p-5 rounded-xl border border-gray-700 border-solid bg-[#0B1739]  max-md:flex-wrap max-md:px-5'>
       {/* <div className='flex items-center bg-[#0B1739] p-4 space-x-4 justify-between'> */}
 
       <Grid container spacing={2} sx={{ flex: 1 }}>
@@ -36,7 +35,7 @@ const ChapterFilterApply = () => {
           <input
             type='text'
             placeholder='Search Name, Enrollment, Standard'
-            className='px-3 py-3 w-full text-sm  bg-secondary__fill__dark   text-white rounded-md'
+            className='px-3 py-3 w-full h-full  bg-secondary__fill__dark   text-white rounded-md'
             value={inputValue}
             onChange={handleInputChange}
             onKeyPress={handleKeyPress}
@@ -81,6 +80,19 @@ const ChapterFilterApply = () => {
           </TextField>
         </Grid>
       </Grid>
+
+      <Stack direction={'row'} justifyContent={'center'} alignItems={'center'}>
+        <button
+          className='bg-white text-[#0E1736]rounded-md flex items-center h-[44px] text-base  flex-row gap-2'
+          style={{
+            padding: '10px 16px',
+            borderRadius: '6px',
+          }}
+          onClick={() => navigate(PATH_DASHBOARD.Material['add-chapter'])}
+        >
+          <Icon icon={'simple-line-icons:plus'} /> Add Chapter
+        </button>
+      </Stack>
     </div>
   );
 };

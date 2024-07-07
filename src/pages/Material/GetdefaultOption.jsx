@@ -1,116 +1,61 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import TextField from '../../components/shared/input/TextField';
 import MenuItem from '../../components/shared/menuitem/MenuItem';
-import useDefaultStdOption from '../../hooks/getDefaultStdOption';
+import useFetcher from '../../hooks/useFetcher';
+import axiosInstance from '../../utilities/axios-client';
+import URLS from '../../constants/api';
 
 function GetdefaultOption({ pageTitle, setselectedoptions }) {
-  console.log('🚀 ~ GetdefaultOption ~ pageTitle:', pageTitle);
-  const {
-    courseOptions,
-    subjectOptions,
-    selectedCourse,
-    selectedSubject,
-    setSelectedCourse,
-    setSelectedSubject,
-    fetchSubjectOptions,
-    fetchCourseOptions,
-  } = useDefaultStdOption();
-
-  const handleCourseChange = e => {
-    const courseId = e.target.value;
-    setSelectedCourse(courseId);
-    setSelectedSubject('');
-    setselectedoptions({ course: courseId });
-
-    fetchSubjectOptions(courseId);
+  const { fetcher } = useFetcher();
+  const [options, setOptions] = useState([]);
+  const getsubjectOptions = async () => {
+    return axiosInstance.get('/course/list');
   };
-
-  const handleSubjectChange = e => {
-    const subjectId = e.target.value;
-    setSelectedSubject(subjectId);
-    setselectedoptions({ course: selectedCourse, subject: subjectId });
-  };
-
+  const selectedoptions = e => setselectedoptions(e.target.value);
   useEffect(() => {
-    if (pageTitle === 'Chapter' || pageTitle === 'Subject') {
-      fetchCourseOptions();
+    if (pageTitle === 'Subject') {
+      fetcher({
+        key: 'get-subject-options',
+        executer: () => getsubjectOptions(),
+        showSuccessToast: false,
+        onSuccess: response => {
+          setOptions(response?.data?.data);
+        },
+      });
     }
   }, [pageTitle]);
-
-  if (pageTitle === 'Chapter') {
-    return (
-      <>
-        <TextField
-          select
-          value={selectedCourse}
-          fullWidth
-          onChange={handleCourseChange}
-          placeholder='Select Course'
-          sx={{ marginRight: 2 }}
-        >
-          {courseOptions?.length === 0 ? (
-            <MenuItem value='' disabled>
-              No Courses Available
-            </MenuItem>
-          ) : (
-            courseOptions?.map(option => (
-              <MenuItem key={option?.id} value={option?.id}>
-                {option?.name}
-              </MenuItem>
-            ))
-          )}
-        </TextField>
-        <TextField
-          select
-          value={selectedSubject}
-          fullWidth
-          onChange={handleSubjectChange}
-          placeholder='Select Subject'
-          disabled={
-            !selectedCourse || selectedCourse === 'No Courses Available'
-          }
-        >
-          {subjectOptions?.length === 0 ? (
-            <MenuItem value='' disabled>
-              No Subjects Available
-            </MenuItem>
-          ) : (
-            subjectOptions?.map(option => (
-              <MenuItem key={option?.id} value={option?.id}>
-                {option?.name}
-              </MenuItem>
-            ))
-          )}
-        </TextField>
-      </>
-    );
-  }
-
   if (pageTitle === 'Subject') {
     return (
       <TextField
         select
-        value={selectedCourse}
+        defaultValue={options[0]?.value || pageTitle}
         fullWidth
-        onChange={handleCourseChange}
-        placeholder='Select Course'
+        onChange={selectedoptions}
       >
-        {courseOptions.length === 0 ? (
-          <MenuItem value='' disabled>
-            No Courses Available
+        {options.map(option => (
+          <MenuItem key={option.id} value={option.id}>
+            {option.name}
           </MenuItem>
-        ) : (
-          courseOptions.map(option => (
-            <MenuItem key={option.id} value={option.id}>
-              {option.name}
-            </MenuItem>
-          ))
-        )}
+        ))}
       </TextField>
     );
   }
-
-  return null;
+  if (pageTitle === 'Chapter') {
+    return (
+      <TextField
+        select
+        defaultValue={options[0]?.value || pageTitle}
+        fullWidth
+        onChange={selectedoptions}
+      >
+        {options.map(option => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
+      </TextField>
+    );
+  }
 }
 
 export default GetdefaultOption;

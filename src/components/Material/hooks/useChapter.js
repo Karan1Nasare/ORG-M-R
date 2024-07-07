@@ -36,40 +36,34 @@ const useChapter = () => {
 
   // Edit chapter
   const EditChapter = useCallback(async (id, chapter) => {
-    return new Promise((resolve, reject) => {
-      try {
-        fetcher({
-          key: 'edit-chapter',
-          executer: () => editChapterById(id, chapter),
-          onSuccess: response => {
-            console.log('response: ', response);
-            resolve(true);
-          },
-        });
-      } catch (err) {
-        console.log('error while editing chapter', err);
-        resolve(false);
-      }
-    });
+    try {
+      fetcher({
+        key: 'edit-chapter',
+        executer: () => editChapterById(id, chapter),
+        onSuccess: response => {
+          console.log('response: ', response);
+          fetchChapterList();
+        },
+      });
+    } catch (err) {
+      console.log('error while editing chapter', err);
+    }
   }, []);
 
   // Delete chapter by id
   const DeleteChapterById = useCallback(async id => {
-    return new Promise((resolve, reject) => {
-      try {
-        fetcher({
-          key: 'delete-chapter',
-          executer: () => deleteChapterById(id),
-          onSuccess: response => {
-            console.log('response: ', response);
-            resolve(true);
-          },
-        });
-      } catch (err) {
-        console.log('error while deleting chapter', err);
-        resolve(false);
-      }
-    });
+    try {
+      fetcher({
+        key: 'delete-chapter',
+        executer: () => deleteChapterById(id),
+        onSuccess: response => {
+          console.log('response: ', response);
+          fetchChapterList();
+        },
+      });
+    } catch (err) {
+      console.log('error while deleting chapter', err);
+    }
   }, []);
 
   useEffect(() => {

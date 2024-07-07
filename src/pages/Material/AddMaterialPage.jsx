@@ -54,42 +54,23 @@ const AddMaterialPage = () => {
       navigate('/');
       return null;
   }
+  const [file, setFile] = useState();
+  const [selectedoptions, setselectedoptions] = useState(0);
 
-  const [file, setFile] = useState(null);
-  const [selectedoptions, setselectedoptions] = useState({
-    course: '',
-    subject: '',
-  });
-  const [error, setError] = useState(null);
-
-  const handleFormSubmit = async data => {
+  const handleFormSubmit = data => {
     const formdata = new FormData();
 
     Object.keys(data).forEach(key => {
       formdata.append(key, data[key]);
     });
-
-    if (file) {
-      formdata.append('image', file);
-    }
-
+    formdata.append('image', file);
     if (selectedoptions) {
-      if (pageTitle === 'Subject') {
-        formdata.append('course_id', selectedoptions?.course);
-      }
-      if (pageTitle === 'Chapter') {
-        formdata.append('course_id', selectedoptions?.course);
-        formdata.append('subject_id', selectedoptions?.subject);
+      if (pageTitle === 'subject') {
+        formdata.append('course_id', selectedoptions);
       }
     }
-
-    try {
-      await submitHandler(formdata);
-    } catch (err) {
-      console.error('Form submission error:', err);
-    }
+    submitHandler(formdata);
   };
-
   const handleBackClick = () => {
     navigate('/material');
   };
@@ -111,7 +92,6 @@ const AddMaterialPage = () => {
           </div>
         </div>
       </div>
-      {error && <div className='text-red-500'>{error}</div>}
       <AddMaterialForm
         pageTitle={pageTitle}
         inputLabel={inputLabel}

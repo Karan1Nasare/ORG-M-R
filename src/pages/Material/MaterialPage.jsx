@@ -1,11 +1,10 @@
-/* eslint-disable import/no-cycle */
-
 import React, { useState } from 'react';
 import ContentFilterApply from '../../components/Material/Filters/ContentFilterApply';
 import CourseFilterApply from '../../components/Material/Filters/CourseFilterApply';
 import SubjectFilterApply from '../../components/Material/Filters/SubjectFilterApply';
 import ChapterFilterApply from '../../components/Material/Filters/ChapterFilterApply';
 
+// eslint-disable-next-line import/no-cycle
 import ContentTabs from '../../components/Material/Tabs/ContentTabs';
 import CourseStdTab from '../../components/Material/Tabs/CourseStdTab';
 import SubjectTabs from '../../components/Material/Tabs/SubjectTabs';

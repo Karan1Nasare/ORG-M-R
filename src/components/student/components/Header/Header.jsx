@@ -59,7 +59,7 @@ const Header = ({ inputValue, handleInputChange }) => {
             </span>
             <button>Add Students</button>
           </div>
-          <div
+          {/* <div
             onClick={handleAddMultipleClick}
             className='flex text-sm bg-white h-11 py-3 px-4 w-32 rounded-md'
           >
@@ -67,7 +67,7 @@ const Header = ({ inputValue, handleInputChange }) => {
               <IoIosAddCircle />
             </span>
             <button>Add Multiple</button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

@@ -21,14 +21,16 @@ const useContent = () => {
   const [loading, setLoading] = useState(true);
 
   // Fetch initial data
-  const fetchContentList = async (chapterId = '') => {
+  const fetchContentList = async () => {
     setLoading(true);
     try {
       fetcher({
         key: 'get-content',
         executer: () => getContent(searchTerm, currentPage),
         onSuccess: response => {
+          console.log('response: ', response);
           const record = response?.data?.data?.data;
+          console.log('🚀 ~ fetchContentList ~ record:', record);
           setContentList(record);
           setItemsPerPage(response?.data?.data?.per_page);
           setCurrentPage(response?.data?.data?.current_page);
@@ -77,7 +79,7 @@ const useContent = () => {
 
   useEffect(() => {
     fetchContentList();
-  }, [currentPage]);
+  }, [searchTerm, currentPage]);
 
   return {
     contentList,
@@ -90,7 +92,6 @@ const useContent = () => {
     totalShowItems: totalData,
     currentPage,
     itemsPerPage,
-    fetchContentList,
   };
 };
 
