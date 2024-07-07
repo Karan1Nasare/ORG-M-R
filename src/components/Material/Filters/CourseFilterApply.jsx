@@ -43,20 +43,6 @@ const CourseFilterApply = () => {
           </button>
         </div>
       </div>
-
-      <Link to={PATH_DASHBOARD.Material['add-course']}>
-        <div>
-          <button
-            className='bg-white text-[#0E1736]rounded-md flex items-center h-[44px] text-base  flex-row gap-2'
-            style={{
-              padding: '10px 16px',
-              borderRadius: '6px',
-            }}
-          >
-            <Icon icon={'simple-line-icons:plus'} /> Add Course
-          </button>
-        </div>
-      </Link>
     </div>
   );
 };

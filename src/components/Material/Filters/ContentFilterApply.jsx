@@ -9,60 +9,6 @@ import MenuItem from '../../shared/menuitem/MenuItem';
 import MaterialDropDown from './MaterialDropDown';
 import MaterialDropDown2 from './MaterialDropDown2';
 
-const SelectSubject = [
-  {
-    label: 'Select Subject',
-    value: '1',
-  },
-  {
-    label: 'Subject  2',
-    value: '2',
-  },
-  {
-    label: 'Subject  3',
-    value: '3',
-  },
-  {
-    label: 'Subject  4',
-    value: '4',
-  },
-];
-const SelectStandard = [
-  {
-    label: 'Select Standard',
-    value: '1',
-  },
-  {
-    label: 'Standard  2',
-    value: '2',
-  },
-  {
-    label: 'Standard  3',
-    value: '3',
-  },
-  {
-    label: 'Standard  4',
-    value: '4',
-  },
-];
-const SelectChapter = [
-  {
-    label: 'Select Chapter',
-    value: '1',
-  },
-  {
-    label: 'Chapter  2',
-    value: '2',
-  },
-  {
-    label: 'Chapter  3',
-    value: '3',
-  },
-  {
-    label: 'Chapter  4',
-    value: '4',
-  },
-];
 const ContentFilterApply = () => {
   const [course, setCourse] = useState([]);
   const [filters, setFilters] = useState({

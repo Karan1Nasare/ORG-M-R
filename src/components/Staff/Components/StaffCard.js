@@ -18,13 +18,6 @@ const StaffCard = ({ data, onDelete }) => {
     });
   };
 
-  const subjects = [
-    'Math',
-    'Science',
-    'Mathematics',
-    'SocialScience',
-    'History',
-  ];
   return (
     <Card
       style={{

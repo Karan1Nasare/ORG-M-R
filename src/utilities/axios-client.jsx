@@ -25,6 +25,7 @@ export const APIClient2 = () => {
       const token =
         JSON.parse(window.localStorage.getItem('last_state'))?.user?.token ||
         '';
+      console.log('token', token);
       const newConfig = { ...config };
       if (token) {
         newConfig.headers = {
@@ -80,6 +81,69 @@ export const APIClient2 = () => {
   return { axiosInstance };
 };
 export const APIClient = () => {
+  axiosInstance.interceptors.request.use(
+    async config => {
+      if (!navigator.onLine) {
+        const error = new Error('No internet connection');
+        error.name = 'NetworkError';
+        return Promise.reject(error);
+      }
+      const token =
+        JSON.parse(window.localStorage.getItem('last_state'))?.user?.token ||
+        '';
+      console.log('token', token);
+      const newConfig = { ...config };
+      if (token) {
+        newConfig.headers = {
+          ...newConfig.headers,
+          Authorization: `Bearer ${token}`,
+          Accept: 'application/json',
+          'Content-Type': 'multipart/form-data',
+        };
+      }
+      return newConfig;
+    },
+    error => {
+      console.log('error axios client', error);
+      if (error?.response?.status === 401) {
+        // StoreDispatch({ type: 'RemoveState' });
+      }
+      return Promise.reject(error);
+    },
+  );
+  axiosInstance.interceptors.response.use(
+    response => response,
+    async error => {
+      const originalRequest = error.config;
+      // if ( [401, 403].includes(error.response.status) && !originalRequest._retry) {
+      //   originalRequest._retry = true;
+
+      //   try {
+      //     const refreshToken = getRefreshToken(usertype);
+      //     const response = await axios.post(
+      //       `${API_END_POINT}/auth/refresh-token`,
+      //       {
+      //         refresh_token: refreshToken,
+      //       },
+      //     );
+      //     const { tokens } = response.data;
+      //     setTokensInStorage(
+      //       usertype,
+      //       tokens.access_token,
+      //       tokens.refresh_token,
+      //     );
+      //     originalRequest.headers.Authorization = `Bearer ${tokens.access_token}`;
+      //     return axios(originalRequest);
+      //   } catch (error) {
+      //     sessionStorage.clear();
+      //     localStorage.clear();
+      //     window.location.href = '/login';
+      //   }
+      // }
+
+      return Promise.reject(error);
+    },
+  );
   let savedToken = '';
   let savedRefreshToken = '';
   try {

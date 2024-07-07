@@ -81,19 +81,6 @@ const ChapterFilterApply = () => {
           </TextField>
         </Grid>
       </Grid>
-
-      <Stack direction={'row'} justifyContent={'center'} alignItems={'center'}>
-        <button
-          className='bg-white text-[#0E1736]rounded-md flex items-center h-[44px] text-base  flex-row gap-2'
-          style={{
-            padding: '10px 16px',
-            borderRadius: '6px',
-          }}
-          onClick={() => navigate(PATH_DASHBOARD.Material['add-chapter'])}
-        >
-          <Icon icon={'simple-line-icons:plus'} /> Add Chapter
-        </button>
-      </Stack>
     </div>
   );
 };

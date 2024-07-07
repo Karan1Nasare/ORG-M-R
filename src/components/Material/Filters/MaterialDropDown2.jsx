@@ -11,6 +11,9 @@ const MaterialDropDown2 = ({
   setApplyFilter,
   hideInput = false,
   selectedFilters,
+  hideCourseStandard = false,
+  hideSubjectStandard = true,
+  hideChapterStandard = true,
 }) => {
   console.log('first', selectedFilters);
   const [courseSearch, setCourseSearch] = useState('');
@@ -102,50 +105,56 @@ const MaterialDropDown2 = ({
           />
         </Grid>
       )}
-      <Grid item sm={6} md={3} xs={12}>
-        {console.log('filterIdTrack', filters?.course?.id)}
-        <TextField
-          select
-          sx={{ width: '100%', textAlign: 'left', padding: '1px' }}
-          name='course'
-          onChange={e => onFilterChanged(e.target)}
-          value={filters?.course?.id || ''}
-          id={filters?.course?.id || ''}
-        >
-          <MenuItem value='' disabled>
-            Select Standard
-          </MenuItem>
-          {renderMenuItems(courseStdList, 'No Standard Exists')}
-        </TextField>
-      </Grid>
-      <Grid item sm={6} md={3} xs={12}>
-        <TextField
-          select
-          sx={{ width: '100%', textAlign: 'left', padding: '1px' }}
-          name='subject'
-          value={filters?.subject?.id || ''}
-          onChange={e => onFilterChanged(e.target)}
-        >
-          <MenuItem value='' disabled>
-            Select Subject
-          </MenuItem>
-          {renderMenuItems(subjectList, 'No Subject Exists')}
-        </TextField>
-      </Grid>
-      <Grid item sm={6} md={3} xs={12}>
-        <TextField
-          select
-          sx={{ width: '100%', textAlign: 'left', padding: '1px' }}
-          name='chapter'
-          onChange={e => onFilterChanged(e.target)}
-          value={filters?.chapter?.id || ''}
-        >
-          <MenuItem value='' disabled>
-            Select Chapter
-          </MenuItem>
-          {renderMenuItems(chapterList, 'No Chapter Exists')}
-        </TextField>
-      </Grid>
+      {!hideCourseStandard && (
+        <Grid item sm={6} md={3} xs={12}>
+          {console.log('filterIdTrack', filters?.course?.id)}
+          <TextField
+            select
+            sx={{ width: '100%', textAlign: 'left', padding: '1px' }}
+            name='course'
+            onChange={e => onFilterChanged(e.target)}
+            value={filters?.course?.id || ''}
+            id={filters?.course?.id || ''}
+          >
+            <MenuItem value='' disabled>
+              Select Standard
+            </MenuItem>
+            {renderMenuItems(courseStdList, 'No Standard Exists')}
+          </TextField>
+        </Grid>
+      )}
+      {!hideSubjectStandard && (
+        <Grid item sm={6} md={3} xs={12}>
+          <TextField
+            select
+            sx={{ width: '100%', textAlign: 'left', padding: '1px' }}
+            name='subject'
+            value={filters?.subject?.id || ''}
+            onChange={e => onFilterChanged(e.target)}
+          >
+            <MenuItem value='' disabled>
+              Select Subject
+            </MenuItem>
+            {renderMenuItems(subjectList, 'No Subject Exists')}
+          </TextField>
+        </Grid>
+      )}
+      {!hideChapterStandard && (
+        <Grid item sm={6} md={3} xs={12}>
+          <TextField
+            select
+            sx={{ width: '100%', textAlign: 'left', padding: '1px' }}
+            name='chapter'
+            onChange={e => onFilterChanged(e.target)}
+            value={filters?.chapter?.id || ''}
+          >
+            <MenuItem value='' disabled>
+              Select Chapter
+            </MenuItem>
+            {renderMenuItems(chapterList, 'No Chapter Exists')}
+          </TextField>
+        </Grid>
+      )}
     </Grid>
   );
 };
