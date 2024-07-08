@@ -21,49 +21,83 @@ function Index() {
     start_time: '',
     end_time: '',
     background_id: 1,
+    exam_paper_id: '',
   });
+
   const handleNextClick = async () => {
-    const isValid = Object.keys(basicInfo).every(key => basicInfo[key]);
-    if (!isValid) return;
+    if (activeTab === 'basicInfo') {
+      const isValid = Object.keys(basicInfo).every(key => basicInfo[key]);
+      if (!isValid) return;
+      StoreDispatch({
+        type: 'EXAM_PAPER_DATA',
+        payload: {
+          ...Store.examData,
+          basicInfo,
+        },
+      });
+      setActiveTab('selectBackground');
+    } else if (activeTab === 'selectBackground') {
+      const payload = JSON.parse(JSON.stringify(basicInfo));
+      payload.exam_date = new Date(basicInfo.exam_date).getTime() / 1000;
+      payload.start_time = (
+        new Date(
+          `${basicInfo.exam_date} ${basicInfo.start_time}:00`,
+        ).getTime() / 1000
+      ).toString();
+      payload.end_time = (
+        new Date(`${basicInfo.exam_date} ${basicInfo.end_time}:00`).getTime() /
+        1000
+      ).toString();
 
-    const payload = JSON.parse(JSON.stringify(basicInfo));
-    payload.exam_date = new Date(basicInfo.exam_date).getTime() / 1000;
-    payload.start_time = (
-      new Date(`${basicInfo.exam_date} ${basicInfo.start_time}:00`).getTime() /
-      1000
-    ).toString();
-    payload.end_time = (
-      new Date(`${basicInfo.exam_date} ${basicInfo.end_time}:00`).getTime() /
-      1000
-    ).toString();
+      if (payload.chapter_id) {
+        delete payload.chapter_id;
+      }
 
-    payload.chapter_id = [basicInfo.chapter_id];
+      const result = await createExam(payload);
+      if (result?.data?.success === true) {
+        navigate('/examSchedule');
+      }
+    }
+  };
 
-    const result = await createExam(payload);
-    navigate('/examSchedule');
+  const handlePreviousClick = () => {
+    if (activeTab === 'basicInfo') {
+      navigate('/examSchedule/selectPaper');
+    } else if (activeTab === 'selectBackground') {
+      setActiveTab('basicInfo');
+    }
   };
 
   useEffect(() => {
-    if (!Store.courseData) {
+    if (!Store?.examData?.courseData) {
       navigate('/selectPaper');
     }
 
     if (
-      !Store.courseData ||
-      !Store.courseData.course_id ||
-      !Store.courseData.subject_id ||
-      !Store.courseData.chapter_id
+      !Store?.examData?.courseData ||
+      !Store?.examData?.courseData.course_id ||
+      !Store?.examData?.courseData.subject_id ||
+      !Store?.examData?.courseData.chapter_id ||
+      !Store?.examData?.courseData.exam_paper_id
     ) {
       navigate('/selectPaper');
     } else {
       setBasicInfo({
         ...basicInfo,
-        course_id: Store.courseData.course_id,
-        subject_id: Store.courseData.subject_id,
-        chapter_id: Store.courseData.chapter_id,
+        course_id: Store?.examData?.courseData.course_id,
+        subject_id: Store?.examData?.courseData.subject_id,
+        chapter_id: Store?.examData?.courseData.chapter_id,
+        exam_paper_id: Store?.examData?.courseData.exam_paper_id,
+        number_of_questions:
+          Store?.examData?.selectedExamPaper?.questions_count,
+        total_marks: Store?.examData?.selectedExamPaper?.total_marks,
       });
     }
-  }, []);
+
+    if (Store?.examData?.basicInfo) {
+      setBasicInfo(Store.examData.basicInfo);
+    }
+  }, [Store?.examData]);
 
   return (
     <div className='min-h-screen flex flex-col items-start justify-start p-2'>
@@ -97,13 +131,26 @@ function Index() {
         )}
         {activeTab === 'selectBackground' && <BackgroundSelect />}
       </div>
-      <div className='flex justify-end mt-6'>
+      <div className='flex justify-between mt-6 w-full'>
+        <button
+          onClick={handlePreviousClick}
+          className='h-11 bg-white w-32 rounded-lg'
+        >
+          <div className='flex px-4 justify-start'>
+            <p>Previous</p>
+            <img
+              src={ArrowRight}
+              style={{ marginLeft: '1rem' }}
+              alt='Arrow Right'
+            />
+          </div>
+        </button>
         <button
           onClick={handleNextClick}
           className='h-11 bg-white w-32 rounded-lg'
         >
           <div className='flex px-4 justify-end'>
-            <p>Create</p>
+            <p>{activeTab === 'basicInfo' ? 'Next' : 'Create'}</p>
             <img
               src={ArrowRight}
               style={{ marginLeft: '1rem' }}

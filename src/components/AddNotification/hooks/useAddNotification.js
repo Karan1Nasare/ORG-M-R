@@ -23,7 +23,7 @@ const useAddNotification = () => {
   };
 
   const getAllAdmins = () => {
-    return axiosInstance.get(URLS.GET_ADMINS());
+    return axiosInstance.get(URLS.GET_STUDENT);
   };
 
   const openAdminDialog = () => {
@@ -45,7 +45,7 @@ const useAddNotification = () => {
     }
   };
 
-  const hasCheckedAdmins = adminData.some(item => item.isChecked);
+  const hasCheckedAdmins = adminData?.some(item => item.isChecked);
 
   const handleSearchClick = () => {
     console.log('handleSearchClick');

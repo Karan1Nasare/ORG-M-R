@@ -1,21 +1,35 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../Header/header';
 import AddSelectPaper from './components/addSelectPaper';
 import EmptyData from './components/selectPaper';
 import ArrowRight from '../../../assets/icon/Arrow Right.svg';
 import { useStore } from '../../../store/context-store';
+import useExamPaper from './hooks';
 
 const Index = () => {
   const navigate = useNavigate();
   const [Store, StoreDispatch] = useStore();
   const [tab, setTab] = useState(false);
+  const { examPaper } = useExamPaper();
 
   const [selectedData, setSelectedData] = useState({
     course_id: null,
     subject_id: null,
     chapter_id: null,
   });
+
+  const filteredData = examPaper?.filter(
+    item =>
+      item?.course_id === selectedData.course_id &&
+      item?.subject_id === selectedData.subject_id,
+  );
+
+  useEffect(() => {
+    if (Store?.examData?.courseData) {
+      setSelectedData(Store?.examData?.courseData);
+    }
+  }, [Store?.examData?.courseData]);
 
   const handleNextClick = () => {
     if (
@@ -25,7 +39,30 @@ const Index = () => {
     ) {
       return;
     }
-    StoreDispatch({ type: 'EXAM_PAPER_DATA', payload: selectedData });
+
+    StoreDispatch({
+      type: 'EXAM_PAPER_DATA',
+      payload: {
+        courseData: selectedData,
+        filteredData,
+      },
+    });
+
+    if (selectedData?.exam_paper_id) {
+      const selectedExamPaper = filteredData.find(
+        paper => paper.id === selectedData.exam_paper_id,
+      );
+
+      StoreDispatch({
+        type: 'EXAM_PAPER_DATA',
+        payload: {
+          courseData: selectedData,
+          filteredData,
+          selectedExamPaper,
+        },
+      });
+    }
+
     navigate('/basicInfo');
   };
 
@@ -37,7 +74,10 @@ const Index = () => {
       !selectedData.chapter_id ? (
         <EmptyData />
       ) : (
-        <AddSelectPaper />
+        <AddSelectPaper
+          setSelectedData={setSelectedData}
+          filteredData={filteredData}
+        />
       )}
       <div className='flex justify-end mt-6'>
         <button

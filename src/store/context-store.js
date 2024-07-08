@@ -64,7 +64,17 @@ export const ContextStoreProvider = ({ children }) => {
       case 'EXAM_PAPER_DATA': {
         return {
           ...State,
-          courseData: action.payload,
+          examData: {
+            ...State?.examData,
+            courseData:
+              action?.payload?.courseData || State?.examData?.courseData,
+            filteredData:
+              action?.payload?.filteredData || State?.examData?.filteredData,
+            basicInfo: action?.payload?.basicInfo || State?.examData?.basicInfo,
+            selectedExamPaper:
+              action?.payload?.selectedExamPaper ||
+              State?.examData?.selectedExamPaper,
+          },
         };
       }
       case 'AddAdminDetails': {

@@ -19,7 +19,7 @@ const URLS = {
   UPDATE_PLAN: id => `/plans/${id}`,
   DELETE_PLAN: id => `/plans/${id}`,
   ADD_ADMIN: () => `/admins`,
-  GET_ADMINS: () => `/organizations`,
+  GET_ADMINS: () => `/admins`,
   EDIT_ADMIN: id => `/admins/${id}`,
   UPDATE_ADMIN: id => `/admins/${id}`,
   DELETE_ADMIN: id => `/admins/${id}`,
@@ -102,5 +102,6 @@ const URLS = {
   ADD_STUDENT: '/students',
   GET_ALL_COURSES: '/getallcoursedata',
   IMPORT_STUDENT: '/students/import',
+  GET_EXAM_PAPER: '/exam-papers',
 };
 export default URLS;

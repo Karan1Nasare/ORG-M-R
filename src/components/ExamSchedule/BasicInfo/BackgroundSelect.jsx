@@ -1,23 +1,20 @@
 import React, { useState } from 'react';
+import English from '../../../assets/BG_Images_For_Exam/English.jpg';
+import Gujarati from '../../../assets/BG_Images_For_Exam/Gujarati.jpg';
+import Hindi from '../../../assets/BG_Images_For_Exam/Hindi.jpg';
+import Mathematics from '../../../assets/BG_Images_For_Exam/Mathematics.jpg';
+import Science from '../../../assets/BG_Images_For_Exam/Science.jpg';
+import SocialStudies from '../../../assets/BG_Images_For_Exam/SocialScience.jpg';
+import Sanskrit from '../../../assets/BG_Images_For_Exam/Sanskrit.jpg';
 
-// Example image URLs, replace with actual image paths or URLs
-const imageUrls = [
-  'https://via.placeholder.com/300x200.png?text=Image+1',
-  'https://via.placeholder.com/300x200.png?text=Image+2',
-  'https://via.placeholder.com/300x200.png?text=Image+3',
-  'https://via.placeholder.com/300x200.png?text=Image+4',
-  'https://via.placeholder.com/300x200.png?text=Image+5',
-  'https://via.placeholder.com/300x200.png?text=Image+6',
-  'https://via.placeholder.com/300x200.png?text=Image+7',
-  'https://via.placeholder.com/300x200.png?text=Image+8',
-  'https://via.placeholder.com/300x200.png?text=Image+1',
-  'https://via.placeholder.com/300x200.png?text=Image+2',
-  'https://via.placeholder.com/300x200.png?text=Image+3',
-  'https://via.placeholder.com/300x200.png?text=Image+4',
-  'https://via.placeholder.com/300x200.png?text=Image+5',
-  'https://via.placeholder.com/300x200.png?text=Image+6',
-  'https://via.placeholder.com/300x200.png?text=Image+7',
-  'https://via.placeholder.com/300x200.png?text=Image+8',
+const images = [
+  { id: 'english', src: English },
+  { id: 'gujarati', src: Gujarati },
+  { id: 'hindi', src: Hindi },
+  { id: 'mathematics', src: Mathematics },
+  { id: 'science', src: Science },
+  { id: 'socialStudies', src: SocialStudies },
+  { id: 'sanskrit', src: Sanskrit },
 ];
 
 const itemsPerPage = 8; // Number of images to display per page
@@ -25,7 +22,7 @@ const itemsPerPage = 8; // Number of images to display per page
 const BackgroundSelect = () => {
   const [currentPage, setCurrentPage] = useState(1);
 
-  const totalPages = Math.ceil(imageUrls.length / itemsPerPage);
+  const totalPages = Math.ceil(images.length / itemsPerPage);
 
   const handlePageChange = pageNumber => {
     setCurrentPage(pageNumber);
@@ -34,20 +31,20 @@ const BackgroundSelect = () => {
   const getCurrentPageImages = () => {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = startIndex + itemsPerPage;
-    return imageUrls.slice(startIndex, endIndex);
+    return images.slice(startIndex, endIndex);
   };
 
   return (
     <div className='bg-[rgba(11,23,57,1)] border border-gray-700 text-white p-8 rounded-lg w-full'>
       <div className='grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 justify-items-center'>
-        {getCurrentPageImages().map((url, index) => (
+        {getCurrentPageImages().map(image => (
           <div
-            key={index}
-            className='w-[115%;] h-[192px] flex items-center justify-center bg-[rgba(11,23,57,1)] rounded]'
+            key={image.id}
+            className='w-[115%] h-[192px] flex items-center justify-center bg-[rgba(11,23,57,1)] rounded]'
           >
             <div
               className='w-[237px] h-[144px] bg-cover bg-center rounded'
-              style={{ backgroundImage: `url(${url})` }}
+              style={{ backgroundImage: `url(${image.src})` }}
             ></div>
           </div>
         ))}

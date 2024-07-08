@@ -72,7 +72,8 @@ const ExamForm = ({ examDetail, setExamDetails }) => {
             name='number_of_questions'
             className='mt-1 block w-full h-[42px] p-[0px_12px] bg-[rgba(11,23,57,1)] border border-[0.6px] border-[#343B4F] rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
             placeholder='Enter Total Question'
-            onInput={handleChange}
+            disabled
+            value={examDetail?.number_of_questions}
           />
         </div>
         <div className='col-span-2 sm:col-span-1'>
@@ -88,7 +89,8 @@ const ExamForm = ({ examDetail, setExamDetails }) => {
             name='total_marks'
             className='mt-1 block w-full h-[42px] p-[0px_12px] bg-[rgba(11,23,57,1)] border border-[0.6px] border-[#343B4F] rounded focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm'
             placeholder='Enter Total Marks'
-            onInput={handleChange}
+            disabled
+            value={examDetail?.total_marks}
           />
         </div>
         <div className='col-span-2 sm:col-span-1'>
