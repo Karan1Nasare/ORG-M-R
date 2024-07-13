@@ -51,7 +51,7 @@ const ProfileDetails = () => {
 
   return (
     <>
-      <TabTitle title='Org & Personal Details' sx={{ marginTop: '20px' }} />
+      <TabTitle title='Org & Personal' sx={{ marginTop: '20px' }} />
       {content}
     </>
   );

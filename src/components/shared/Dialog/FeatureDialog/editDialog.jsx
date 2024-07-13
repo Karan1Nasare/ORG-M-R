@@ -1,10 +1,14 @@
-import React, { useState } from 'react';
-import { IconButton } from '@mui/material';
+import React, { useEffect, useState, useRef } from 'react';
+import { IconButton, MenuItem, TextField } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import { Icon } from '@iconify/react';
+import dayjs from 'dayjs';
 import AnnouncementImage from '../../../../assets/announcement_card.png';
 import RichTextEditor from '../../RichTextEditor';
 import SelectField from '../../SelectField';
+import services from '../../../Material/services/services';
+import useFetcher from '../../../../hooks/useFetcher';
+import useEvent from '../../../EventManegement/hooks/useEvent';
 
 const EditAnnouncementCard = ({
   isOpen,
@@ -16,6 +20,9 @@ const EditAnnouncementCard = ({
     return null;
   }
 
+  const { fetcher } = useFetcher();
+  const { getCourseStd } = services();
+
   const [data, setData] = useState({
     title: announcementData?.title || '',
     description: announcementData?.description || '',
@@ -24,11 +31,45 @@ const EditAnnouncementCard = ({
     url: announcementData?.url || '',
     date: announcementData?.date || '',
     time: announcementData?.time || '',
+    standard: announcementData?.standard || '',
+    event_id: announcementData?.event_id || '',
     _method: 'PUT',
   });
+  const [courseStdList, setCourseStdList] = useState([]);
+  const { event } = useEvent();
+  const hasFetchedCourseStdList = useRef(false); // To track if API call has been made
 
-  const handleFileChange = event => {
-    const file = event.target.files[0];
+  const textFieldStyles = {
+    '& .MuiSelect-select': {
+      color: 'white',
+    },
+  };
+
+  const fetchCourseStdList = async (search = '', pageSize = '') => {
+    if (hasFetchedCourseStdList.current) return; // Prevent multiple API calls
+    hasFetchedCourseStdList.current = true;
+
+    try {
+      fetcher({
+        key: 'get-courseStd-edit',
+        showSuccessToast: false,
+        executer: () => getCourseStd(search, pageSize),
+        onSuccess: response => {
+          const record = response?.data?.data?.data;
+          setCourseStdList(record);
+        },
+      });
+    } catch (err) {
+      console.log('error while fetching course standards', err);
+    }
+  };
+
+  useEffect(() => {
+    fetchCourseStdList();
+  }, []); // Empty dependency array ensures this runs only once on mount
+
+  const handleFileChange = e => {
+    const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
       reader.onload = () => {
@@ -38,15 +79,27 @@ const EditAnnouncementCard = ({
     }
   };
 
-  const handleInputChange = event => {
-    const { name, value } = event.target;
+  const handleInputChange = e => {
+    const { name, value } = e.target;
     setData(prevState => ({ ...prevState, [name]: value }));
+  };
+
+  const handleDateChange = e => {
+    const formattedDate = dayjs(e.target.value).format('DD-MM-YYYY');
+    console.log('Formatted Date:', formattedDate);
+    setData(prevState => ({ ...prevState, date: formattedDate }));
   };
 
   const handleSubmit = async () => {
     const formData = new FormData();
 
-    Object.entries(data).forEach(([key, value]) => {
+    // Convert the date to DD-MM-YYYY format before appending to formData
+    const formattedData = {
+      ...data,
+      date: dayjs(data.date).format('DD-MM-YYYY'),
+    };
+
+    Object.entries(formattedData).forEach(([key, value]) => {
       formData.append(key, value);
     });
 
@@ -55,13 +108,13 @@ const EditAnnouncementCard = ({
       await onUpdate(formData);
       onClose();
     } catch (error) {
-      console.error('Error editing feature:', error);
+      console.error('Error editing announcement:', error);
     }
   };
 
   return (
     <div className='fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-black bg-opacity-20 text-start'>
-      <div className='flex flex-col px-8 py-7 rounded-3xl border border-gray-700 border-solid text-start bg-secondary__fill w-42.6 max-md:px-5'>
+      <div className='flex flex-col h-3/4 overflow-y-scroll px-8 py-7 rounded-3xl border border-gray-700 border-solid text-start bg-secondary__fill w-42.6 max-md:px-5'>
         <div className='flex gap-5 text-xl text-white max-md:flex-wrap max-md:max-w-full'>
           <div className='flex-auto my-auto '>Edit Announcement</div>
           <IconButton
@@ -109,19 +162,26 @@ const EditAnnouncementCard = ({
         <div className='flex flex-wrap gap-5 content-start mt-5 text-sm '>
           <div className='flex flex-col flex-1'>
             <div className='text-white mb-2'>Select Announcement Type</div>
-            <SelectField
-              name='announcementType'
-              label='Select an option'
-              value={data.announcementType}
+
+            <TextField
+              select
+              name='event_id'
+              value={data.event_id}
               onChange={handleInputChange}
-              options={[
-                { label: 'Option 1', value: 'option1' },
-                { label: 'Option 2', value: 'option2' },
-                { label: 'Option 3', value: 'option3' },
-              ]}
+              sx={{
+                ...textFieldStyles,
+              }}
               placeholder='Select'
-              error={false} // Set to true to display error state
-            />
+            >
+              <MenuItem value='' disabled>
+                Select Event
+              </MenuItem>
+              {event?.map(eventList => (
+                <MenuItem key={eventList.id} value={eventList.id}>
+                  {eventList.title}
+                </MenuItem>
+              ))}
+            </TextField>
           </div>
           <div className='flex flex-col flex-1'>
             <div className='text-white'>Title</div>
@@ -138,19 +198,25 @@ const EditAnnouncementCard = ({
         <div className='flex flex-wrap gap-5 content-start mt-5 text-sm '>
           <div className='flex flex-col flex-1'>
             <div className='text-white mb-2'>Standard</div>
-            <SelectField
+            <TextField
+              select
               name='standard'
-              label='Select an option'
               value={data.standard}
               onChange={handleInputChange}
-              options={[
-                { label: 'Option 1', value: 'option1' },
-                { label: 'Option 2', value: 'option2' },
-                { label: 'Option 3', value: 'option3' },
-              ]}
+              sx={{
+                ...textFieldStyles,
+              }}
               placeholder='Select'
-              error={false} // Set to true to display error state
-            />
+            >
+              <MenuItem value='' disabled>
+                Select Standard
+              </MenuItem>
+              {courseStdList?.map(standard => (
+                <MenuItem key={standard.id} value={standard.id}>
+                  {standard.name}
+                </MenuItem>
+              ))}
+            </TextField>
           </div>
           <div className='flex flex-col flex-1'>
             <div className='text-white'>URL</div>
@@ -184,7 +250,7 @@ const EditAnnouncementCard = ({
               placeholder='Select a date'
               className='justify-center bg-transparent items-start px-3 py-3.5 mt-2 rounded border border-gray-700 border-solid text-stone-300 max-md:pr-5'
               value={data.date}
-              onChange={handleInputChange}
+              onChange={handleDateChange}
             />
           </div>
           <div className='flex flex-col flex-1'>

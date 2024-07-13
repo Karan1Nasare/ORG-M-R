@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import React, {
   createContext,
   useReducer,
@@ -24,6 +23,8 @@ const InitialState = {
 export const DefaultState = localStorage.getItem('last_state')
   ? JSON.parse(localStorage.getItem('last_state'))
   : InitialState;
+
+console.log('default State', DefaultState);
 
 export const StoreContext = createContext(DefaultState);
 export const StoreDispatchContext = createContext();
@@ -54,11 +55,6 @@ export const ContextStoreProvider = ({ children }) => {
         return InitialState;
       }
 
-      case 'Log': {
-        console.log(action);
-        return State;
-      }
-
       case 'ADD_QUESTION_BANK': {
         return {
           ...State,
@@ -68,7 +64,17 @@ export const ContextStoreProvider = ({ children }) => {
       case 'EXAM_PAPER_DATA': {
         return {
           ...State,
-          courseData: action.payload,
+          examData: {
+            ...State?.examData,
+            courseData:
+              action?.payload?.courseData || State?.examData?.courseData,
+            filteredData:
+              action?.payload?.filteredData || State?.examData?.filteredData,
+            basicInfo: action?.payload?.basicInfo || State?.examData?.basicInfo,
+            selectedExamPaper:
+              action?.payload?.selectedExamPaper ||
+              State?.examData?.selectedExamPaper,
+          },
         };
       }
       case 'AddAdminDetails': {
@@ -92,8 +98,7 @@ export const ContextStoreProvider = ({ children }) => {
       //   return State;
       // }
       default: {
-        State = DefaultState;
-        return State;
+        return DefaultState;
       }
     }
     // return null;

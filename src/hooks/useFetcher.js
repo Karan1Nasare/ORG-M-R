@@ -30,9 +30,11 @@ const useFetcher = () => {
     try {
       const response = await executer();
 
-      if (response.status === 200) {
+      if (response.status === 200 || response.status === 201) {
         onSuccess?.(response);
         if (showSuccessToast) {
+          toast.dismiss();
+
           toast.success(ToastMessage || response.data?.message, {
             position: 'top-right',
             icon: SuccessIcon,
@@ -51,6 +53,7 @@ const useFetcher = () => {
         throw new Error(`Unexpected status code: ${response.status}`);
       }
     } catch (error) {
+      console.log('errror useFetcher', error);
       if (error?.response?.status === 401) {
         StoreDispatch({ type: 'RemoveState' });
         return;
@@ -66,6 +69,7 @@ const useFetcher = () => {
         errorMessage = error.response.data.message;
       }
       if (showErrorToast) {
+        toast.dismiss();
         toast.error(ToastMessage || errorMessage, {
           position: 'top-right',
           icon: ErrorIcon,

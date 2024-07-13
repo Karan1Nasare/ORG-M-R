@@ -86,7 +86,7 @@ const OrganizationCard = () => {
                 backgroundColor: '#0B1739',
               }}
             >
-              <CardContent>
+              <CardContent className='border border-gray-700 rounded-xl'>
                 <Box className='flex mb-4 items-center'>
                   <img className='mr-4' src={studentStaffReportIcon} alt='' />
                   <Box>
@@ -105,12 +105,12 @@ const OrganizationCard = () => {
 
       <div className='mt-8'>
         <Card
-          className='bg-gradient-to-r from-purple-900 to-blue-900'
+          className='bg-gradient-to-r from-purple-900 to-blue-900 rounded-xl'
           style={{ backgroundColor: '#0B1739' }}
         >
-          <CardContent className='text-center'>
+          <CardContent className='text-center border rounded-xl border-gray-700'>
             <div className='flex '>
-              <div className='bg-red-800 ml-4 opacity-30 h-12 text-white w-56 rounded-full p-2 pt-3 m-2'>
+              <div className='bg-red-800 ml-4 bg-opacity-30 h-12 text-white w-56 rounded-full p-2 pt-3 m-2'>
                 <Typography
                   variant='h5'
                   sx={{
@@ -120,7 +120,7 @@ const OrganizationCard = () => {
                   Plan Expires in 56 Days
                 </Typography>
               </div>
-              <h5 className='text-green m-2 mt-6'>Pre Upgrade</h5>
+              <h5 className='text-green m-2 mt-5'>Pre Upgrade</h5>
             </div>
             <div className='text-white w-[80%] md:w-[85%] m-2 ml-4 lg:text-xl md:mt-4 text-sm text-left'>
               <Typography variant='body1' className='mt-4 text-start'>

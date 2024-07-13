@@ -14,25 +14,6 @@ const useAddAnnouncement = () => {
     return axiosInstance.post(URLS.ADD_ANNOUNCEMENT(), data);
   };
 
-  const getEvent = async () => {
-    return axiosInstance.get(URLS.GET_EVENT());
-  };
-
-  const fetchEventList = async () => {
-    try {
-      fetcher({
-        key: 'event',
-        executer: () => getEvent(),
-        onSuccess: response => {
-          console.log('event rresponse event: ', response);
-          setEventList(response.data?.data);
-        },
-      });
-    } catch (err) {
-      console.log('error while fetching questions', err);
-    }
-  };
-
   // add Announcement
   const onAddAnnouncement = useCallback(async announcement => {
     try {
@@ -40,7 +21,6 @@ const useAddAnnouncement = () => {
         key: 'add-Announcement',
         executer: () => addAnnouncement(announcement),
         onSuccess: response => {
-          console.log('rresponse: ', response);
           navigate('/announcements');
         },
       });
@@ -55,7 +35,6 @@ const useAddAnnouncement = () => {
 
   return {
     onAddAnnouncement,
-    eventList,
   };
 };
 

@@ -7,6 +7,7 @@ import FileUploaderImage from '../../ui/Form/FileUploaderImage';
 const AddMultipleForm = ({ file, setFile }) => {
   const [selectFile, setSelection] = useState(false);
   const [removeFile, setRemoveSelection] = useState(false);
+
   return (
     <div className='text-sm w-full font-medium text-center bg-[#0B1739] text-gray-500 p-7 rounded-xl flex items-center justify-between'>
       <Stack
@@ -28,15 +29,19 @@ const AddMultipleForm = ({ file, setFile }) => {
               setRemoveSelection={setRemoveSelection}
               setSelection={setSelection}
               isRounded={true}
+              accept={'*'}
             />
           </Stack>
 
           <Stack>
             <p className='text-lg  text-white text-left'>
-              Upload Your Plan Image
+              Upload Your Student Sheet
             </p>
             <p className='text-sm font-normal text-[#98A4AE]'>
-              Allowed JPG, GIF or PNG. Max size of 800K{' '}
+              Allowed xls, xlsx. Max size of 800K{' '}
+            </p>
+            <p className='text-md  text-white text-left font-normal'>
+              {file && `Selectd Files ${file[0]?.name}`}
             </p>
           </Stack>
         </Stack>

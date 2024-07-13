@@ -46,7 +46,7 @@ const PaperDetails = ({ paperImg }) => {
           </div>
           <div className='border-b ml-2 mt-2 w-28 border-primary ' />
         </div>
-        <Stack direction={'row'} spacing={2} alignItems={'center'}>
+        {/* <Stack direction={'row'} spacing={2} alignItems={'center'}>
           <Button
             sx={{ background: theme => theme.color.white, padding: '8px 16px' }}
           >
@@ -85,7 +85,7 @@ const PaperDetails = ({ paperImg }) => {
           >
             Back
           </Button>
-        </Stack>
+        </Stack> */}
       </div>
       <div className='flex'>
         <div className='h-1 mt-3 w-7 bg-primary rotate-90' />

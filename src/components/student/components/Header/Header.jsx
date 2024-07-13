@@ -6,7 +6,7 @@ import { Grid, Stack } from '@mui/material';
 import { Icon } from '@iconify/react';
 // import { TiUserAdd } from 'react-icons/ti';
 
-const Header = ({ inputValue, handleInputChange, handleSearchClick }) => {
+const Header = ({ inputValue, handleInputChange }) => {
   const navigate = useNavigate();
   const handleAddStudentsClick = () => {
     navigate('/student/addStudent');
@@ -59,7 +59,7 @@ const Header = ({ inputValue, handleInputChange, handleSearchClick }) => {
             </span>
             <button>Add Students</button>
           </div>
-          <div
+          {/* <div
             onClick={handleAddMultipleClick}
             className='flex text-sm bg-white h-11 py-3 px-4 w-32 rounded-md'
           >
@@ -67,7 +67,7 @@ const Header = ({ inputValue, handleInputChange, handleSearchClick }) => {
               <IoIosAddCircle />
             </span>
             <button>Add Multiple</button>
-          </div>
+          </div> */}
         </div>
       </div>
     </div>

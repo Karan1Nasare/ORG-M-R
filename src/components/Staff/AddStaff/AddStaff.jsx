@@ -21,7 +21,8 @@ import useSubject from '../../Material/hooks/useSubject';
 import useCourseStd from '../../Material/hooks/useCourseStd';
 
 const AddStaff = ({ setValue }) => {
-  const { staffState } = useLocation();
+  const location = useLocation();
+  const { staffData } = location?.state || {};
   const navigate = useNavigate();
   const { fetcher } = useFetcher();
   const { onAddStaff, getAllCities, getStates } = useAddStaff();
@@ -40,6 +41,14 @@ const AddStaff = ({ setValue }) => {
       primary_class: [],
       subject: [],
       standard: [],
+      name: staffData?.name || '',
+      email: staffData?.email || '',
+      staff_id: staffData?.staff_details?.staff_id,
+      phone: staffData?.staff_details?.phone,
+      address: staffData?.staff_details?.address,
+      city: staffData?.staff_details?.city?.name,
+      state: staffData?.staff_details?.state?.name,
+      degree: staffData?.staff_details?.degree,
     },
   });
   const {
@@ -78,14 +87,6 @@ const AddStaff = ({ setValue }) => {
   const handleBackClick = () => {
     navigate('/staff');
   };
-
-  useEffect(() => {
-    console.log('🚀 ~ useEffect ~ staffState:', staffState);
-
-    if (staffState && staffState?.staff_id) {
-      console.log('111111111staff_id', staffState.staff_id);
-    }
-  }, []);
 
   useEffect(() => {
     setCities([]);
@@ -171,10 +172,10 @@ const AddStaff = ({ setValue }) => {
                 <RHFMultiSelect
                   size='small'
                   name='class'
-                  options={[
-                    { label: 'Class 1', value: '1' },
-                    { label: 'Class 2', value: '2' },
-                  ]}
+                  options={courseStdList?.map(course => ({
+                    label: course?.name,
+                    value: course?.id,
+                  }))}
                   placeholder='Select Class'
                   chip
                 />
@@ -189,10 +190,10 @@ const AddStaff = ({ setValue }) => {
                 <RHFMultiSelect
                   size='small'
                   name='primary_class'
-                  options={[
-                    { label: 'Primay Class 1', value: '1' },
-                    { label: 'Primay Class 2', value: '2' },
-                  ]}
+                  options={courseStdList?.map(course => ({
+                    label: course?.name,
+                    value: course?.id,
+                  }))}
                   placeholder='Select Primary Class'
                   chip
                 />

@@ -67,5 +67,4 @@ const SelectedAdminCard = ({ data, handleRemoveAdmin }) => {
     </>
   );
 };
-
 export default SelectedAdminCard;

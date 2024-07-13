@@ -7,7 +7,7 @@ import { useForm } from 'react-hook-form';
 import BannerHeader from './bannerHeader';
 import UploadImage from '../shared/uploadImage/uploadImage';
 import BannerForm from './bannerForm';
-import AdminImageSelect from './AdminImageSelect';
+import AdminImageSelect from '../Admins/Form/AdminImageSelect';
 import { FormProvider } from '../../hooks/hook-form';
 import useFetcher from '../../hooks/useFetcher';
 import { addbanner } from '../../service/banner';
@@ -62,6 +62,7 @@ const AddBanner = ({ Bannertype }) => {
       },
       showErrorToast: true,
     });
+    console.log(data, 'asxbahslakmslxkm');
   };
   return (
     <FormProvider onSubmit={handleSubmit(onsubmit)} methods={methods}>

@@ -107,7 +107,7 @@ const Header = ({ selectedData, setSelectedData }) => {
                 options={courseOptions}
               />
             </div>
-            <div className='h-10 mt-8 bg-secondary__fill__dark border rounded-md border-gray-700 w-40'>
+            <div className='h-10 mt-8 mr-2 bg-secondary__fill__dark border rounded-md border-gray-700 w-40'>
               <RHFSelect
                 size='small'
                 name='subject_id'

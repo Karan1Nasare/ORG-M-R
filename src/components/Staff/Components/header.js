@@ -1,6 +1,6 @@
 // Components/Header.js
 
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaUserPlus } from 'react-icons/fa';
 import { useNavigate } from 'react-router-dom';
@@ -9,9 +9,16 @@ import {
   RHFSelect, // Import RHFSelect
   RHFTextField, // Import RHFTextField
 } from '../../../hooks/hook-form';
+import MaterialDropDown2 from '../../Material/Filters/MaterialDropDown2';
 
 const Header = () => {
   const navigate = useNavigate();
+  const [filters, setFilters] = useState({
+    search: '',
+    course: '',
+    subject: '',
+    chapter: '',
+  });
 
   const handleAddStaffClick = () => {
     navigate('/staff/addStaff');
@@ -30,36 +37,34 @@ const Header = () => {
   return (
     <FormProvider methods={methods} onSubmit={handleSubmit(onSubmit)}>
       <div className='bg-secondary__fill py-9 w-full max-w-screen mx-auto flex justify-between h-28 border p-7 border-gray-700 rounded-xl '>
-        <div className='flex'>
+        <div className='flex w-full'>
           <input
             type='text'
             placeholder='Search Name, Enrollment, Standard'
             className='w-80 flex p-2 text-white bg-secondary__fill__dark h-10'
           />
-          <div className='flex'>
-            <div className='w-36 border h-10 border-gray-700 flex rounded-md ml-3'>
-              <RHFSelect
-                size='small'
-                name='plan_type'
-                options={[
-                  { label: 'Bronze', value: 'bronze' },
-                  { label: 'Silver', value: 'silver' },
-                  { label: 'Gold', value: 'gold' },
-                ]}
-              />
-            </div>
-            <div className='w-36 border h-10 border-gray-700 rounded-md ml-3'>
-              <RHFSelect
-                size='small'
-                name='plan_type'
-                options={[
-                  { label: 'Bronze', value: 'bronze' },
-                  { label: 'Silver', value: 'silver' },
-                  { label: 'Gold', value: 'gold' },
-                ]}
-              />
-            </div>
+          {/* <div className='flex'> */}
+          <div className='w-full h-10 flex ml-3'>
+            <MaterialDropDown2
+              setApplyFilter={setFilters}
+              hideCourseStandard={false}
+              hideSubjectStandard={false}
+              hideChapterStandard={true}
+              hideInput={true}
+            />
           </div>
+          {/* <div className='w-36 border h-10 border-gray-700 rounded-md ml-3'>
+              <RHFSelect
+                size='small'
+                name='plan_type'
+                options={[
+                  { label: 'Bronze', value: 'bronze' },
+                  { label: 'Silver', value: 'silver' },
+                  { label: 'Gold', value: 'gold' },
+                ]}
+              />
+            </div> */}
+          {/* </div> */}
         </div>
         <button
           onClick={handleAddStaffClick}

@@ -10,6 +10,7 @@ import {
 import { useNavigate } from 'react-router-dom';
 
 const StaffCard = ({ data, onDelete }) => {
+  console.log(data);
   const navigate = useNavigate();
   const handleOnClick = () => {
     navigate('/staff/staffInformation', {
@@ -17,13 +18,6 @@ const StaffCard = ({ data, onDelete }) => {
     });
   };
 
-  const subjects = [
-    'Math',
-    'Science',
-    'Mathematics',
-    'SocialScience',
-    'History',
-  ];
   return (
     <Card
       style={{

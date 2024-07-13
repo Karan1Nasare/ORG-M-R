@@ -1,3 +1,4 @@
+// Update data state when initialData is fetched
 import React, { useEffect, useState } from 'react';
 import { RHFSelect } from '../../../hooks/hook-form';
 import SelectAdminDialog from './dialog/selectAdmin';
@@ -28,10 +29,13 @@ const Header = ({
       }
       return admin;
     });
-
     setData(updatedData);
   };
-
+  useEffect(() => {
+    if (initialData && initialData.length > 0) {
+      setData(initialData);
+    }
+  }, [initialData]);
   useEffect(() => {
     if (initialData && initialData.length > 0) {
       setData(initialData);
@@ -44,9 +48,7 @@ const Header = ({
       .map(admin => admin.id);
     setSelectedAdminIds(selectedIds);
   }, [data]);
-
   const hasCheckedAdmins = selectedAdminIds.length > 0;
-
   return (
     <>
       {!hasCheckedAdmins ? (
@@ -54,9 +56,9 @@ const Header = ({
           <div className='flex justify-end'>
             <button
               onClick={openAdminDialog}
-              className='bg-white ml-4 w-28 rounded-md p-1 h-10 text-sm'
+              className='bg-white ml-4 w-36 rounded-md p-1 h-10 text-sm'
             >
-              Select Admin
+              Select Organization
             </button>
           </div>
           <SelectAdminDialog
@@ -85,5 +87,4 @@ const Header = ({
     </>
   );
 };
-
 export default Header;

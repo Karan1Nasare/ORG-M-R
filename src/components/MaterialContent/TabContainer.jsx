@@ -248,7 +248,7 @@ export default function TabContainer() {
           content_type: 'video',
           type: 'content',
         };
-        videoFiles.forEach((video, index) => {
+        videoFiles?.forEach((video, index) => {
           formData.append(`materialcontents[${index}]`, video?.file);
         });
 
@@ -260,7 +260,7 @@ export default function TabContainer() {
           content_type: 'image',
           type: 'content',
         };
-        imagesFile.forEach((image, index) => {
+        imagesFile?.forEach((image, index) => {
           formData.append(`materialcontents[${index}]`, image?.files);
         });
 
@@ -272,7 +272,7 @@ export default function TabContainer() {
           content_type: 'document',
           type: 'content',
         };
-        documentFile.forEach((document, index) => {
+        documentFile?.forEach((document, index) => {
           formData.append(`materialcontents[${index}]`, document?.files);
         });
 

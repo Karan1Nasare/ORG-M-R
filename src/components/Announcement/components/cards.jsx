@@ -5,6 +5,7 @@ import AnnouncementImage from '../../../assets/announcement_card.png';
 import PreviewDialog from '../../shared/Dialog/previewDialog';
 import EditAnnouncementCard from '../../shared/Dialog/FeatureDialog/editDialog';
 import ConfirmDelete from '../../ui/Dialog/ConfirmDelete';
+import useCourseStd from '../../Material/hooks/useCourseStd';
 
 const AnnouncementCard = ({
   data,
@@ -22,6 +23,7 @@ const AnnouncementCard = ({
   confirmUpdateHandler,
 }) => {
   console.log('🚀 ~ AnnouncementCard ~ data:', data);
+
   return (
     <div className='relative bg-secondary__fill h-68 w-34 mt-4 p-8 rounded-lg border border-grey__primary__light border-opacity-20'>
       <img

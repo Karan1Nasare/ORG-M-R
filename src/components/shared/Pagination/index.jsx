@@ -8,6 +8,7 @@ const Pagination = ({
   currentPage,
 }) => {
   const totalPages = Math.ceil(totalCards / cardsPerPage);
+
   const pages = [];
 
   // Generate page numbers with ellipses
@@ -17,7 +18,9 @@ const Pagination = ({
 
     if (totalPages <= maxPagesToShow) {
       for (let i = 1; i <= totalPages; i += 1) {
-        pageNumbers.push(i);
+        if (typeof i === 'number') {
+          pageNumbers.push(i);
+        }
       }
     } else {
       let startPage = Math.max(2, currentPage - 1);
@@ -38,14 +41,18 @@ const Pagination = ({
       }
 
       for (let i = startPage; i <= endPage; i += 1) {
-        pageNumbers.push(i);
+        if (typeof i === 'number') {
+          pageNumbers.push(i);
+        }
       }
 
       if (endPage < totalPages - 1) {
         pageNumbers.push('...');
       }
 
-      pageNumbers.push(totalPages);
+      if (typeof i === 'number') {
+        pageNumbers.push(totalPages);
+      }
     }
 
     return pageNumbers;

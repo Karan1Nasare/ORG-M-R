@@ -4,7 +4,7 @@ import CarouselItem from './carouselItem';
 import './cardCarousel.css';
 import CardBg from './cardbg.png';
 
-const CardCarousel = ({ BannerData, setBannerList, onDelete }) => {
+const CardCarousel = ({ BannerData }) => {
   const responsiveOptions = [
     {
       breakpoint: '1400px',
@@ -31,13 +31,11 @@ const CardCarousel = ({ BannerData, setBannerList, onDelete }) => {
   const itemTemplate = item => {
     return (
       <div className='w-full px-2'>
-        <div className='bg-darkBlue rounded-xl flex items-center justify-center h-60'>
+        <div className='bg-darkBlue border border-gray-700 rounded-xl flex items-center justify-center h-60'>
           <CarouselItem
-            setBannerList={setBannerList}
             backgroundImage={CardBg}
             image={item?.image?.url}
             item={item}
-            onDelete={onDelete}
           />
         </div>
       </div>

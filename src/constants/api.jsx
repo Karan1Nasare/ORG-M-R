@@ -1,5 +1,5 @@
 const URLS = {
-  HOST_URL: 'https://superadmin.mandreducation.in',
+  HOST_URL: 'https://api.mandreducation.in',
   SUFFIX_URL: '/api/v1',
   LOGIN: `/login`,
   LOG_OUT: `/logout`,
@@ -19,7 +19,7 @@ const URLS = {
   UPDATE_PLAN: id => `/plans/${id}`,
   DELETE_PLAN: id => `/plans/${id}`,
   ADD_ADMIN: () => `/admins`,
-  GET_ADMINS: () => `/superadmin/admins`,
+  GET_ADMINS: () => `/admins`,
   EDIT_ADMIN: id => `/admins/${id}`,
   UPDATE_ADMIN: id => `/admins/${id}`,
   DELETE_ADMIN: id => `/admins/${id}`,
@@ -91,5 +91,17 @@ const URLS = {
   GET_STATES: '/states',
   GET_CITIES: '/cities',
   EVENTS: '/events',
+  GET_MATERIAL_OPTION: (courseId, subjectId, chapterId) => {
+    let url = '/getallcoursedata?';
+    if (courseId) url += `course_id=${courseId}`;
+    if (subjectId) url += `&subject_id=${subjectId}`;
+    if (chapterId) url += `&chapter_id=${chapterId}`;
+    return url;
+  },
+  GET_STUDENT: '/students',
+  ADD_STUDENT: '/students',
+  GET_ALL_COURSES: '/getallcoursedata',
+  IMPORT_STUDENT: '/students/import',
+  GET_EXAM_PAPER: '/exam-papers',
 };
 export default URLS;

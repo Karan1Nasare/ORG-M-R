@@ -14,7 +14,6 @@ const AddAnnouncement = () => {
   const { handleSubmit, setValue, getValues } = methods;
 
   const onSubmit = data => {
-    console.log('Submitted data:', data);
     const formData = new FormData();
 
     // Append form fields to the FormData object using Object.entries
@@ -47,7 +46,7 @@ const AddAnnouncement = () => {
       </div>
       <FormProvider {...methods}>
         <form onSubmit={handleSubmit(onSubmit)}>
-          <AnnouncementForm setValue={setValue} eventList={eventList} />
+          <AnnouncementForm setValue={setValue} />
           <div className='flex justify-end mt-6 '>
             <Button
               type='submit'

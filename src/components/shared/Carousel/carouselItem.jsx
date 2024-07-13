@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { Button, Typography } from '@mui/material';
 import { Icon } from '@iconify/react/dist/iconify';
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import axios from '../../../utilities/axios-client';
 import BannerPreviewDialog from '../../banner/bannerPreview';
 import ConfirmDelete from '../../ui/Dialog/ConfirmDelete';
-import axiosInstance from '../../../utilities/axios-client';
 
 const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
@@ -13,11 +13,13 @@ const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
   const handleCloseDelete = () => {
     setOpenDelete(false);
   };
-  const DeleteBannerById = async () => {
+  const DeleteBannerById = async id => {
     try {
-      const response = await axiosInstance.delete(`/banners/${item.id}`);
+      const response = await axios.delete(`/banners/${id}`);
       if (response.data.success) {
-        onDelete(item.id);
+        onDelete(id); // Update the parent component's state
+      } else {
+        console.error('Error:', response.data.message);
       }
     } catch (error) {
       console.error('Error:', error);
@@ -26,7 +28,7 @@ const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
   };
   const confirmDeleteHandler = () => {
     if (item.id) {
-      DeleteBannerById();
+      DeleteBannerById(item.id);
     }
     setOpenDelete(false);
   };
@@ -48,7 +50,7 @@ const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
       <div className='relative rounded-xl group'>
         <img
           className='w-full h-48 object-cover rounded-lg'
-          src={backgroundImage}
+          src={image}
           alt='University'
         />
         <div className='absolute inset-0 bg-black opacity-50 rounded-lg group-hover:opacity-75 transition-opacity'></div>
@@ -100,7 +102,7 @@ const CarouselItem = ({ backgroundImage, image, item, onDelete }) => {
           title='Delete Banner'
           handleClose={handleCloseDelete}
           open={openDelete}
-          deleteHandler={confirmDeleteHandler}
+          deleteHandler={() => confirmDeleteHandler()}
         />
       ) : (
         ''
